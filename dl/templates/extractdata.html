@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<button type="button" class="mb-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    New Field
+</button>
+<div>
+    {% if (my_size==0) %}
+        <h5>No fields created</h5>
+    {% endif %}
+</div>
+<div>
+    {% if (my_size > 0) %}
+    <div class="mb-2">
+        <h3>List of Fields</h3>
+    </div>
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>_id</th>
+                    <th>Field Label</th>
+                    <th>Origin</th>
+                    <th>Query by Language</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for field in my_fields %}
+                    <tr>
+                        <th>{{ field._id}}</th>
+                        <th>{{ field.field}}</th>
+                        <th>{{ field.origin}}</th>
+                        <th>{{ field.query}}</th>
+                        <th><span class="badge badge-pill badge-primary">Edit</span><span class="badge badge-pill badge-danger ml-1">Delete</span></th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Field Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="/fields" method="POST">
+                <div class="form-group">
+                    <label for="inputformyfield" class="form-label">Field</label>
+                    <input type="text" id="myfield" aria-describedby="emailHelp" name="myfield" placeholder="Enter the field">
+                </div>
+                <div class="form-group">
+                    <label for="inputformyorigin" class="form-label">Origin</label>
+                    <input type="text" id="myorigin" aria-describedby="emailHelp" name="myorigin" placeholder="Enter the origin">
+                </div>
+                <div class="form-group">
+                    <label for="inputformyquery" class="form-label">Query</label>
+                    <input type="text" id="myquery" name="myquery" placeholder="Query">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create Field</button>
+            </form>
+        </div>
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Create User</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
