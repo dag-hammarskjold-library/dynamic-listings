@@ -9,7 +9,7 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 cryptography==41.0.5
-dlx==1.2.3.1
+dlx @ git+https://github.com/dag-hammarskjold-library/dlx@805accd810d00fdcd72a3e35b6ec35729fe2a02a
 dnspython==2.3.0
 flask==2.3.3
 Flask-Bcrypt==1.0.1
