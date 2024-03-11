@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{ secrets.SSH_HOST_DEV }}
+            USER_NAME: ${{ secrets.USER_NAME_DEV }}
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+
+              # Now we have got the access of EC2 and we will start the deploy .
+              cd /var/www/dlx-rest &&
+              sudo su www -c "git pull origin main" &&
+              sudo su www -c "source venv/bin/activate && pip uninstall -yr requirements.txt && pip install -r requirements.txt"
+              sudo systemctl restart dynamic-listings.service
+              '
