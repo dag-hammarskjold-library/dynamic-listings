@@ -23,7 +23,7 @@ jobs:
 
               # Now we have got the access of EC2 and we will start the deploy .
               cd /var/www/dlx-rest &&
-              sudo su www -c "git pull origin main" &&
+              sudo su www -c "git pull" &&
               sudo su www -c "source venv/bin/activate && pip uninstall -yr requirements.txt && pip install -r requirements.txt"
               sudo systemctl restart dynamic-listings.service
               '
