@@ -35,7 +35,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         </div>
         <hr>
         <div class="shadow" v-if="displayRecordFromQuery">
-          <table id="myTable" class="tablefont" summary="The table has five columns and should be read per row. The first column indicate the document 
+          <table v-if="languageSelected==='EN'" id="myTable" class="tablefont" summary="The table has five columns and should be read per row. The first column indicate the document 
               symbol of the meeting record, which is linked to the actual document in PDF format. 
               The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
               The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
@@ -52,7 +52,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <th width="15%">Security Council<br />
                           Outcome</th>
                           <th width="10%">Vote</th>
-                          <th width="10%">Action(s)</th>
+                          <th width="10%">Actions</th>
                       </tr>
                       <tr>
                           <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
@@ -79,7 +79,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                           </td>
                            
-                          <td> <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
+                          <td> 
+                            <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
                             <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
                             <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
                             <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
@@ -92,11 +93,139 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td v-else>  </td>
 
                           <td>
-                          <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openUpdateRecord(record.meeting_record)">Update</span>                
+                              <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
+                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
+                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
                           </td>
                       </tr>
                   </tbody>
           </table>
+
+      <table v-if="languageSelected==='ES'" id="myTable" class="tablefont" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
+          <tbody>
+                    <tr>
+                        <th class="tbltitle" colspan="E5" v-model="actualYear">Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
+                        (en orden cronológico inverso)</th>
+                    </tr>
+                    <tr>
+                        <th width="15%">Reunión<br /></th>
+                        <th width="10%">Fecha</th>
+                        <th width="30%">Tema</th>
+                        <th width="15%">Consejo de Seguridad <br />
+                        Resultado</th>
+                        <th width="10%">Votar</th>
+                        <th width="10%">Acciones</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6"><strong>Enlaces de documentos</strong> funcionará una vez que el documento haya sido publicado en el Sistema de Documento Oficial.</td>
+                    </tr>
+                    <tr  v-for="record in listOfRecords" >
+                        
+                        <td><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                        
+                        <td>
+                          <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
+                          <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
+                          <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
+                          <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
+                          <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
+                          <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                        </td>
+                        
+                        <td>
+                        <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
+                        <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
+                        <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
+                        <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
+                        <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
+                        <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
+                        </td>
+                        
+                        <td> <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
+                          <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
+                          <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
+                          <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
+                          <span v-if="languageSelected==='AR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[4].outcome_text}} </span>
+                          <span v-if="languageSelected==='ZH' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[5].outcome_text}} </span>
+                          <span v-else>  </span>
+                        </td>
+                        
+                        <td v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
+                        <td v-else>  </td>
+
+                        <td>
+                            <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
+                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
+                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+
+      <table v-if="languageSelected==='FR'" id="myTable" class="tablefont" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
+          <tbody>
+              <tr>
+                  <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
+                  (Dans l'ordre chronologique inverse)</th>
+              </tr>
+              <tr>
+                  <th width="15%">Réunion<br /></th>
+                  <th width="10%">Date</th>
+                  <th width="30%">Sujet</th>
+                  <th width="15%">Conseil de sécurité<br />
+                  Résultat</th>
+                  <th width="10%">Vote</th>
+                  <th width="10%">Actions</th>
+              </tr>
+              <tr>
+                  <td colspan="6"><strong>Les liens vers les documents</strong> fonctionneront une fois que le document aura été publié dans le système de documents officiel.</td>
+              </tr>
+              <tr  v-for="record in listOfRecords" >
+                  
+                  <td><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                  
+                  <td>
+                    <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
+                    <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
+                    <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
+                    <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
+                    <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                  </td>
+                  
+                  <td>
+                    <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
+                    <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
+                    <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
+                    <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
+                    <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
+                  </td>
+                   
+                  <td> 
+                    <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
+                    <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
+                    <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
+                    <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
+                    <span v-if="languageSelected==='AR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[4].outcome_text}} </span>
+                    <span v-if="languageSelected==='ZH' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[5].outcome_text}} </span>
+                    <span v-else>  </span>
+                  </td>
+                  
+                  <td v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
+                  <td v-else>  </td>
+
+                  <td>
+                      <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
+                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
+                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                  </td>
+              </tr>
+          </tbody>
+  </table>
+
+
+
         </div>
 
         <div v-if="displayFTP" class="form-section ">
@@ -116,42 +245,123 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         </div>
 
 
-        <div v-if="updateRecordFromQuery">
+             <div v-if="updateRecordFromQuery">
                 <hr> 
                 <form @submit.prevent="">
-                <div class="mb-3">
-                    <label for="inputMeeting" class="form-label">Meeting</label>
-                    <input type="text" class="form-control" id="meeting" name="meeting" v-model="record">
-                </div>   
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">Date</label>
-                    <input type="text" class="form-control" id="date" name="date" v-model="date">
-                </div>   
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">Topic</label>
-                    <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
-                </div>   
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">Security Council </label>
-                    <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
-                </div> 
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">Outcome Vote</label>
-                    <input type="text" class="form-control" id="vote" name="vote" v-model="vote">
-                </div>     
-                <div class="form-check mb-3">
-                  <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Allow Refresh
-                  </label>
-                </div>
-                <hr>
-                <button type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
-                <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+                    <div class="mb-3">
+                        <label for="inputMeeting" class="form-label">Meeting</label>
+                        <input type="text" class="form-control" id="meeting" name="meeting" v-model="record">
+                    </div>   
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Date</label>
+                        <input type="text" class="form-control" id="date" name="date" v-model="date">
+                    </div>   
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Topic</label>
+                        <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
+                    </div>   
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Security Council </label>
+                        <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
+                    </div> 
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Outcome Vote</label>
+                        <input type="text" class="form-control" id="vote" name="vote" v-model="vote">
+                    </div>     
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        Allow Refresh
+                      </label>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
+                    <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
                 </form>
             </div>
+        
+
+        <div v-if="createRecordFromQuery">
+              <hr> 
+              <form @submit.prevent="">
+              <div class="mb-3">
+                  <label for="inputMeeting" class="form-label">Meeting</label>
+                  <input type="text" class="form-control" id="meeting" name="record" v-model="record">
+              </div>   
+              <div class="mb-3">
+                  <label for="inputMeetingLink" class="form-label">Record Link</label>
+                  <input type="text" class="form-control" id="record_link" name="record_link" v-model="record_link">
+              </div>  
+              <div class="mb-3">
+                  <label for="inputName" class="form-label">Date</label>
+                  <input type="text" class="form-control" id="date" name="date" v-model="date">
+              </div>   
+              <div class="mb-3">
+                  <label for="inputListingID" class="form-label">Listing id</label>
+                  <input type="text" class="form-control" id="listing_id" name="listing_id" v-model="listing_id" >
+              </div> 
+              <div class="mb-3">
+                  <label for="inputName" class="form-label">Topic</label>
+                  <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
+              </div>   
+              <div class="mb-3">
+                  <label for="inputName" class="form-label">Security Council </label>
+                  <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
+              </div> 
+              <div class="mb-3">
+                  <label for="inputName" class="form-label">Outcome Vote</label>
+                  <input type="text" class="form-control" id="vote" name="vote" v-model="vote">
+              </div>     
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Allow Refresh
+                </label>
+              </div>
+              <hr>
+              <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button>
+              <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+              </form>
         </div>
-    </div>`,
+
+        <div v-if="deleteRecordFromQuery">
+            <hr> 
+            <form @submit.prevent="">
+            <div class="mb-3">
+                <label for="inputMeeting" class="form-label">Meeting</label>
+                <input type="text" class="form-control" id="meeting" name="meeting" v-model="record" disabled>
+            </div>   
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Date</label>
+                <input type="text" class="form-control" id="date" name="date" v-model="date" disabled>
+            </div>     
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Topic</label>
+                <input type="text" class="form-control" id="topic" name="topic" v-model="topic" disabled>
+            </div>   
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Security Council </label>
+                <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document" disabled>
+            </div> 
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Outcome Vote</label>
+                <input type="text" class="form-control" id="vote" name="vote" v-model="vote" disabled>
+            </div>     
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh" disabled>  
+              <label class="form-check-label" for="flexCheckDefault">
+                Allow Refresh
+              </label>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary" @click="deleteRecord()"> Delete your record </button>
+            <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+            </form>
+        </div>
+      
+     </div>`,
+
+
     data: function () {
       return {
         initPage:true,
@@ -161,6 +371,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         languageSelected:"",
         displayRecordFromQuery:false,
         updateRecordFromQuery:false,
+        createRecordFromQuery:false,
+        deleteRecordFromQuery:false,
         prefix: this.prefix,
         actualYear:"",
         listOfRecords:[],
@@ -172,13 +384,15 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         vote:"",
         refresh:"",
         record:"",
-        my_id:""
+        my_id:"",
+        listing_id:"",
+        record_link:""
       }
     },
     
     created:async function(){
       // loading all the meetings ID
-      const my_response = await fetch("/getlistingsId");
+      const my_response = await fetch("/getsclistingsId");
       const my_data = await my_response.json();
       my_data.forEach(element => {
         this.meetingsIds.push(element)
@@ -206,7 +420,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
-      const my_response = await fetch("/getlistings/" + myMeetingValue);
+      const my_response = await fetch("/getsclistings/" + myMeetingValue);
       const my_data = await my_response.json();
       console.log(my_data)
       my_data.forEach(element => {
@@ -219,13 +433,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       this.displayRecordFromQuery=true
       },
 
-      openUpdateRecord(record){
+      openRecord(record){
 
         this.listOfRecords.forEach(element => {
           if (element.meeting_record==record) {
 
               this.my_id=element._id.$oid
               this.record=element.meeting_record
+              this.listing_id=element.listing_id
 
               // Management of the topic depending of the language
               if (this.languageSelected==='EN') {
@@ -308,6 +523,26 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           }
         });
       },
+      async createRecord(){
+        let dataset = new FormData()
+        dataset.append('meeting_record',this.record)
+        dataset.append('meeting_record_link',this.record_link)
+        dataset.append('topic',this.topic)
+        dataset.append('outcome_vote',this.vote)
+        dataset.append('date',this.date)
+        dataset.append('outcome_text',this.security_council_document)
+        dataset.append('refresh',this.refresh)
+        dataset.append('listing_id',this.listing_id)
+        dataset.append('languageSelected',this.languageSelected)
+        const my_response = await fetch("/create_sc_listing",{
+          "method":"POST",
+          "body":dataset
+          });
+        const my_data = await my_response.json();
+        this.displayRecordFromQuery=true
+        alert("Record created!!!")
+        location.reload()
+      },
       async updateRecord(){
         let dataset = new FormData()
         dataset.append('_id',this.my_id)
@@ -319,27 +554,34 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('security_council_document',this.security_council_document)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)
-        const my_response = await fetch("/update_listing",{
+        const my_response = await fetch("/update_sc_listing",{
           "method":"PUT",
           "body":dataset
           });
         const my_data = await my_response.json();
         console.log(my_data)
         this.displayRecordFromQuery=true
-        alert("Data updated!!!")
+        alert("Record updated!!!")
         location.reload()
       },
       displayUpdateRecordFromQuery(){
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
-      deleteRecord(docsymbol){
-          
+      async deleteRecord(docsymbol){
         if (confirm(`Do you really want to delete the record with the document symbol : ${docsymbol} ? `) == true) {
-            this.listOfRecords=this.listOfRecords.filter((item)=>{
-              return item.document_symbol!==docsymbol
-          })
-          }
+          let dataset = new FormData()
+          alert(this.my_id)
+          dataset.append('_id',this.my_id)
+          const my_response = await fetch("/delete_sc_listing",{
+            "method":"POST",
+            "body":dataset
+            });
+          const my_data = await my_response.json();
+          this.deleteRecordFromQuery=false
+          alert("Record deleted!!!")
+          location.reload()
+        }
         }, 
       async exportHTML(){
         try {
@@ -352,20 +594,12 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               let myDataHTML=myData.outerHTML
               alert("Your data has been exported with HTML format!!!")
               let start=`
-              <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-                    <title>HTML 5 Boilerplate</title>
-                    <link rel="stylesheet" href="style.css">
-                </head>
-                <body>             
+              <div id="s-lg-content-74877231" class="  clearfix">
+              <h4 style="text-align: center;">&nbsp;</h4>
+              <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">          
               `
               let end=`
-                </body>
-                </html>
+              </div>
               `
               let element = document.createElement('a');
               element.setAttribute('href', 'data:text/html;charset=utf-8,' + start + myDataHTML + end);

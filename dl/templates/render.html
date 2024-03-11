@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <table id="myTable" class="tablefont" >
+            <tbody>
+                {% if language == "EN" %}
+                <tr>
+                    <th class="tbltitle" colspan="5" >Meetings conducted by the Security Council in  <br />
+                        (in reverse chronological order)</th>
+                </tr>                
+                {% endif %}
+                {% if language == "FR" %}
+                <tr>
+                    <th class="tbltitle" colspan="5" >Réunions conduites par le Conseil de sécurité en <br />
+                    (Dans l'ordre chronologique inverse)</th>
+                </tr>                
+                {% endif %}
+                {% if language == "ES" %}
+                <tr>
+                    <th class="tbltitle" colspan="5" >Reuniones realizadas por el Consejo de Seguridad en <br />
+                        (en orden cronológico inverso)</th>
+                </tr>                
+                {% endif %}                
+
+                <tr>
+                    <th width="15%">{{title[0]}} <br/></th>
+                    <th width="10%">{{title[1]}} </th>
+                    <th width="30%">{{title[2]}} </th>
+                    <th width="15%">{{title[3]}} <br />
+                        {{title[4]}} </th>
+                    <th width="10%">{{title[5]}} </th>
+                </tr>
+                <tr>
+                    {% if language == "EN" %}
+                        <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
+                    {% endif %}    
+                    {% if language == "FR" %}
+                        <td colspan="6"><strong>Les liens vers les documents</strong> fonctionneront une fois que le document aura été publié dans le système de documents officiel.</td>
+                    {% endif %} 
+                    {% if language == "SP" %}
+                        <td colspan="6"><strong>Enlaces de documentos</strong> funcionará una vez que el documento haya sido publicado en el Sistema de Documento Oficial.</td>
+                    {% endif %}                                               
+                </tr>
+                
+                    {% if language == "EN" %}
+                        {% for record in data %}
+                        <tr>
+                            <td >{{record["meeting_record"]}}</td>
+                            <td >{{record["date"][0]["value"]}}</td>
+                            <td >{{record["topic"][0]["value"]}}</td>
+                            <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
+                            <td >{{record["outcomes"][0]["outcome"][0]["outcome_text"]}}</td>
+                        </tr>
+                        {% endfor %}      
+                    {% endif %}  
+
+                    {% if language == "FR" %}
+                        {% for record in data %}
+                        <tr>
+                            <td >{{record["meeting_record"]}}</td>
+                            <td >{{record["date"][1]["value"]}}</td>
+                            <td >{{record["topic"][1]["value"]}}</td>
+                            <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
+                            <td >{{record["outcomes"][0]["outcome"][1]["outcome_text"]}}</td>
+                        </tr>
+                        {% endfor %}      
+                    {% endif %}  
+
+                {% if language == "ES" %}
+                    {% for record in data %}
+                    <tr>
+                        <td >{{record["meeting_record"]}}</td>
+                        <td >{{record["date"][2]["value"]}}</td>
+                        <td >{{record["topic"][2]["value"]}}</td>
+                        <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
+                        <td >{{record["outcomes"][0]["outcome"][2]["outcome_text"]}}</td>
+                    </tr>
+                    {% endfor %}      
+                {% endif %}  
+                
+            </tbody>
+        </table>
+        <script src="" async defer></script>
+    </body>
+</html>
