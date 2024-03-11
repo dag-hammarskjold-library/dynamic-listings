@@ -7,6 +7,7 @@ from .config1 import Config
 import datetime
 from dlx.marc import Bib, BibSet, Query, Condition
 from dotenv import dotenv_values
+from decouple import config
 
 # function managing the creation of the logs depending of the context
 def add_log(date_log:str,user_connected:str,action_log:str)-> int:
@@ -14,9 +15,9 @@ def add_log(date_log:str,user_connected:str,action_log:str)-> int:
     try:
     
         # definition of the parameters for the mongo client
-        my_config = dotenv_values(".env") 
+        #my_config = dotenv_values(".env") 
         my_client = MongoClient(
-            my_config["DATABASE_CONN"]
+            config("DATABASE_CONN")
         )
         
         # setup the database and the collection

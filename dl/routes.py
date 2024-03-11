@@ -9,13 +9,14 @@ from bson import json_util
 from bson.objectid import ObjectId
 import requests
 from dotenv import dotenv_values
+from decouple import config
 
 # definition of the Blueprint
 main=Blueprint("main",__name__)
 
 # connection to the database
-my_config = dotenv_values(".env") 
-my_client = MongoClient(my_config["DATABASE_CONN"])
+#config = dotenv_values(".env") 
+my_client = MongoClient(config("DATABASE_CONN"))
 print(my_client)
     
 
@@ -43,15 +44,15 @@ def login():
     if request.method=="POST":
         
         # check if it's the special user
-        if request.form.get("email")==my_config["DEFAULT_USER_EMAIL"]:
+        if request.form.get("email")==config("DEFAULT_USER_EMAIL"):
 
-            if request.form.get("password")==my_config["DEFAULT_USER_PWD"]:
+            if request.form.get("password")==config("DEFAULT_USER_PWD"):
                 
                 # special user
-                add_log(datetime.datetime.now(tz=datetime.timezone.utc),my_config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config("DEFAULT_USER_NAME"),"Connected to the system!!!")
                 
                 # add the username to the session
-                session['username'] = my_config["DEFAULT_USER_NAME"]
+                session['username'] = config("DEFAULT_USER_NAME")
                 
                 #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
                 return redirect('index')
@@ -109,7 +110,7 @@ def login():
 @main.route("/index")
 def index():
     if session['username']!="":
-        return render_template('index.html',version=my_config["ACTUAL_VERSION"],session_username=session['username'])
+        return render_template('index.html',version=config("ACTUAL_VERSION"),session_username=session['username'])
     else:
         return redirect("login.html")
 
@@ -226,7 +227,7 @@ def logs():
     
     if session:
         if session['username']!="":
-            my_prefix=my_config["APP_PREFIX_VALUE"]
+            my_prefix=config("APP_PREFIX_VALUE")
             return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
@@ -574,7 +575,7 @@ def datasetsVueExecuteDataset(dataset_id):
             # extract the data based on the values from the fields 
             if (dm["field"]!="") and (dm["subfield"]!=""):
                 try:
-                    my_data= requests.get(my_config["BIB_PREFIX_VALUE"] + dm["recordid"]  +"/fields/"+ dm["field"]  +"/0")
+                    my_data= requests.get(config("BIB_PREFIX_VALUE") + dm["recordid"]  +"/fields/"+ dm["field"]  +"/0")
                     my_data=json.loads(my_data._content)
                     # print(my_data["data"]["subfields"])
                     for subfield in my_data["data"]["subfields"]:
