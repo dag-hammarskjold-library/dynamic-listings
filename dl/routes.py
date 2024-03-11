@@ -2,18 +2,24 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from flask import Blueprint, jsonify, redirect, render_template,request,make_response, send_file, session,redirect, url_for
 from pymongo import MongoClient
-from decouple import config
 import datetime
 from datetime import date
 from .tools import add_log,query_security_counsel_dataset
 from bson import json_util
 from bson.objectid import ObjectId
 import requests
+from dotenv import dotenv_values
 
 # definition of the Blueprint
 main=Blueprint("main",__name__)
 
+# connection to the database
+my_config = dotenv_values(".env") 
+my_client = MongoClient(my_config["DATABASE_CONN"])
+print(my_client)
+    
 
+    
 
 
 ####################################################################################################################
@@ -37,15 +43,15 @@ def login():
     if request.method=="POST":
         
         # check if it's the special user
-        if request.form.get("email")==config("DEFAULT_USER_EMAIL"):
+        if request.form.get("email")==my_config["DEFAULT_USER_EMAIL"]:
 
-            if request.form.get("password")==config("DEFAULT_USER_PWD"):
+            if request.form.get("password")==my_config["DEFAULT_USER_PWD"]:
                 
                 # special user
-                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config("DEFAULT_USER_NAME"),"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),my_config["DEFAULT_USER_NAME"],"Connected to the system!!!")
                 
                 # add the username to the session
-                session['username'] = config("DEFAULT_USER_NAME")
+                session['username'] = my_config["DEFAULT_USER_NAME"]
                 
                 #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
                 return redirect('index')
@@ -103,7 +109,7 @@ def login():
 @main.route("/index")
 def index():
     if session['username']!="":
-        return render_template('index.html',version=config("ACTUAL_VERSION"),session_username=session['username'])
+        return render_template('index.html',version=my_config["ACTUAL_VERSION"],session_username=session['username'])
     else:
         return redirect("login.html")
 
@@ -129,10 +135,6 @@ def users():
 # route providing data for the vue
 @main.route("/usersVue")
 def usersVue():
-
-    my_client = MongoClient(
-        config("DATABASE_CONN")
-    )
     
     my_database = my_client["DynamicListings"]  
     my_collection = my_database["dl_users_collection"]
@@ -196,10 +198,6 @@ def usersVueUpdateUser(user_id):
 @main.route("/usersVue/DeleteUser", methods=["POST"])
 def usersVueDeleteUser():
 
-        my_client = MongoClient(
-            config("DATABASE_CONN")
-        )
-        
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_users_collection"]
 
@@ -228,7 +226,7 @@ def logs():
     
     if session:
         if session['username']!="":
-            my_prefix=config("APP_PREFIX_VALUE")
+            my_prefix=my_config["APP_PREFIX_VALUE"]
             return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
@@ -237,10 +235,6 @@ def logs():
 @main.route("/logsVue")
 def logsVue():
 
-    my_client = MongoClient(
-        config("DATABASE_CONN")
-    )
-    
     my_database = my_client["DynamicListings"]  
     my_collection = my_database["dl_logs_collection"]
     
@@ -270,10 +264,7 @@ def fields():
 @main.route("/fieldsVue")
 def fieldsVue():
 
-    my_client = MongoClient(
-        config("DATABASE_CONN")
-    )
-    
+   
     my_database = my_client["DynamicListings"]  
     my_collection = my_database["dl_fields_collection"]
     
@@ -286,10 +277,6 @@ def fieldsVue():
 
 @main.route("/fieldsVue/DeleteField", methods=["POST"])
 def fieldsVueDeleteField():
-
-        my_client = MongoClient(
-            config("DATABASE_CONN")
-        )
         
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_fields_collection"]
@@ -311,9 +298,6 @@ def fieldsVueDeleteField():
 @main.route("/fieldsVue/UpdateField/<field_id>", methods=["PUT"])
 def fieldsVueUpdate(field_id):
 
-        my_client = MongoClient(
-            config("DATABASE_CONN")
-        )
         
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_fields_collection"]
@@ -341,9 +325,6 @@ def fieldsVueUpdate(field_id):
 @main.route("/fieldsVue/AddField", methods=["POST"])
 def fieldsVueAddField():
 
-        my_client = MongoClient(
-            config("DATABASE_CONN")
-        )
         
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_fields_collection"]
@@ -372,9 +353,6 @@ def fieldsVueAddField():
 ####################################################################################################################
 ####################################################################################################################    
 
-my_client = MongoClient(
-    config("DATABASE_CONN")
-)
 
 # route to display the datamodels page
 @main.route("/dataModels")
@@ -510,7 +488,6 @@ def datasets():
     
     if session:
         if session['username']!="":
-            #my_prefix=config("APP_PREFIX_VALUE")
             return render_template('datasets.html',session_username=session['username'])
     else:
         return redirect("login")
@@ -581,12 +558,6 @@ def datasetsVueExecuteDataset(dataset_id):
     # Queries to get the dataset
     dataset = my_dataset.find_one({'_id': ObjectId(dataset_id)})
     
-    # print("Le dataset est: ")
-    # print(dataset)
-    
-    # Dataset result Object
-    # my_dataset_result=[]
-    
     # Results Object
     my_results={}
     my_results_record_global=[]
@@ -603,7 +574,7 @@ def datasetsVueExecuteDataset(dataset_id):
             # extract the data based on the values from the fields 
             if (dm["field"]!="") and (dm["subfield"]!=""):
                 try:
-                    my_data= requests.get(config("BIB_PREFIX_VALUE") + dm["recordid"]  +"/fields/"+ dm["field"]  +"/0")
+                    my_data= requests.get(my_config["BIB_PREFIX_VALUE"] + dm["recordid"]  +"/fields/"+ dm["field"]  +"/0")
                     my_data=json.loads(my_data._content)
                     # print(my_data["data"]["subfields"])
                     for subfield in my_data["data"]["subfields"]:
@@ -722,12 +693,9 @@ def displayDatasetsSecurityCounsel(year):
     
     
 # route to display the listings
-@main.route("/getlistings/<meeting>", methods=["GET"])
-def get_listings_values(meeting):
-    
-    my_client = MongoClient(
-        config("DATABASE_CONN")
-    )
+@main.route("/getsclistings/<meeting>", methods=["GET"])
+def get_sc_listings_values(meeting):
+
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl5"]
 
@@ -739,12 +707,9 @@ def get_listings_values(meeting):
 
 
 # route to display the listings ID
-@main.route("/getlistingsId")
-def get_listings_Id():
-    
-    my_client = MongoClient(
-        config("DATABASE_CONN")
-    )
+@main.route("/getsclistingsId")
+def get_sc_listings_Id():
+
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl5"]
 
@@ -755,12 +720,9 @@ def get_listings_Id():
     return json.loads(json_util.dumps(my_fields))  
 
 
-@main.route("/update_listing", methods=["PUT"])
-def updatelisting():
+@main.route("/update_sc_listing", methods=["PUT"])
+def update_sc_listing():
 
-        my_client = MongoClient(
-            config("DATABASE_CONN")
-        )
         my_database=my_client["DynamicListings"]
         my_collection = my_database["dl5"]
         my_languague_selected=request.form.get("languageSelected")
@@ -817,3 +779,135 @@ def updatelisting():
         
         # just render the users
         return jsonify(message="Record updated")
+
+
+@main.route("/create_sc_listing", methods=["POST"])
+def create_sc_listing():
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl5"]
+    
+    # language selected
+    my_languague_selected=request.form.get("languageSelected")
+    
+    # meeting record
+    my_meeting_record=request.form.get("meeting_record")
+    
+    # meeting record link
+    my_meeting_record_link=request.form.get("meeting_record_link")
+
+    # date
+    my_date=[
+        {"lang":"EN","value":request.form.get("date")},
+        {"lang":"FR","value":request.form.get("date")},
+        {"lang":"ES","value":request.form.get("date")}  
+    ]
+    
+    # press release
+    my_press_release=""
+    
+    # topic
+    my_topic=[
+        {"lang":"EN","value":request.form.get("topic")},
+        {"lang":"FR","value":request.form.get("topic")},
+        {"lang":"ES","value":request.form.get("topic")}  
+    ]
+    
+    # refresh
+    my_refresh=False
+    
+    # listing id
+    my_listing_id=request.form.get("listing_id")
+    
+    # outcomes
+    my_outcome=(
+             {"lang":"EN","outcome_text":request.form.get("outcome_text")},
+             {"lang":"FR","outcome_text":request.form.get("outcome_text")},
+             {"lang":"ES","outcome_text":request.form.get("outcome_text")}
+    )
+    
+    my_outcomes=[
+        {
+         "outcome_vote":request.form.get("outcome_vote"),
+         "outcome":my_outcome
+        }
+    ]
+
+    my_collection.insert_one(
+                {
+                    'meeting_record':my_meeting_record,
+                    'meeting_record_link':my_meeting_record_link,
+                    'date':my_date,
+                    'press_release':my_press_release,
+                    'topic':my_topic,
+                    'refresh': my_refresh,
+                    'listing_id': my_listing_id,
+                    'outcomes':my_outcomes               
+                })
+            
+
+    # create log
+    add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_record) +  " created!!!")
+    
+    # just render the users
+    return jsonify(message="Record created")
+    
+    
+@main.route("/delete_sc_listing", methods=["POST"])
+def delete_sc_listing():
+        
+        my_database = my_client["DynamicListings"]  
+        my_collection = my_database["dl5"]
+        print(request.form.get("_id"))
+        record = {
+            "_id": ObjectId(request.form.get("_id")),
+        }
+        
+        # save the user in the database
+        my_collection.delete_one(record)
+        
+        # create log
+        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"SC Listing " + str(request.form.get("_id")) + "  deleted from the database!!!")
+        
+        # just render the users
+        return jsonify(message="Record deleted")
+    
+
+@main.route("/render_meeting/<codemeeting>/<language>", methods=["GET"])
+def render_meeting(codemeeting,language):
+    
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl5"]
+
+    print(codemeeting)
+    print(language)
+
+    # title
+    title=""
+    title_en=["Meeting","Date","Topic","Security Council","Outcome","Vote"]
+    title_fr=["Réunion","Date","Sujet","Conseil de sécurité","Résultat","Vote"]
+    title_sp=["Reunión","Fecha","Tema","Consejo de Seguridad","Resultado","Votar"]
+    
+    if language=="EN":
+        title=title_en
+
+    if language=="FR":
+        title=title_fr
+
+    if language=="SP":
+        title=title_sp
+
+
+    # get all the listings_id
+    my_records=my_collection.find({"listing_id":"scmeetings_2024"})
+    
+    print(my_records)
+    
+    data=[]
+    for record in my_records:
+        # print(record["listing_id"])
+        data.append(record)
+    
+    print(data)
+    # just return the listings
+    return render_template("render.html",language=language,data=data,title=title)
