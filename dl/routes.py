@@ -90,7 +90,7 @@ def login():
                     if session['username']!="":
                         return redirect('index')
                     else:
-                        return redirect("login.html")
+                        return redirect("login")
                     
             if find_record==False:
                 
@@ -108,10 +108,10 @@ def login():
 
 @main.route("/index")
 def index():
-    if session['username']!="":
+    if 'username' in session:
         return render_template('index.html',version=config("ACTUAL_VERSION"),session_username=session['username'])
     else:
-        return redirect("login.html")
+        return redirect("login")
 
 ####################################################################################################################
 ####################################################################################################################
@@ -123,10 +123,9 @@ def index():
 # route to display the user page
 @main.route("/users")
 def users():
-    
-    if session:
-        if session['username']!="":
-            return render_template('users.html',session_username=session['username'])
+
+    if 'username' in session:
+        return render_template('users.html',session_username=session['username'])
     else:
         return redirect("login")
     
@@ -244,10 +243,9 @@ def usersVueDeleteUser():
 @main.route("/logs")
 def logs():
     
-    if session:
-        if session['username']!="":
-            my_prefix=config("APP_PREFIX_VALUE")
-            return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
+    if 'username' in session:
+        my_prefix=config("APP_PREFIX_VALUE")
+        return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
     
@@ -273,9 +271,8 @@ def logsVue():
 @main.route("/fields", methods=["GET"])
 def fields():
 
-    if session:
-        if session['username']!="":
-            return render_template('fields.html',session_username=session['username'])
+    if 'username' in session:
+        return render_template('fields.html',session_username=session['username'])
     else:
         return redirect("login")
 
@@ -377,10 +374,9 @@ def fieldsVueAddField():
 @main.route("/dataModels")
 def dataModels():
     
-    if session:
-        if session['username']!="":
-            #my_prefix=config("APP_PREFIX_VALUE")
-            return render_template('datamodels.html',session_username=session['username'])
+    if 'username' in session:
+        #my_prefix=config("APP_PREFIX_VALUE")
+        return render_template('datamodels.html',session_username=session['username'])
     else:
         return redirect("login")
     
@@ -505,9 +501,8 @@ def logout():
 @main.route("/datasets")
 def datasets():
     
-    if session:
-        if session['username']!="":
-            return render_template('datasets.html',session_username=session['username'])
+    if 'username' in session:
+        return render_template('datasets.html',session_username=session['username'])
     else:
         return redirect("login")
     
@@ -692,8 +687,7 @@ def datasetVueDeleteDataset():
 @main.route("/datasetSecurityCounsel")
 def datasetSecurityCounsel():
     
-    if session:
-        if session['username']!="":
+    if 'username' in session:
             return render_template('datasetsecuritycounsel.html',session_username=session['username'])
     else:
         return redirect("login")
