@@ -8,7 +8,6 @@ from .tools import add_log,query_security_counsel_dataset
 from bson import json_util
 from bson.objectid import ObjectId
 import requests
-from dotenv import dotenv_values
 from decouple import config
 
 # definition of the Blueprint
@@ -127,7 +126,6 @@ def users():
     
     if session:
         if session['username']!="":
-            #my_prefix=config("APP_PREFIX_VALUE")
             return render_template('users.html',session_username=session['username'])
     else:
         return redirect("login")
@@ -148,7 +146,8 @@ def usersVue():
 
 @main.route("/usersVue/AddUser", methods=["POST"])
 def usersVueAddUser():
-        
+    
+    try :    
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_users_collection"]
 
@@ -168,8 +167,28 @@ def usersVueAddUser():
         # create log
         add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"User " + str(my_user.inserted_id) + "  added to the system!!!")
         
-        # just render the users
-        return json.loads(json_util.dumps(my_user.inserted_id))   
+        if (my_user.inserted_id):
+            result={
+                "status" : "OK",
+                "message" : "User created!!!"
+            }
+            print(result)
+            return jsonify(result)
+
+        else :
+            result={
+                "status" : "NOK",
+                "message" : "User not created!!!"
+            }
+            return jsonify(result)
+        
+    except:
+        result={
+            "status" : "NOK",
+            "message" : "User not created!!!"
+        }
+        return jsonify(result)
+        
 
 
 @main.route("/usersVue/UpdateUser/<user_id>", methods=["PUT"])
@@ -326,7 +345,6 @@ def fieldsVueUpdate(field_id):
 @main.route("/fieldsVue/AddField", methods=["POST"])
 def fieldsVueAddField():
 
-        
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl_fields_collection"]
 
@@ -880,9 +898,6 @@ def render_meeting(codemeeting,language):
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl5"]
 
-    print(codemeeting)
-    print(language)
-
     # title
     title=""
     title_en=["Meeting","Date","Topic","Security Council","Outcome","Vote"]
@@ -900,15 +915,12 @@ def render_meeting(codemeeting,language):
 
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":"scmeetings_2024"})
-    
-    print(my_records)
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"})
     
     data=[]
     for record in my_records:
         # print(record["listing_id"])
         data.append(record)
-    
-    print(data)
+
     # just return the listings
     return render_template("render.html",language=language,data=data,title=title)

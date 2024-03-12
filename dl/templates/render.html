@@ -13,36 +13,44 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <table id="myTable" class="tablefont" >
+        <table id="myTable" class="tablefont" style="width:1200px;border: 1px solid black;border-collapse: collapse;">
             <tbody>
                 {% if language == "EN" %}
-                <tr>
+                <tr style="border: 1px solid black;border-collapse: collapse;">
                     <th class="tbltitle" colspan="5" >Meetings conducted by the Security Council in  <br />
                         (in reverse chronological order)</th>
                 </tr>                
                 {% endif %}
                 {% if language == "FR" %}
-                <tr>
+                <tr style="border: 1px solid black;border-collapse: collapse;">
                     <th class="tbltitle" colspan="5" >Réunions conduites par le Conseil de sécurité en <br />
                     (Dans l'ordre chronologique inverse)</th>
                 </tr>                
                 {% endif %}
-                {% if language == "ES" %}
-                <tr>
+                {% if language == "SP" %}
+                <tr style="border: 1px solid black;border-collapse: collapse;">
                     <th class="tbltitle" colspan="5" >Reuniones realizadas por el Consejo de Seguridad en <br />
                         (en orden cronológico inverso)</th>
                 </tr>                
                 {% endif %}                
 
-                <tr>
-                    <th width="15%">{{title[0]}} <br/></th>
-                    <th width="10%">{{title[1]}} </th>
-                    <th width="30%">{{title[2]}} </th>
-                    <th width="15%">{{title[3]}} <br />
-                        {{title[4]}} </th>
-                    <th width="10%">{{title[5]}} </th>
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0]}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[1]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="30%">{{title[2]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[3]}} <br />
+                    {{title[4]}} </th>
+                    {% if language == "EN" %}
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (Y-N-A)</th>
+                    {% endif %}
+                    {% if language == "FR" %}
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (O-N-A)</th>
+                    {% endif %}
+                    {% if language == "SP" %}
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (S-N-A)</th>
+                    {% endif %}
                 </tr>
-                <tr>
+                <tr style="border: 1px solid black;border-collapse: collapse;">
                     {% if language == "EN" %}
                         <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
                     {% endif %}    
@@ -56,36 +64,36 @@
                 
                     {% if language == "EN" %}
                         {% for record in data %}
-                        <tr>
-                            <td >{{record["meeting_record"]}}</td>
-                            <td >{{record["date"][0]["value"]}}</td>
-                            <td >{{record["topic"][0]["value"]}}</td>
-                            <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
-                            <td >{{record["outcomes"][0]["outcome"][0]["outcome_text"]}}</td>
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"][-4:]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][0]["outcome_text"]}}</td>
                         </tr>
                         {% endfor %}      
                     {% endif %}  
 
                     {% if language == "FR" %}
                         {% for record in data %}
-                        <tr>
-                            <td >{{record["meeting_record"]}}</td>
-                            <td >{{record["date"][1]["value"]}}</td>
-                            <td >{{record["topic"][1]["value"]}}</td>
-                            <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
-                            <td >{{record["outcomes"][0]["outcome"][1]["outcome_text"]}}</td>
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"][-5:]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][1]["outcome_text"]}}</td>
                         </tr>
                         {% endfor %}      
                     {% endif %}  
 
-                {% if language == "ES" %}
+                {% if language == "SP" %}
                     {% for record in data %}
-                    <tr>
-                        <td >{{record["meeting_record"]}}</td>
-                        <td >{{record["date"][2]["value"]}}</td>
-                        <td >{{record["topic"][2]["value"]}}</td>
-                        <td >{{record["outcomes"][0]["outcome_vote"]}}</td>
-                        <td >{{record["outcomes"][0]["outcome"][2]["outcome_text"]}}</td>
+                    <tr style="border: 1px solid black;border-collapse: collapse;">
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"][-5:]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["outcomes"][0]["outcome_vote"]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["outcomes"][0]["outcome"][2]["outcome_text"]}}</td>
                     </tr>
                     {% endfor %}      
                 {% endif %}  

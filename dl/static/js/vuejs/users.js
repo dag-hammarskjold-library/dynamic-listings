@@ -1,7 +1,7 @@
 Vue.component('displaylistuserscomponent',{
     props: ["title"],
     template: `
-  <div class="page mt-3">
+  <div class="mt-3">
         <div class="alert alert-success" role="alert">
             <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
         </div>
@@ -52,29 +52,29 @@ Vue.component('displaylistuserscomponent',{
         <!-- User Creation Form -->
         <div v-if="ShowCreateUser">
             <hr> 
-            <form @submit.prevent="createUser">
+            <form @submit.prevent="">
             <div class="mb-3">
                 <label for="inputName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name" v-model="name">
+                <input type="text" class="form-control" id="name" name="name" v-model="name" autocomplete="off">
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email"  v-model="email">
+                <input type="email" class="form-control" id="email" name="email"  v-model="email" autocomplete="off">
             </div>
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password"  v-model="password">
+                <input type="password" class="form-control" id="password" name="password"  v-model="password" autocomplete="off">
             </div>
             <div class="mb-3">
             <label for="role">Choose a role:</label>
-                <select name="role" id="role"  v-model="role">
+                <select name="role" id="role"  v-model="role" autocomplete="off">
                 <option value="admin"  selected>Administrator</option>
                 <option value="readandwrite" >Read and Write</option>
                 <option value="reader" >Read only</option>
                 </select> 
             </div>          
             <hr>      
-            <button type="submit" class="btn btn-primary"> Save your record </button>
+            <button type="submit" class="btn btn-primary" @click="createUser()"> Save your record </button>
             <button class="btn btn-primary" @click="showList=true;ShowCreateUser=false;location.reload()">Back to the list of users </button>
             </form>
         </div>
@@ -113,10 +113,6 @@ Vue.component('displaylistuserscomponent',{
         showModal:false,
         ShowCreateUser:false,
         ShowUpdateUser:false,
-        // showOkMessage:false,
-        // CreationOkMessage:"",
-        // showNOkMessage:false,
-        // CreationNOkMessage:"",
         name:"",
         email:"",
         password:"",
@@ -150,9 +146,9 @@ Vue.component('displaylistuserscomponent',{
               "method":"POST",
               "body":user
             });
+            // const my_data = await my_response.json();
             const my_data = await my_response.json();
-            alert("New User Created!!!")
-          
+            alert(my_data["message"])
           } catch (error) {
           alert(error.message)
         }

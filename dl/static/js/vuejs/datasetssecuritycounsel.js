@@ -34,35 +34,35 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             </div>
         </div>
         <hr>
-        <div class="shadow" v-if="displayRecordFromQuery">
-          <table v-if="languageSelected==='EN'" id="myTable" class="tablefont" summary="The table has five columns and should be read per row. The first column indicate the document 
+        <div class="shadow" v-if="displayRecordFromQuery" style="width:1200px;">
+          <table v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="The table has five columns and should be read per row. The first column indicate the document 
               symbol of the meeting record, which is linked to the actual document in PDF format. 
               The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
               The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
               taken with links provided to the actual document in PDF format if a presidential statement has been issued or a resolution adopted.">
                   <tbody>
-                      <tr>
+                      <tr style="border: 1px solid black;border-collapse: collapse;">
                           <th class="tbltitle" colspan="5" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
                           (in reverse chronological order)</th>
                       </tr>
-                      <tr>
-                          <th width="15%">Meeting<br />Record</th>
-                          <th width="10%">Date</th>
-                          <th width="30%">Topic</th>
-                          <th width="15%">Security Council<br />
+                      <tr style="border: 1px solid black;border-collapse: collapse;">
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Meeting<br />Record</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Date</th>
+                          <th width="30%" style="border: 1px solid black;border-collapse: collapse;">Topic</th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council<br />
                           Outcome</th>
-                          <th width="10%">Vote</th>
-                          <th width="10%">Actions</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Vote <br> (Y-N-A) </th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
                       </tr>
-                      <tr>
+                      <tr style="border: 1px solid black;border-collapse: collapse;">
                           <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
                       </tr>
-                      <tr  v-for="record in listOfRecords" >
+                      <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                           
-                          <td><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                          <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
                           
-                          <td>
-                            <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                            <span v-if="languageSelected==='EN'"> {{record.date[0].value.substring(record.date[0].value.length - 4)}}</span>
                             <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
                             <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
                             <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
@@ -70,7 +70,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                             <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
                           </td>
                           
-                          <td>
+                          <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
                           <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
                           <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
@@ -79,7 +79,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                           </td>
                            
-                          <td> 
+                          <td style="border: 1px solid black;border-collapse: collapse;"> 
                             <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
                             <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
                             <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
@@ -89,10 +89,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                             <span v-else>  </span>
                           </td>
                           
-                          <td v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
+                          <td v-if="record.outcomes.length>0" style="border: 1px solid black;border-collapse: collapse;"> {{record.outcomes[0].outcome_vote}}  </td>
                           <td v-else>  </td>
 
-                          <td>
+                          <td style="border: 1px solid black;border-collapse: collapse;">
                               <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
                               <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                               <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
@@ -101,38 +101,38 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   </tbody>
           </table>
 
-      <table v-if="languageSelected==='ES'" id="myTable" class="tablefont" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
+      <table v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
           <tbody>
-                    <tr>
-                        <th class="tbltitle" colspan="E5" v-model="actualYear">Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
+                    <tr style="border: 1px solid black;border-collapse: collapse;">
+                        <th class="tbltitle" colspan="5" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
                         (en orden cronológico inverso)</th>
                     </tr>
-                    <tr>
-                        <th width="15%">Reunión<br /></th>
-                        <th width="10%">Fecha</th>
-                        <th width="30%">Tema</th>
-                        <th width="15%">Consejo de Seguridad <br />
+                    <tr style="border: 1px solid black;border-collapse: collapse;">
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Reunión<br /></th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Fecha</th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Tema</th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad <br />
                         Resultado</th>
-                        <th width="10%">Votar</th>
-                        <th width="10%">Acciones</th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Votar <br> (S-N-A) </th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Acciones</th>
                     </tr>
-                    <tr>
+                    <tr style="border: 1px solid black;border-collapse: collapse;">
                         <td colspan="6"><strong>Enlaces de documentos</strong> funcionará una vez que el documento haya sido publicado en el Sistema de Documento Oficial.</td>
                     </tr>
-                    <tr  v-for="record in listOfRecords" >
+                    <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
                         
-                        <td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
                           <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                          <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
+                          <span v-if="languageSelected==='ES'"> {{record.date[2].value.substring(record.date[2].value.length - 5)}}</span>
                           <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                           <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
                           <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
                         </td>
                         
-                        <td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">
                         <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
                         <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
                         <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
@@ -141,7 +141,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                         </td>
                         
-                        <td> <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
+                        <td style="border: 1px solid black;border-collapse: collapse;"> <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
                           <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
                           <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
                           <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
@@ -150,10 +150,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <span v-else>  </span>
                         </td>
                         
-                        <td v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
+                        <td style="border: 1px solid black;border-collapse: collapse;" v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}}  </td>
                         <td v-else>  </td>
 
-                        <td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">
                             <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
                             <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                             <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
@@ -162,38 +162,38 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 </tbody>
         </table>
 
-      <table v-if="languageSelected==='FR'" id="myTable" class="tablefont" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
+      <table v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
           <tbody>
-              <tr>
+              <tr style="border: 1px solid black;border-collapse: collapse;">
                   <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
                   (Dans l'ordre chronologique inverse)</th>
               </tr>
-              <tr>
-                  <th width="15%">Réunion<br /></th>
-                  <th width="10%">Date</th>
-                  <th width="30%">Sujet</th>
-                  <th width="15%">Conseil de sécurité<br />
+              <tr style="border: 1px solid black;border-collapse: collapse;">
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Réunion<br /></th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Date</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Sujet</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité<br />
                   Résultat</th>
-                  <th width="10%">Vote</th>
-                  <th width="10%">Actions</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Vote <br> (O-N-A)</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Actions</th>
               </tr>
-              <tr>
+              <tr style="border: 1px solid black;border-collapse: collapse;">
                   <td colspan="6"><strong>Les liens vers les documents</strong> fonctionneront une fois que le document aura été publié dans le système de documents officiel.</td>
               </tr>
-              <tr  v-for="record in listOfRecords" >
+              <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
                   
-                  <td>
+                  <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.date[1].value.substring(record.date[1].value.length - 5)}}</span>
                     <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
                     <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                     <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
                     <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
                   </td>
                   
-                  <td>
+                  <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
                     <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
                     <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
@@ -202,7 +202,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                   </td>
                    
-                  <td> 
+                  <td style="border: 1px solid black;border-collapse: collapse;"> 
                     <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
                     <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
                     <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
@@ -212,10 +212,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     <span v-else>  </span>
                   </td>
                   
-                  <td v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
                   <td v-else>  </td>
 
-                  <td>
+                  <td style="border: 1px solid black;border-collapse: collapse;">
                       <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
                       <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                       <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
@@ -442,29 +442,35 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               this.record=element.meeting_record
               this.listing_id=element.listing_id
 
-              // Management of the topic depending of the language
+              // Management of the date depending of the language
               if (this.languageSelected==='EN') {
                 this.date=element.date[0].value
+                
               }
 
               if (this.languageSelected==='FR') {
                 this.date=element.date[1].value
+               
               }
 
               if (this.languageSelected==='ES') {
                 this.date=element.date[2].value
+               
               }
               
               if (this.languageSelected==='RU') {
                 this.date=element.date[3].value
+                
               }
 
               if (this.languageSelected==='AR') {
                 this.date=element.date[4].value
+               
               }              
 
               if (this.languageSelected==='ZH') {
                 this.date=element.date[5].value
+               
               }    
 
               // Management of the topic depending of the language
@@ -587,7 +593,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         try {
               
               let myData=document.getElementById("myTable")
-
+              alert(myData.outerHTML)
               for(const row of myData.rows){
                   row.deleteCell(-1);
               }

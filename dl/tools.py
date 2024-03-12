@@ -2,11 +2,8 @@ from pymongo import MongoClient
 import sys
 from dlx import DB
 from .config1 import Config
-# import time
-# import re
 import datetime
 from dlx.marc import Bib, BibSet, Query, Condition
-from dotenv import dotenv_values
 from decouple import config
 
 # function managing the creation of the logs depending of the context

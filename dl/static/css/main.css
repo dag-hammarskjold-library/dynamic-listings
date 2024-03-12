@@ -97,10 +97,6 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-/* .table-responsive {
-  max-height:600px;
-} */
-
 .center {
   width: 100px;
   height: 100px;
@@ -115,20 +111,13 @@ body {
   background-color: #727272;
 }
 
-.page{
-  width:1500px;
-  height: 1500px;
-}
 
 .tableau{
   background-color: #d7dbdd;
-  /* border-collapse:collapse; */
-  /* table-layout:fixed; 
-  width:1500px;*/
 }
-/* td {overflow:hidden;white-space:nowrap; } */
+/* td {overflow:hidden;white-space:nowrap; } 
 
 tr > td:hover {
   overflow: visible;
   white-space: unset;
-}
+}*/
