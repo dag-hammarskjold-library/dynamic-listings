@@ -16,10 +16,6 @@ main=Blueprint("main",__name__)
 # connection to the database
 #config = dotenv_values(".env") 
 my_client = MongoClient(config("DATABASE_CONN"))
-print(my_client)
-    
-
-    
 
 
 ####################################################################################################################
@@ -919,7 +915,6 @@ def render_meeting(codemeeting,language):
     
     data=[]
     for record in my_records:
-        # print(record["listing_id"])
         data.append(record)
 
     # just return the listings
