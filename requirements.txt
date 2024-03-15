@@ -10,12 +10,11 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 cryptography==41.0.5
-dlx==1.2.3.1
 dnspython==2.3.0
-flask==2.3.3
+Flask==2.3.3
 Flask-Bcrypt==1.0.1
 Flask-PyMongo==2.3.0
-flask-session==0.6.0
+Flask-Session==0.6.0
 idna==3.4
 importlib-metadata==6.8.0
 itsdangerous==2.1.2
@@ -33,7 +32,7 @@ pycparser==2.21
 pymongo==4.6.2
 pyrsistent==0.20.0
 python-dateutil==2.8.2
-python-decouple==3.8
+python-dotenv==1.0.1
 pytz==2023.3.post1
 PyYAML==6.0.1
 regex==2023.10.3
@@ -44,7 +43,7 @@ sentinels==1.0.0
 six==1.16.0
 tqdm==4.66.1
 urllib3==1.26.18
-werkzeug==2.3.7
+Werkzeug==2.3.7
 xlrd==1.2.0
 xmldiff==2.4
 xmltodict==0.13.0

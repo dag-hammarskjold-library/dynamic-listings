@@ -1,21 +1,23 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
-from flask import Blueprint, jsonify, redirect, render_template,request,make_response, send_file, session,redirect, url_for
-from pymongo import MongoClient
+from flask import Blueprint, jsonify, redirect, render_template,request, send_file, session,redirect
+from pymongo.mongo_client import MongoClient
 import datetime
 from datetime import date
-from .tools import add_log,query_security_counsel_dataset
-from bson import json_util
+from .tools import add_log
 from bson.objectid import ObjectId
 import requests
-from decouple import config
+from dotenv import dotenv_values
+from bson import json_util
+
+
 
 # definition of the Blueprint
 main=Blueprint("main",__name__)
 
 # connection to the database
-#config = dotenv_values(".env") 
-my_client = MongoClient(config("DATABASE_CONN"))
+config = dotenv_values(".env") 
+my_client = MongoClient(config["DATABASE_CONN"])
 
 
 ####################################################################################################################
@@ -39,15 +41,15 @@ def login():
     if request.method=="POST":
         
         # check if it's the special user
-        if request.form.get("email")==config("DEFAULT_USER_EMAIL"):
+        if request.form.get("email")==config["DEFAULT_USER_EMAIL"]:
 
-            if request.form.get("password")==config("DEFAULT_USER_PWD"):
+            if request.form.get("password")==config["DEFAULT_USER_PWD"]:
                 
                 # special user
-                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config("DEFAULT_USER_NAME"),"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
                 
                 # add the username to the session
-                session['username'] = config("DEFAULT_USER_NAME")
+                session['username'] = config["DEFAULT_USER_NAME"]
                 
                 #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
                 return redirect('index')
@@ -105,7 +107,7 @@ def login():
 @main.route("/index")
 def index():
     if session['username']!="":
-        return render_template('index.html',version=config("ACTUAL_VERSION"),session_username=session['username'])
+        return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
     else:
         return redirect("login.html")
 
@@ -242,7 +244,7 @@ def logs():
     
     if session:
         if session['username']!="":
-            my_prefix=config("APP_PREFIX_VALUE")
+            my_prefix=config["APP_PREFIX_VALUE"]
             return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
@@ -561,8 +563,8 @@ def datasetsVueAddDataset():
 
 
 # route for the datamodels form
-@main.route("/datasetsVue/executeDataset/<dataset_id>", methods=["POST"])
-def datasetsVueExecuteDataset(dataset_id):
+# @main.route("/datasetsVue/executeDataset/<dataset_id>", methods=["POST"])
+# def datasetsVueExecuteDataset(dataset_id):
     
     # Definition of the collections
     my_database = my_client["DynamicListings"]  
