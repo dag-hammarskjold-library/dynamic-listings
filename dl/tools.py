@@ -1,3 +1,4 @@
+import datetime
 from pymongo import MongoClient
 import sys
 from dotenv import dotenv_values
@@ -7,7 +8,7 @@ from dotenv import dotenv_values
 config = dotenv_values(".env") 
 
 # function managing the creation of the logs depending of the context
-def add_log(date_log:str,user_connected:str,action_log:str)-> int:
+def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
     
     try:
     

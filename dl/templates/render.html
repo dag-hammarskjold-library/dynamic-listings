@@ -27,7 +27,7 @@
                     (Dans l'ordre chronologique inverse)</th>
                 </tr>                
                 {% endif %}
-                {% if language == "SP" %}
+                {% if language == "ES" %}
                 <tr style="border: 1px solid black;border-collapse: collapse;">
                     <th class="tbltitle" colspan="5" >Reuniones realizadas por el Consejo de Seguridad en <br />
                         (en orden cronológico inverso)</th>
@@ -46,7 +46,7 @@
                     {% if language == "FR" %}
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (O-N-A)</th>
                     {% endif %}
-                    {% if language == "SP" %}
+                    {% if language == "ES" %}
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (S-N-A)</th>
                     {% endif %}
                 </tr>
@@ -57,7 +57,7 @@
                     {% if language == "FR" %}
                         <td colspan="6"><strong>Les liens vers les documents</strong> fonctionneront une fois que le document aura été publié dans le système de documents officiel.</td>
                     {% endif %} 
-                    {% if language == "SP" %}
+                    {% if language == "ES" %}
                         <td colspan="6"><strong>Enlaces de documentos</strong> funcionará una vez que el documento haya sido publicado en el Sistema de Documento Oficial.</td>
                     {% endif %}                                               
                 </tr>
@@ -86,7 +86,7 @@
                         {% endfor %}      
                     {% endif %}  
 
-                {% if language == "SP" %}
+                {% if language == "ES" %}
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>

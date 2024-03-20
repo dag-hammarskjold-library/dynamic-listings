@@ -908,7 +908,7 @@ def render_meeting(codemeeting,language):
     if language=="FR":
         title=title_fr
 
-    if language=="SP":
+    if language=="ES":
         title=title_sp
 
 
