@@ -21,7 +21,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <option value="AR">Arabic</option>
                 <option value="ZH">Chinese</option> -->
               </select>
-              <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Display the table</button> 
+              <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Update the table</button> 
               <button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  
             </div>
             <div v-if="displayRecordFromQuery">
