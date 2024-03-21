@@ -917,7 +917,7 @@ def render_meeting(codemeeting,language):
 
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"})
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
     
     data=[]
     for record in my_records:
