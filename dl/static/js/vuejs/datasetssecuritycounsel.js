@@ -22,6 +22,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <option value="ZH">Chinese</option> -->
               </select>
               <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Update the table</button> 
+              <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')">Display table</button> 
               <button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  
             </div>
             <div v-if="displayRecordFromQuery">
@@ -407,6 +408,19 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         this.initPage=false
         this.displayRecordFromQuery=false
         this.displayFTP=true
+      },
+      renderData(my_meeting,my_language){
+        // getting values for the meeting and the language selected
+        const my_meeting_value=document.getElementById(my_meeting).value
+        const my_language_value=document.getElementById(my_language).value
+        // getting the domain
+        const my_location=window.location.toString()
+        const my_string_to_replace="/datasetSecurityCounsel"
+        const my_final_location=my_location.replace(my_string_to_replace,'')
+        // generation of the url to open
+        const url=`${my_final_location}/render_meeting/${my_meeting_value}/${my_language_value}`
+        // open the url generated
+        window.open(url, '_blank').focus();
       },
       async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
