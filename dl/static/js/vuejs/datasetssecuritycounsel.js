@@ -21,9 +21,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <option value="AR">Arabic</option>
                 <option value="ZH">Chinese</option> -->
               </select>
-              <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Update the table</button> 
-              <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')">Display table</button> 
-              <button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  
+                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;">Create a  new record</button> 
+                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Update the table</button> 
+                <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')">Display table</button> 
+                <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
             <div v-if="displayRecordFromQuery">
               <button type="button" class="btn btn-success" @click="exportExcel('myTable')">Extract to Excel</button>
@@ -94,7 +95,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td v-else>  </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
                               <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                               <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
                           </td>
@@ -247,6 +247,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
 
              <div v-if="updateRecordFromQuery">
+                <div class="mb-3">
+                  <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
+                  <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This update will affect the record in French </h3>
+                  <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This update will affect the record in Spanish </h3>
+                  <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This update will affect the record in Russian</h3>
+                  <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This update will affect the record in Arabic </h3>
+                  <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This update will affect the record in Chinese</h3>
+                </div> 
                 <hr> 
                 <form @submit.prevent="">
                     <div class="mb-3">
@@ -283,6 +291,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         
 
         <div v-if="createRecordFromQuery">
+              <div class="mb-3">
+                <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This creation will affect the record in English </h3>
+                <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This creation will affect the record in French </h3>
+                <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This creation will affect the record in Spanish </h3>
+                <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This creation will affect the record in Russian</h3>
+                <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This creation will affect the record in Arabic </h3>
+                <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This creation will affect the record in Chinese</h3>
+              </div> 
               <hr> 
               <form @submit.prevent="">
               <div class="mb-3">
@@ -326,6 +342,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         </div>
 
         <div v-if="deleteRecordFromQuery">
+            <div class="mb-3">
+              <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This deletion will affect the record in English </h3>
+              <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This deletion will affect the record in French </h3>
+              <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This deletion will affect the record in Spanish </h3>
+              <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This deletion will affect the record in Russian</h3>
+              <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This deletion will affect the record in Arabic </h3>
+              <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This deletion will affect the record in Chinese</h3>
+            </div> 
             <hr> 
             <form @submit.prevent="">
             <div class="mb-3">
