@@ -66,7 +66,7 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"][-4:]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][0]["outcome_text"]}}</td>
@@ -78,7 +78,7 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"][-5:]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][1]["outcome_text"]}}</td>
@@ -90,7 +90,7 @@
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
-                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"][-5:]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["outcomes"][0]["outcome_vote"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["outcomes"][0]["outcome"][2]["outcome_text"]}}</td>
