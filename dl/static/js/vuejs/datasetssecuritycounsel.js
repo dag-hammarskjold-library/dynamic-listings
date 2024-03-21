@@ -397,7 +397,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       my_data.forEach(element => {
         this.meetingsIds.push(element)
       });
-      this.meetingsIds=this.meetingsIds.sort()
+      //this.meetingsIds=this.meetingsIds.sort()
 
     },
 

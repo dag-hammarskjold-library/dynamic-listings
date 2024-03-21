@@ -2,6 +2,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from flask import Blueprint, jsonify, redirect, render_template,request, send_file, session,redirect
 from pymongo.mongo_client import MongoClient
+import pymongo
 import datetime
 from datetime import date
 from .tools import add_log
@@ -731,7 +732,10 @@ def get_sc_listings_Id():
     my_collection = my_database["dl5"]
 
     # get all the listings_id
-    my_fields=my_collection.distinct("listing_id")
+    my_field=my_collection.distinct("listing_id")
+    
+    # descending sort 
+    my_fields=sorted(my_field,reverse=True)
     
     # just return the listings
     return json.loads(json_util.dumps(my_fields))  
