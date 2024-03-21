@@ -63,7 +63,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                            <span v-if="languageSelected==='EN'"> {{record.date[0].value.substring(record.date[0].value.length - 4)}}</span>
+                            <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
                             <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
                             <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
                             <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
@@ -127,7 +127,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
                           <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                          <span v-if="languageSelected==='ES'"> {{record.date[2].value.substring(record.date[2].value.length - 5)}}</span>
+                          <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
                           <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                           <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
                           <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
@@ -187,7 +187,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.date[1].value.substring(record.date[1].value.length - 5)}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
                     <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
                     <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                     <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
