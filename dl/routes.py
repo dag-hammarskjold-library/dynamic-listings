@@ -757,6 +757,7 @@ def update_sc_listing():
                             'date.0.value': request.form.get("date"),
                             'topic.0.value':request.form.get("topic"),
                             'outcomes.0.outcome_vote':request.form.get("vote"),
+                            'outcomes.0.outcome.0.lang':my_languague_selected, 
                             'outcomes.0.outcome.0.outcome_text': request.form.get("security_council_document"),                            
                             "refresh": request.form.get("refresh")
                         }
@@ -772,7 +773,8 @@ def update_sc_listing():
                             'date.1.value': request.form.get("date"),
                             'topic.1.value':request.form.get("topic"),
                             'outcomes.1.outcome_vote':request.form.get("vote"),
-                            'outcomes.1.outcome.1.outcome_text': request.form.get("security_council_document"),                            
+                            'outcomes.0.outcome.1.lang':my_languague_selected, 
+                            'outcomes.0.outcome.1.outcome_text': request.form.get("security_council_document"),                            
                             "refresh": request.form.get("refresh")
                         }
                     }
@@ -787,7 +789,8 @@ def update_sc_listing():
                             'date.2.value': request.form.get("date"),
                             'topic.2.value':request.form.get("topic"),
                             'outcomes.2.outcome_vote':request.form.get("vote"),
-                            'outcomes.2.outcome.2.outcome_text': request.form.get("security_council_document"),                            
+                            'outcomes.0.outcome.2.lang':my_languague_selected, 
+                            'outcomes.0.outcome.2.outcome_text': request.form.get("security_council_document"),                            
                             "refresh": request.form.get("refresh")
                         }
                     }

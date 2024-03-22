@@ -115,9 +115,3 @@ body {
 .tableau{
   background-color: #d7dbdd;
 }
-/* td {overflow:hidden;white-space:nowrap; } 
-
-tr > td:hover {
-  overflow: visible;
-  white-space: unset;
-}*/
