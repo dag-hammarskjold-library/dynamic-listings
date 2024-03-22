@@ -9,3 +9,4 @@ _build/
 .DS_Store
 .vs
 .env
+flask_session/
