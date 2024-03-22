@@ -1,7 +1,7 @@
 Vue.component('displaylistdatasetssecuritycounselcomponent',{
     props: ["title",'prefix'],
     template: `
-     <div class="page mt-3" id="test">
+     <div class="mt-3" id="test">
         <div class="alert alert-success" role="alert">
             <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
         </div>
@@ -270,7 +270,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
                     </div>   
                     <div class="mb-3">
-                        <label for="inputName" class="form-label">Security Council </label>
+                        <label for="inputName" class="form-label">Outcome Text</label>
                         <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
                     </div> 
                     <div class="mb-3">
@@ -322,7 +322,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
               </div>   
               <div class="mb-3">
-                  <label for="inputName" class="form-label">Security Council </label>
+                  <label for="inputName" class="form-label">Outcome Text </label>
                   <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
               </div> 
               <div class="mb-3">
@@ -365,7 +365,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <input type="text" class="form-control" id="topic" name="topic" v-model="topic" disabled>
             </div>   
             <div class="mb-3">
-                <label for="inputName" class="form-label">Security Council </label>
+                <label for="inputName" class="form-label">Outcome Text</label>
                 <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document" disabled>
             </div> 
             <div class="mb-3">

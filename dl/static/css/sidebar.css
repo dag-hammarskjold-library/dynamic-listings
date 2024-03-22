@@ -9,12 +9,13 @@ body {
   
   main {
     display: flex;
-    flex-wrap: nowrap;
-    /* height: 100vh;
-    height: -webkit-fill-available; */
+    height: 900vh;
+    /*flex-wrap: nowrap;
+    
+    height: -webkit-fill-available; 
    
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: hidden;*/
   }
   
   .b-example-divider {
