@@ -155,7 +155,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <td v-else>  </td>
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                            <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
+                          
                             <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                             <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
                         </td>
@@ -217,7 +217,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <td v-else>  </td>
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
-                      <span class="badge rounded-pill bg-primary" @click="displayRecordFromQuery=false;createRecordFromQuery=true;"><i class="fas fa-plus"></i></span> 
+                      
                       <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
                       <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
                   </td>
