@@ -123,7 +123,7 @@ Vue.component('displaylistuserscomponent',{
     },
     created:async function(){
       try {
-        const my_response = await fetch("/usersVue");
+        const my_response = await fetch("./usersVue");
         const my_data = await my_response.json();
         my_data.forEach(element => {
           this.listOfFields.push(element)
@@ -142,7 +142,7 @@ Vue.component('displaylistuserscomponent',{
             user.append('email',this.email)
             user.append('password',this.password)
             user.append('role',this.role)
-            const my_response = await fetch("/usersVue/AddUser", {
+            const my_response = await fetch("./usersVue/AddUser", {
               "method":"POST",
               "body":user
             });
@@ -160,7 +160,7 @@ Vue.component('displaylistuserscomponent',{
             user.append('email',this.email)
             user.append('_id',this.userToUpdate)
             user.append('role',this.role)
-            const my_response = await fetch("/usersVue/UpdateUser/" + this.userToUpdate , {
+            const my_response = await fetch("./usersVue/UpdateUser/" + this.userToUpdate , {
               "method":"PUT",
               "body":user
             });
@@ -176,7 +176,7 @@ Vue.component('displaylistuserscomponent',{
               if (confirm(`Do you really want to delete the record with the _id : ${userID} ? `) == true) {
               let user = new FormData()
               user.append('_id',userID)
-              const my_response = await fetch("/usersVue/DeleteUser", {
+              const my_response = await fetch("./usersVue/DeleteUser", {
                 "method":"POST",
                 "body":user
               });
