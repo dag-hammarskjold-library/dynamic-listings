@@ -123,7 +123,7 @@ Vue.component('displaylistuserscomponent',{
     },
     created:async function(){
       try {
-        const my_response = await fetch("/usersVue");
+        const my_response = await fetch("./usersVue");
         const my_data = await my_response.json();
         my_data.forEach(element => {
           this.listOfFields.push(element)
