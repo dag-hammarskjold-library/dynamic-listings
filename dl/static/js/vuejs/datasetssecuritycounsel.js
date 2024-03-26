@@ -458,7 +458,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
-      const my_response = await fetch("/getsclistings/" + myMeetingValue);
+      const my_response = await fetch("./getsclistings/" + myMeetingValue);
       const my_data = await my_response.json();
       console.log(my_data)
       my_data.forEach(element => {
@@ -578,7 +578,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('refresh',this.refresh)
         dataset.append('listing_id',this.listing_id)
         dataset.append('languageSelected',this.languageSelected)
-        const my_response = await fetch("/create_sc_listing",{
+        const my_response = await fetch("./create_sc_listing",{
           "method":"POST",
           "body":dataset
           });
@@ -598,7 +598,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('security_council_document',this.security_council_document)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)
-        const my_response = await fetch("/update_sc_listing",{
+        const my_response = await fetch("./update_sc_listing",{
           "method":"PUT",
           "body":dataset
           });
@@ -617,7 +617,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           let dataset = new FormData()
           alert(this.my_id)
           dataset.append('_id',this.my_id)
-          const my_response = await fetch("/delete_sc_listing",{
+          const my_response = await fetch("./delete_sc_listing",{
             "method":"POST",
             "body":dataset
             });

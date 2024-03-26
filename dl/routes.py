@@ -24,7 +24,6 @@ main=Blueprint("main",__name__)
 # connection to the database
 config = dotenv_values(".env") 
 my_client = MongoClient(config["DATABASE_CONN"])
-print(my_client)
 
 
 ####################################################################################################################
@@ -177,7 +176,6 @@ def usersVueAddUser():
                 "status" : "OK",
                 "message" : "User created!!!"
             }
-            print(result)
             return jsonify(result)
 
         else :
@@ -600,13 +598,11 @@ def datasetsVueAddDataset():
                 try:
                     my_data= requests.get(config("BIB_PREFIX_VALUE") + dm["recordid"]  +"/fields/"+ dm["field"]  +"/0")
                     my_data=json.loads(my_data._content)
-                    # print(my_data["data"]["subfields"])
+ 
                     for subfield in my_data["data"]["subfields"]:
                         if subfield["code"]==dm["subfield"]:
                             
                             # Adding the day to the result
-                            # print(subfield["code"])
-                            # print(subfield["value"])
                             my_results_record={}
                             
                             # Storing the value provided by the API
@@ -614,20 +610,17 @@ def datasetsVueAddDataset():
                             my_results_record["value"]=subfield["value"]
                             my_results_record["comment"]="ok"
                             my_results_record_global.append(my_results_record)
-                            print(my_results_record_global)
+
                     
                 except:
                     pass
                 
             else : 
-                # extract the default values
-                print("error")
+                pass
                 
         # create the global object + save
         date_of_the_day=today = str(date.today())
         my_results[date_of_the_day]=my_results_record_global
-        print("-----------------------------------")
-        print(my_results)
     
     # adding the results to the field results in the database
     my_dataset.update_one(
@@ -778,7 +771,7 @@ def update_sc_listing():
                             'meeting_record':request.form.get("record"),
                             'date.1.value': request.form.get("date"),
                             'topic.1.value':request.form.get("topic"),
-                            'outcomes.1.outcome_vote':request.form.get("vote"),
+                            'outcomes.0.outcome_vote':request.form.get("vote"),
                             'outcomes.0.outcome.1.lang':my_languague_selected, 
                             'outcomes.0.outcome.1.outcome_text': request.form.get("security_council_document"),                            
                             "refresh": request.form.get("refresh")
@@ -794,7 +787,7 @@ def update_sc_listing():
                             'meeting_record':request.form.get("record"),
                             'date.2.value': request.form.get("date"),
                             'topic.2.value':request.form.get("topic"),
-                            'outcomes.2.outcome_vote':request.form.get("vote"),
+                            'outcomes.0.outcome_vote':request.form.get("vote"),
                             'outcomes.0.outcome.2.lang':my_languague_selected, 
                             'outcomes.0.outcome.2.outcome_text': request.form.get("security_council_document"),                            
                             "refresh": request.form.get("refresh")
@@ -888,7 +881,7 @@ def delete_sc_listing():
         
         my_database = my_client["DynamicListings"]  
         my_collection = my_database["dl5"]
-        print(request.form.get("_id"))
+
         record = {
             "_id": ObjectId(request.form.get("_id")),
         }
@@ -913,7 +906,7 @@ def render_meeting(codemeeting,language):
     title=""
     title_en=["Meeting","Date","Topic","Security Council","Outcome","Vote"]
     title_fr=["Réunion","Date","Sujet","Conseil de sécurité","Résultat","Vote"]
-    title_sp=["Reunión","Fecha","Tema","Consejo de Seguridad","Resultado","Votar"]
+    title_es=["Reunión","Fecha","Tema","Consejo de Seguridad","Resultado","Votar"]
     
     if language=="EN":
         title=title_en
@@ -922,7 +915,7 @@ def render_meeting(codemeeting,language):
         title=title_fr
 
     if language=="ES":
-        title=title_sp
+        title=title_es
 
 
     # get all the listings_id
