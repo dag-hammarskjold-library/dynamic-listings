@@ -417,7 +417,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     
     created:async function(){
       // loading all the meetings ID
-      const my_response = await fetch("/getsclistingsId");
+      const my_response = await fetch("./getsclistingsId");
       const my_data = await my_response.json();
       my_data.forEach(element => {
         this.meetingsIds.push(element)
