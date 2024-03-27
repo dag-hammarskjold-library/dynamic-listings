@@ -31,9 +31,6 @@ jobs:
           pip install -r requirements.txt
           pip install zappa
           deactivate
-      - name: Set environment variables
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Deploy with Zappa
         run: | 
           . venv/bin/activate
