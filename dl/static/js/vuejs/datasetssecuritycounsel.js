@@ -407,7 +407,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         topic:"",
         security_council_document:"",
         vote:"",
-        refresh:"",
+        refresh:false,
         record:"",
         my_id:"",
         listing_id:"",
