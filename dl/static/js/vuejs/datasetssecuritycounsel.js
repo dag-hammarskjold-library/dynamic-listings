@@ -407,7 +407,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         topic:"",
         security_council_document:"",
         vote:"",
-        refresh:false,
+        refresh:Boolean,
         record:"",
         my_id:"",
         listing_id:"",
@@ -612,10 +612,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
-      async deleteRecord(docsymbol){
-        if (confirm(`Do you really want to delete the record with the document symbol : ${docsymbol} ? `) == true) {
+      async deleteRecord(){
+        if (confirm(`Do you really want to delete this record ? `) == true) {
           let dataset = new FormData()
-          alert(this.my_id)
           dataset.append('_id',this.my_id)
           const my_response = await fetch("./delete_sc_listing",{
             "method":"POST",
