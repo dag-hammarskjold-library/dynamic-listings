@@ -747,6 +747,13 @@ def update_sc_listing():
         my_collection = my_database["dl5"]
         my_languague_selected=request.form.get("languageSelected")
 
+        if (request.form.get("refresh")=="false"):
+            my_refresh=False
+        else:
+             my_refresh=True
+            
+        
+        
         if my_languague_selected=="EN":
             my_collection.update_one(
                 {'_id':   ObjectId(request.form.get("_id"))}, 
@@ -758,7 +765,7 @@ def update_sc_listing():
                             'outcomes.0.outcome_vote':request.form.get("vote"),
                             'outcomes.0.outcome.0.lang':my_languague_selected, 
                             'outcomes.0.outcome.0.outcome_text': request.form.get("security_council_document"),                            
-                            "refresh": request.form.get("refresh")
+                            "refresh": my_refresh
                         }
                     }
                 )
@@ -774,7 +781,7 @@ def update_sc_listing():
                             'outcomes.0.outcome_vote':request.form.get("vote"),
                             'outcomes.0.outcome.1.lang':my_languague_selected, 
                             'outcomes.0.outcome.1.outcome_text': request.form.get("security_council_document"),                            
-                            "refresh": request.form.get("refresh")
+                            "refresh": my_refresh
                         }
                     }
                 )
@@ -790,7 +797,7 @@ def update_sc_listing():
                             'outcomes.0.outcome_vote':request.form.get("vote"),
                             'outcomes.0.outcome.2.lang':my_languague_selected, 
                             'outcomes.0.outcome.2.outcome_text': request.form.get("security_council_document"),                            
-                            "refresh": request.form.get("refresh")
+                            "refresh":  my_refresh
                         }
                     }
                 )                    
@@ -837,7 +844,11 @@ def create_sc_listing():
     ]
     
     # refresh
-    my_refresh=False
+    if (request.form.get("refresh")=="false"):
+        my_refresh=False
+    else:
+        my_refresh=True
+
     
     # listing id
     my_listing_id=request.form.get("listing_id")

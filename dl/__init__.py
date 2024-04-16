@@ -13,17 +13,7 @@ config1 = dotenv_values(".env")
 def create_app(test_config=None):
     app=Flask(__name__) 
 
-    #management of the session
-    #app.config["SESSION_PERMANENT"] = False
-    #app.config["SESSION_TYPE"] = "filesystem"  
-    #sess = Session()
-    #sess.init_app(app)    
-
     app.register_blueprint(main)
     app.config["SECRET_KEY"] = config1["SECRET_KEY"]
-
-    print(app.config["SECRET_KEY"])
-        
-    #from .routes import *
     
     return app
