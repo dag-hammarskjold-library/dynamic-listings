@@ -639,7 +639,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
               <h4 style="text-align: center;">&nbsp;</h4>
-              <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">          
+              <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">     
+              <p style="text-align: justify;">&nbsp;</p>     
               `
               let end=`
               </div>
