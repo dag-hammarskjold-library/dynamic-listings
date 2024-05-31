@@ -37,7 +37,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         </div>
         <hr>
         <div class="shadow" v-if="displayRecordFromQuery" style="width:1200px;">
-          <table style="width:868px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="The table has five columns and should be read per row. The first column indicate the document 
+          <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="The table has five columns and should be read per row. The first column indicate the document 
               symbol of the meeting record, which is linked to the actual document in PDF format. 
               The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
               The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
@@ -102,7 +102,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   </tbody>
           </table>
 
-      <table style="width:868px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
+      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
           <tbody>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <th class="tbltitle" colspan="5" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
@@ -163,7 +163,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 </tbody>
         </table>
 
-      <table style="width:868px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
+      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
           <tbody>
               <tr style="border: 1px solid black;border-collapse: collapse;">
                   <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
@@ -630,9 +630,11 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         try {
               
               let myData=document.getElementById("myTable")
-              alert(myData.outerHTML)
               for(const row of myData.rows){
-                  row.deleteCell(-1);
+                  if (row.rowIndex!==0) 
+                    {
+                      row.deleteCell(-1);
+                    }
               }
               let myDataHTML=myData.outerHTML
               alert("Your data has been exported with HTML format!!!")
