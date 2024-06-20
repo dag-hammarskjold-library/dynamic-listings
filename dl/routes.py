@@ -8,8 +8,9 @@ from datetime import date
 from .tools import add_log
 from bson.objectid import ObjectId
 import requests
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from bson import json_util
+import os
 
 
 
@@ -22,8 +23,10 @@ from bson import json_util
 main=Blueprint("main",__name__)
 
 # connection to the database
-config = dotenv_values(".env") 
-my_client = MongoClient(config["DATABASE_CONN"])
+#config = dotenv_values(".env") 
+load_dotenv()
+#my_client = MongoClient(config["DATABASE_CONN"])
+my_client = MongoClient(os.getenv("DATABASE_CONN"))
 
 
 ####################################################################################################################
@@ -47,15 +50,19 @@ def login():
     if request.method=="POST":
         
         # check if it's the special user
-        if request.form.get("email")==config["DEFAULT_USER_EMAIL"]:
+        #if request.form.get("email")==config["DEFAULT_USER_EMAIL"]:
+        if request.form.get("email") == os.getenv("DEFAULT_USER"):
 
-            if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            #if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            if request.form.get("password") == os.getenv("DEFAULT_USER_PWD"):
                 
                 # special user
-                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                #add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),os.getenv("DEFAULT_USER_NAME"),"Connected to the system!!!")
                 
                 # add the username to the session
-                session['username'] = config["DEFAULT_USER_NAME"]
+                #session['username'] = config["DEFAULT_USER_NAME"]
+                session['username'] = os.getenv("DEFAULT_USER_NAME")
                 
                 #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
                 return redirect('index')
@@ -113,7 +120,8 @@ def login():
 @main.route("/index")
 def index():
     if session['username']!="":
-        return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        #return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        return render_template('index.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
     else:
         return redirect("login.html")
 
@@ -249,7 +257,8 @@ def logs():
     
     if session:
         if session['username']!="":
-            my_prefix=config["APP_PREFIX_VALUE"]
+            #my_prefix=config["APP_PREFIX_VALUE"]
+            my_prefix=os.getenv("APP_PREFIX_VALUE")
             return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
