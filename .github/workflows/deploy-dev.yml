@@ -16,9 +16,13 @@ jobs:
     - name: Setting up AWS Credentials
       run: |
         pip install awscli
+        echo "configuring region"
         aws configure set region us-east-1
+        echo "configuring output"
         aws configure set output json
+        echo "configuring access key id"
         aws configure set aws_access_key_id ${{secrets.AWS_ACCESS_KEY_ID}}
+        echo "configuring secret access key"
         aws configure set aws_secret_access_key ${{secrets.AWS_SECRET_ACCESS_KEY}}
     - name: Create virtual environment
       run: |
