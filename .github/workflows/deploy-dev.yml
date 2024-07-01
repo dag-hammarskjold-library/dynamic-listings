@@ -8,18 +8,18 @@ jobs:
   deploy-Lambda-function:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
     - name: Setting up AWS Credentials
       run: |
-        pip install awscliv2
-        awsv2 configure set region us-east-1
-        awsv2 configure set output json
-        awsv2 configure set aws_access_key_id ${{secrets.AWS_ACCESS_KEY_ID}}
-        awsv2 configure set aws_secret_access_key ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        pip install awscli
+        aws configure set region us-east-1
+        aws configure set output json
+        aws configure set aws_access_key_id ${{secrets.AWS_ACCESS_KEY_ID}}
+        aws configure set aws_secret_access_key ${{secrets.AWS_SECRET_ACCESS_KEY}}
     - name: Create virtual environment
       run: |
         pip install virtualenv
