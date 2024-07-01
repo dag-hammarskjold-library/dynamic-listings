@@ -1,11 +1,13 @@
 import datetime
 from pymongo import MongoClient
 import sys
-from dotenv import dotenv_values
+from dotenv import load_dotenv
+import os
 
 
 # connection to the database
-config = dotenv_values(".env") 
+#config = dotenv_values(".env") 
+load_dotenv
 
 # function managing the creation of the logs depending of the context
 def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
@@ -14,7 +16,8 @@ def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
     
         # definition of the parameters for the mongo client
         my_client = MongoClient(
-            config["DATABASE_CONN"]
+            #config["DATABASE_CONN"]
+            os.getenv("DATABASE_CONN")
         )
         
         # setup the database and the collection
