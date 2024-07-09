@@ -101,15 +101,18 @@ def process_records():
         outcomes=[]
         outcome_text=bib.get_value('993','a')
         outcome_text_link=""
-        if outcome_text:
-            outcome_text_link="https://undocs.org/"+outcome_text
         outcome_obj={"outcome_vote":outcome_vote,
                         "outcome":[{"outcome_vote":outcome_vote},{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-    # this is to create outcome text structure if we have text or if not we generate 
+        
         if outcome_text:
-            outcomes.append(outcome_obj)
+            outcome_text_link="https://undocs.org/"+outcome_text
+            outcome_obj={"outcome_vote":outcome_vote,
+                        "outcome":[{"outcome_vote":outcome_vote},{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+    # this is to create outcome text structure if we have text or if not we generate 
         else:
             # we need second query to find a vote value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
             query2 = Query.from_string("952__a:/^"+document_symbol+"/") # Dataset-search_query
@@ -136,6 +139,8 @@ def process_records():
                 outcomes.append(outcome_obj)
         #i+=1
         #print(i,document_symbol,outcomes)
+        if outcomes==[]:
+            outcomes.append(outcome_obj)
         outcome_text=""
         outcome_vote=""         
         data_model=(document_symbol, action_date, agenda_subject, outcomes)
@@ -185,7 +190,7 @@ def refresh_SCMO():
 
 if __name__ == '__main__':
     year=2023
-    month=11
+    month="10"
     start_time_chunk=time.time()
     query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
     coll_dl5,coll_agendas=connect_db()
