@@ -796,7 +796,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         }
         },
       async refresh_data(){
-        alert("inside")
         let myYear=document.getElementById("year").value
         let myMonth=""
         if (document.getElementById("january").checked) myMonth="01"
@@ -815,13 +814,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         let dataset = new FormData()
         dataset.append('year',Number(myYear))
         dataset.append('month',Number(myMonth))
-        alert("The process has started the data will be updated in few minutes!!!")
+        alert("The process has started the data will be updated in few seconds!!!")
         const my_response = await fetch("./refresh_data",{
           "method":"POST",
           "body":dataset
           }); 
           const my_data = await my_response.json();  
         alert(my_data["message"])
+        this.showMyModal()
       },
       async exportHTML(){
         try {

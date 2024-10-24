@@ -140,7 +140,5 @@ def proess(year:int)-> None:
     print("Process ended")
     
     
-proess(2020)
-    
     
 
