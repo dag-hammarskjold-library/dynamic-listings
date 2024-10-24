@@ -1,5 +1,5 @@
 from dlx import DB
-from config import Config
+from .config import Config
 import time
 import re
 import datetime
@@ -22,7 +22,7 @@ def get_date_in_lang(date, locale):
         pass
 
 # function that returns translations of the agenda subjects based onthe english text and a query language code from the lookup table
-def query_agendas_collection(text_en, query_lang):
+def query_agendas_collection(text_en, query_lang,coll_agendas):
     # Aggregation pipeline to find documents where 'body' is 'SC' and 'agenda' array contains an object where 'lang' is 'EN' and 'txt' is 'abc'
     pipeline = [
         # Match documents where 'body' is 'SC' and there is an element in the 'agenda' array where 'lang' is 'EN' and 'txt' is 'abc'
@@ -58,7 +58,7 @@ def connect_db():
     #this is the parameter value that needs to be selected each time the specific table is refreshed
     return coll_dl5, coll_agendas
 
-def process_records():
+def process_records(coll_agendas,query_string,year):
     documents=[]
     #query to get metadata values for the S/PV documents
     # for the time we refresh the full table
@@ -157,9 +157,9 @@ def process_records():
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
                 {"lang":"ES","value":get_date_in_lang(action_date,'es_ES')}],
         "topic":[{"lang":"EN","value":agenda_subject},
-                {"lang":"FR","value": query_agendas_collection(agenda_subject, "FR")},
+                {"lang":"FR","value": query_agendas_collection(agenda_subject, "FR",coll_agendas)},
                 #{"lang":"FR","value":agenda_subject},
-                {"lang":"ES","value":query_agendas_collection(agenda_subject, "ES")}],
+                {"lang":"ES","value":query_agendas_collection(agenda_subject, "ES",coll_agendas)}],
                 #{"lang":"ES","value":agenda_subject}],
         "refresh":True,
         "listing_id":"scmeetings_"+str(year),
@@ -170,11 +170,14 @@ def process_records():
     ]
     return documents
 
-def refresh_SCMO():
+def refresh_scmo(year:int,month:int):
 # for each doc in documents list find the matching record in the DB
 # if match and if mdb_doc['refresh']==True, update the record in the dl5 with the up to date data; do not update the record if mdb_doc['refresh']==False
     #coll_dl5, _=connect_db()
-    documents=process_records()
+    query_string ='191__a:"S/PV" AND 992:"'+str(year)+"-"+str(month)+'"'
+    coll_dl5,coll_agendas=connect_db()
+    documents=process_records(coll_agendas,query_string,year)
+    print(documents)
     for doc in documents:
         update_filter = {'meeting_record': doc['meeting_record']}
         new_values = {'$set': doc}
@@ -186,13 +189,3 @@ def refresh_SCMO():
             #in case there is not a match an exception will insert a new record
             coll_dl5.update_one(update_filter, new_values, upsert=True)
     
-
-
-if __name__ == '__main__':
-    year=2023
-    month=10
-    start_time_chunk=time.time()
-    #query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
-    query_string ='191__a:"S/PV" AND 992:"'+str(year)+"-"+str(month)+'"'
-    coll_dl5,coll_agendas=connect_db()
-    refresh_SCMO()
