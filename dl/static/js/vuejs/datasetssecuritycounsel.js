@@ -21,9 +21,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <option value="AR">Arabic</option>
                 <option value="ZH">Chinese</option> -->
               </select>
-                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;">Create a  new record</button> 
-                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')">Update the table</button> 
-                <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')">Display table</button> 
+                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;"><i class="fas fa-plus"></i> Create a  new record</button> 
+                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
+                <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
+                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button> 
                 <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
             <div v-if="displayRecordFromQuery">
@@ -383,12 +384,117 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
             </form>
         </div>
-      
+
+        <div :class="modalClasses" class="fade" id="reject" role="dialog">
+            <div class="modal-dialog">
+                  <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Refreshing Data process</h4>
+                          <button type="button" class="close" @click="showMyModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                        <label class="form-label"><strong>Please select the year</strong></label>
+                          <select id="year" class="form-select mb-3" aria-label="Default select example">
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                          </select>
+                          <label class="form-label"><strong>Please select the month</strong></label>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="january" checked>
+                              <label class="form-check-label" for="january">
+                                January
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="february" >
+                              <label class="form-check-label" for="february">
+                                February
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="march" >
+                              <label class="form-check-label" for="march">
+                                March
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="april" >
+                              <label class="form-check-label" for="april">
+                                April
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="may" >
+                              <label class="form-check-label" for="may">
+                                May
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="june" >
+                              <label class="form-check-label" for="june">
+                                June
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="july" >
+                              <label class="form-check-label" for="july">
+                                July
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="august" >
+                              <label class="form-check-label" for="august">
+                                August
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="september" >
+                              <label class="form-check-label" for="september">
+                                September
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="october" >
+                              <label class="form-check-label" for="october">
+                                October
+                              </label>
+                            </div>
+                             <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="november" >
+                              <label class="form-check-label" for="november">
+                                November
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="december" >
+                              <label class="form-check-label" for="december">
+                                December
+                              </label>
+                            </div>  
+                          <hr>                                             
+                          <button class="btn btn-primary" @click="refresh_data()">Refresh</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+            
      </div>`,
 
 
     data: function () {
       return {
+        rows: [
+          [{ value1: "" }, { value2: "" }, { value3: "" },{ value4: "" }, { value5: "" }],
+        ],
         initPage:true,
         displayFTP:false,
         meetingsIds:[],
@@ -411,7 +517,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         record:"",
         my_id:"",
         listing_id:"",
-        record_link:""
+        record_link:"",
+        modalClasses: ['modal','fade'],
       }
     },
     
@@ -427,17 +534,80 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     },
 
     methods:{
+      addRow() {
+        // Adds a new row with three empty cells
+        this.rows.push([{ value1: "" }, { value2: "" }, { value3: "" }, { value4: "" }, { value5: "" }]);
+      },
+      removeRow(index) {
+        // Removes a row at the specified index
+        this.rows.splice(index, 1);
+      },
       openFTP(){
         alert("define the ftp")
         this.initPage=false
         this.displayRecordFromQuery=false
         this.displayFTP=true
       },
+      showMyModal() {
+        
+        document.body.className += ' modal-open'
+        let modalClasses = this.modalClasses
+    
+        if (modalClasses.indexOf('d-block') > -1) {
+            modalClasses.pop()
+            modalClasses.pop()
+    
+            //hide backdrop
+            let backdrop = document.querySelector('.modal-backdrop')
+            document.body.removeChild(backdrop)
+        }
+        else {
+            modalClasses.push('d-block')
+            modalClasses.push('show')
+    
+            //show backdrop
+            let backdrop = document.createElement('div')
+            backdrop.classList = "modal-backdrop fade show"
+            document.body.appendChild(backdrop)
+        }
+
+        const date = new Date();
+        const month = date.getMonth() + 1;
+        const year=date.getFullYear()
+       
+        // checked the actual month
+        if (month==1) document.getElementById("january").checked=true;
+        if (month==2) document.getElementById("february").checked=true;
+        if (month==3) document.getElementById("march").checked=true;
+        if (month==4) document.getElementById("april").checked=true;
+        if (month==5) document.getElementById("may").checked=true;
+        if (month==6) document.getElementById("june").checked=true;
+        if (month==7) document.getElementById("july").checked=true;
+        if (month==8) document.getElementById("august").checked=true;
+        if (month==9) document.getElementById("september").checked=true;
+        if (month==10) document.getElementById("october").checked=true;
+        if (month==11) document.getElementById("november").checked=true;
+        if (month==12) document.getElementById("december").checked=true;
+
+        // check the actual year
+        if (year=="2020") document.getElementById("year").value="2020";
+        if (year=="2021") document.getElementById("year").value="2021";
+        if (year=="2022") document.getElementById("year").value="2022";
+        if (year=="2023") document.getElementById("year").value="2023";
+        if (year=="2024") document.getElementById("year").value="2024";
+        if (year=="2025") document.getElementById("year").value="2025";
+        if (year=="2026") document.getElementById("year").value="2026";
+        if (year=="2027") document.getElementById("year").value="2027";
+        if (year=="2028") document.getElementById("year").value="2028";
+        if (year=="2029") document.getElementById("year").value="2029";
+        if (year=="2030") document.getElementById("year").value="2030";
+
+      },
       renderData(my_meeting,my_language){
-        // getting values for the meeting and the language selected
-        const my_meeting_value=document.getElementById(my_meeting).value
-        const my_language_value=document.getElementById(my_language).value
-        // getting the domain
+       // getting values for the meeting and the language selected
+       const my_meeting_value=document.getElementById(my_meeting).value
+       const my_language_value=document.getElementById(my_language).value
+       // getting the domain
         const my_location=window.location.toString()
         const my_string_to_replace="/datasetSecurityCounsel"
         const my_final_location=my_location.replace(my_string_to_replace,'')
@@ -460,7 +630,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       // loading all the data
       const my_response = await fetch("./getsclistings/" + myMeetingValue);
       const my_data = await my_response.json();
-      console.log(my_data)
+      
       my_data.forEach(element => {
         // We find the meeting
         if (element["listing_id"]===myMeetingValue){
@@ -603,7 +773,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           "body":dataset
           });
         const my_data = await my_response.json();
-        console.log(my_data)
         this.displayRecordFromQuery=true
         alert("Record updated!!!")
         location.reload()
@@ -625,7 +794,35 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           alert("Record deleted!!!")
           location.reload()
         }
-        }, 
+        },
+      async refresh_data(){
+        alert("inside")
+        let myYear=document.getElementById("year").value
+        let myMonth=""
+        if (document.getElementById("january").checked) myMonth="01"
+        if (document.getElementById("february").checked) myMonth="02"
+        if (document.getElementById("march").checked) myMonth="03"
+        if (document.getElementById("april").checked) myMonth="04"
+        if (document.getElementById("may").checked) myMonth="05"
+        if (document.getElementById("june").checked) myMonth="06"
+        if (document.getElementById("july").checked) myMonth="07"
+        if (document.getElementById("august").checked) myMonth="08"
+        if (document.getElementById("september").checked) myMonth="09"
+        if (document.getElementById("october").checked) myMonth="10"
+        if (document.getElementById("november").checked) myMonth="11"
+        if (document.getElementById("december").checked) myMonth="12"
+
+        let dataset = new FormData()
+        dataset.append('year',Number(myYear))
+        dataset.append('month',Number(myMonth))
+        alert("The process has started the data will be updated in few minutes!!!")
+        const my_response = await fetch("./refresh_data",{
+          "method":"POST",
+          "body":dataset
+          }); 
+          const my_data = await my_response.json();  
+        alert(my_data["message"])
+      },
       async exportHTML(){
         try {
               

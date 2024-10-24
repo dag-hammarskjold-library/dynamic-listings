@@ -37,6 +37,20 @@
         font-size: 3.5rem;
       }
     }
+
+  .row {
+   display: flex;
+   margin-bottom: 10px;
+  }
+  
+  .cell {
+   margin-right: 10px;
+  }
+  
+  button {
+   margin-top: 10px;
+  }
+  
   </style>
 
 
@@ -172,6 +186,7 @@
      <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
 
       <!-- Views created with Vue -->
+      <script src="{{url_for('static',filename='js/vuejs/test.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/index.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/logs.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/users.js')}}"></script>

@@ -40,4 +40,4 @@ def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
         
         e = sys.exc_info()[0]
         return -1
-    
+

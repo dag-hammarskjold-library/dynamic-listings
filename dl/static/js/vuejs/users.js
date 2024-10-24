@@ -8,8 +8,8 @@ Vue.component('displaylistuserscomponent',{
         
         <!-- Button export / Creation -->
         <div class="mb-3">
-          <button type="button" class="btn btn-success" @click="exportToExcel" v-if="showList">Extract to Excel</button>
-          <button type="button" class="btn btn-primary" @click="showList=false;ShowCreateUser=true;" v-if="showList">Create a new User</button>
+          <button type="button" class="btn btn-success" @click="exportToExcel" v-if="showList"><i class="far fa-file-excel"></i>  Extract to Excel</button>
+          <button type="button" class="btn btn-primary" @click="showList=false;ShowCreateUser=true;" v-if="showList"><i class="fas fa-plus"></i>   Create a new User</button>
         </div>
         <div class="shadow">
             <!-- Messages -->
@@ -42,7 +42,7 @@ Vue.component('displaylistuserscomponent',{
                 <td> {{field.name}} </td>
                 <td> {{field.email}}</td>
                 <td> {{field.role}}</td>
-                <td><span class="badge rounded-pill bg-success mr-2"  @click="showList=false;userToUpdate=field._id.$oid;name=field.name;email=field.email;role=field.role;ShowUpdateUser=true;">Update</span><span class="badge rounded-pill bg-danger" @click="deleteUser(field._id.$oid)">Delete</span></td>
+                <td><span class="badge rounded-pill bg-success mr-2"  @click="showList=false;userToUpdate=field._id.$oid;name=field.name;email=field.email;role=field.role;ShowUpdateUser=true;"><i class="fas fa-sync"></i>   Update</span><span class="badge rounded-pill bg-danger" @click="deleteUser(field._id.$oid)"><i class="fas fa-trash"></i>  Delete</span></td>
                 <td></td>
               </tr>
             </tbody>

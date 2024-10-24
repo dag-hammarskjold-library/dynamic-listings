@@ -1,14 +1,15 @@
 from dlx import DB
-from config import Config
+from .config import Config
 import time
-import re
 import datetime
 import boto3
 from pymongo import MongoClient
-from dlx.marc import Bib, BibSet, Query, Condition
+from dlx.marc import BibSet, Query
 from datetime import datetime
 from babel.dates import format_datetime
 
+# database connection
+DB.connect(Config.connect_string, database="undlFiles")
 
 # function that formats translated dates in French and Spanish
 def get_date_in_lang(date, locale):
@@ -22,7 +23,7 @@ def get_date_in_lang(date, locale):
         pass
 
 # function that returns translations of the agenda subjects based onthe english text and a query language code from the lookup table
-def query_agendas_collection(text_en, query_lang):
+def query_agendas_collection(text_en, query_lang,myCollAgenda):
     # Aggregation pipeline to find documents where 'body' is 'SC' and 'agenda' array contains an object where 'lang' is 'EN' and 'txt' is 'abc'
     pipeline = [
         # Match documents where 'body' is 'SC' and there is an element in the 'agenda' array where 'lang' is 'EN' and 'txt' is 'abc'
@@ -32,7 +33,7 @@ def query_agendas_collection(text_en, query_lang):
     ]
     
     # Execute the aggregation pipeline
-    result = list(coll_agendas.aggregate(pipeline))
+    result = list(myCollAgenda.aggregate(pipeline))
     
     # Print or process the result
     if result:
@@ -42,39 +43,26 @@ def query_agendas_collection(text_en, query_lang):
         #print("No matching document found.")
         return text_en
 
-    print(result)
-
-
 def connect_db():
     # connect to mongoDB and collection
     client = boto3.client('ssm')
     uat_connect_string=client.get_parameter(Name='uatISSU-admin-connect-string')['Parameter']['Value']
     MDBclient = MongoClient(uat_connect_string)
     db = MDBclient['DynamicListings']
-    coll_dl5 = db['dl5']
+    coll_dl5 = db['dl_data_collection']
     coll_agendas=db['Agendas']
-    DB.connect(Config.connect_string, database="undlFiles")
-    #query_agendas_collection("The situation in the Middle East, including the Palestinian question")
-    #this is the parameter value that needs to be selected each time the specific table is refreshed
+    # DB.connect(Config.connect_string, database="undlFiles")
     return coll_dl5, coll_agendas
 
-def process_records():
+def process_records(my_query_string,myYear,myCollAgendas):
     documents=[]
-    #query to get metadata values for the S/PV documents
-    # for the time we refresh the full table
-    #query_string="191__a:/^S\/PV./ AND 269__a:/^"+str(year)+"-04"+"/"
-    
-    query = Query.from_string(query_string) # Dataset-search_query
-    #print(query.to_json())
-    #i=0
+    query = Query.from_string(my_query_string) # Dataset-search_query
     lst=[]
     document_symbol=""
     action_date=""
-    #press_release=""
     agenda_subject=""
     outcome_vote=""
     outcome_text=""
-    #datamodel=(document_symbol, action_date, press_release, agenda_subject, outcome_vote)# defining the order of the fields
 
     #for the future use to generalize the code to work with other tables. Not used now!
     collumns=[
@@ -84,7 +72,6 @@ def process_records():
         {4:"outcome","label":"Security Council Outcome", "query":"993_a","get_data":"get_value", "etl":""},
         {5:"vote","label":"Vote", "query":"","get_data":"get_value", "etl":""}
     ]
-
 
     #going over the records to extract values for symbol - 191, the date - 992, agenda subject - 991c, resolution number 993a
     # and formating the dictionary to match the schema in the dl5 collection for this table
@@ -152,17 +139,14 @@ def process_records():
     documents=[
         {"meeting_record":document_symbol,
         "meeting_record_link":"https://undocs.org/"+document_symbol,
-        #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
                 {"lang":"ES","value":get_date_in_lang(action_date,'es_ES')}],
         "topic":[{"lang":"EN","value":agenda_subject},
-                {"lang":"FR","value": query_agendas_collection(agenda_subject, "FR")},
-                #{"lang":"FR","value":agenda_subject},
-                {"lang":"ES","value":query_agendas_collection(agenda_subject, "ES")}],
-                #{"lang":"ES","value":agenda_subject}],
+                {"lang":"FR","value": query_agendas_collection(agenda_subject, "FR",myCollAgendas)},
+                {"lang":"ES","value":query_agendas_collection(agenda_subject, "ES",myCollAgendas)}],
         "refresh":True,
-        "listing_id":"scmeetings_"+str(year),
+        "listing_id":"scmeetings_"+str(myYear),
         "outcomes":outcomes
         }
 
@@ -170,11 +154,14 @@ def process_records():
     ]
     return documents
 
-def refresh_SCMO():
-# for each doc in documents list find the matching record in the DB
-# if match and if mdb_doc['refresh']==True, update the record in the dl5 with the up to date data; do not update the record if mdb_doc['refresh']==False
-    #coll_dl5, _=connect_db()
-    documents=process_records()
+def refresh_scmo(myYear:int,myMonth:int)->None:
+    print("start")
+    year=myYear
+    month=myMonth
+    start_time_chunk=time.time()
+    query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
+    coll_dl5,coll_agendas=connect_db()
+    documents=process_records(query_string,myYear,coll_agendas)
     for doc in documents:
         update_filter = {'meeting_record': doc['meeting_record']}
         new_values = {'$set': doc}
@@ -185,13 +172,7 @@ def refresh_SCMO():
         except:
             #in case there is not a match an exception will insert a new record
             coll_dl5.update_one(update_filter, new_values, upsert=True)
-    
-
-
-if __name__ == '__main__':
-    year=2023
-    month="10"
-    start_time_chunk=time.time()
-    query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
-    coll_dl5,coll_agendas=connect_db()
-    refresh_SCMO()
+    end_time_chunk=time.time()
+    duration_sec=end_time_chunk-start_time_chunk
+    print(f"process duration {duration_sec}")
+    print("end")

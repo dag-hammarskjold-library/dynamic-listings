@@ -10,7 +10,7 @@ Vue.component('displaylistcomponent',{
           <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
       </div>
       <div class="mb-3">
-        <button type="button" class="btn btn-success" @click="exportToExcel" >Extract to Excel</button>
+        <button type="button" class="btn btn-success" @click="exportToExcel" ><i class="far fa-file-excel"></i>  Extract to Excel</button>
       </div>
       <div class="shadow">
           <table class="table table-striped tableau" id="listlogs">
