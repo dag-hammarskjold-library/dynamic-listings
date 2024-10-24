@@ -1,29 +1,41 @@
-name: Deploy
+name: Deploy to Dev
 
 on:
-  push:
-    branches: [ ec2 ]
-
+  release:
+    types: [ released ]
+  
 jobs:
-  Deploy:
-    name: Deploy to EC2
+  deploy-Lambda-function:
     runs-on: ubuntu-latest
-    
     steps:
-      - uses: actions/checkout@v3
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            HOSTNAME: ${{ secrets.SSH_HOST_DEV }}
-            USER_NAME: ${{ secrets.USER_NAME_DEV }}
-      
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-
-              # Now we have got the access of EC2 and we will start the deploy .
-              cd /var/www/dynamic-listings &&
-              sudo su www -c "git pull" &&
-              sudo su www -c "source venv/bin/activate && pip uninstall -yr requirements.txt && pip install -r requirements.txt"
-              sudo systemctl restart dynamic-listings.service
-              '
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+    - name: Setting up AWS Credentials
+      run: |
+        pip install awscli
+        echo "configuring region"
+        aws configure set region us-east-1
+        echo "configuring output"
+        aws configure set output json
+        echo "configuring access key id"
+        aws configure set aws_access_key_id ${{secrets.AWS_ACCESS_KEY}}
+        echo "configuring secret access key"
+        aws configure set aws_secret_access_key ${{secrets.AWS_SECRET_KEY}}
+    - name: Create virtual environment
+      run: |
+        pip install virtualenv
+        python3 -m virtualenv venv
+    - name: Install requiremenents
+      run: | 
+        . venv/bin/activate
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install zappa
+        deactivate
+    - name: Deploy
+      run: | 
+        . venv/bin/activate
+        zappa update dev

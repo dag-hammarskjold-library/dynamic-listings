@@ -2,28 +2,24 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from flask import Blueprint, jsonify, redirect, render_template,request, send_file, session,redirect
 from pymongo.mongo_client import MongoClient
-import pymongo
 import datetime
 from datetime import date
 from .tools import add_log
+from .refresh import refresh_scmo
 from bson.objectid import ObjectId
 import requests
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from bson import json_util
-
-
-
-#from . import app as main
-
-
+import os
 
 
 # definition of the Blueprint
 main=Blueprint("main",__name__)
 
 # connection to the database
-config = dotenv_values(".env") 
-my_client = MongoClient(config["DATABASE_CONN"])
+#config = dotenv_values(".env") 
+load_dotenv()
+my_client = MongoClient(os.getenv("DATABASE_CONN"))
 
 
 ####################################################################################################################
@@ -47,15 +43,18 @@ def login():
     if request.method=="POST":
         
         # check if it's the special user
-        if request.form.get("email")==config["DEFAULT_USER_EMAIL"]:
+        if request.form.get("email") == os.getenv("DEFAULT_USER"):
 
-            if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            #if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            if request.form.get("password") == os.getenv("DEFAULT_USER_PWD"):
                 
                 # special user
-                add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                #add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),os.getenv("DEFAULT_USER_NAME"),"Connected to the system!!!")
                 
                 # add the username to the session
-                session['username'] = config["DEFAULT_USER_NAME"]
+                #session['username'] = config["DEFAULT_USER_NAME"]
+                session['username'] = os.getenv("DEFAULT_USER_NAME")
                 
                 #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
                 return redirect('index')
@@ -102,6 +101,20 @@ def login():
                 error="User not found in the database!!!"
                 return render_template("login.html",error=error)
                     
+
+####################################################################################################################
+####################################################################################################################
+############  TEST ROUTE
+####################################################################################################################
+####################################################################################################################
+
+@main.route("/test")
+def test():
+    if session['username']!="":
+        #return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        return render_template('test.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login.html")
         
 
 ####################################################################################################################
@@ -113,7 +126,8 @@ def login():
 @main.route("/index")
 def index():
     if session['username']!="":
-        return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        #return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        return render_template('index.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
     else:
         return redirect("login.html")
 
@@ -127,7 +141,6 @@ def index():
 # route to display the user page
 @main.route("/users")
 def users():
-    
     if session:
         if session['username']!="":
             return render_template('users.html',session_username=session['username'])
@@ -249,7 +262,8 @@ def logs():
     
     if session:
         if session['username']!="":
-            my_prefix=config["APP_PREFIX_VALUE"]
+            #my_prefix=config["APP_PREFIX_VALUE"]
+            my_prefix=os.getenv("APP_PREFIX_VALUE")
             return render_template('logs.html',session_username=session['username'],my_prefix=my_prefix)
     else:
         return redirect("login")
@@ -568,8 +582,8 @@ def datasetsVueAddDataset():
 
 
 # route for the datamodels form
-# @main.route("/datasetsVue/executeDataset/<dataset_id>", methods=["POST"])
-# def datasetsVueExecuteDataset(dataset_id):
+@main.route("/datasetsVue/executeDataset/<dataset_id>", methods=["POST"])
+def datasetsVueExecuteDataset(dataset_id):
     
     # Definition of the collections
     my_database = my_client["DynamicListings"]  
@@ -938,3 +952,23 @@ def render_meeting(codemeeting,language):
 
     # just return the listings
     return render_template("render.html",language=language,data=data,title=title)
+
+
+# route to display the user page
+@main.route("/refresh_data", methods=["POST"])
+def refresh_data():
+    if session:
+        if session['username']!="":
+            
+            # logic to calsl the function to refresh the data
+            my_year=request.form.get("year")
+            my_month=request.form.get("month")
+            try:
+                refresh_scmo(my_year,my_month)
+                return jsonify(message="The collection has been updated!!!")
+            except:
+                return jsonify(message="The collection has not been updated!!!")
+            #refresh_scmo(int(my_year),int(my_month))
+    else:
+        # user not authentificated
+        return redirect("login")
