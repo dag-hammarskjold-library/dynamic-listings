@@ -51,8 +51,8 @@ def connect_db():
     uat_connect_string=client.get_parameter(Name='uatISSU-admin-connect-string')['Parameter']['Value']
     MDBclient = MongoClient(uat_connect_string)
     db = MDBclient['DynamicListings']
-    coll_dl5 = db['dl5']
-    coll_agendas=db['Agendas']
+    coll_dl5 = db['dl_cd_data_collection']
+    coll_agendas=db['dl_agendas_collection']
     DB.connect(Config.connect_string, database="undlFiles")
     #query_agendas_collection("The situation in the Middle East, including the Palestinian question")
     #this is the parameter value that needs to be selected each time the specific table is refreshed
@@ -115,7 +115,7 @@ def process_records():
     # this is to create outcome text structure if we have text or if not we generate 
         else:
             # we need second query to find a vote value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
-            query2 = Query.from_string("952__a:/^"+document_symbol+"/") # Dataset-search_query
+            query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
             # iterate over the metadata in the bib record to assemble outcome_vote and outcome text
             for bib in BibSet.from_query(query2):
                 outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
@@ -190,8 +190,9 @@ def refresh_SCMO():
 
 if __name__ == '__main__':
     year=2023
-    month="10"
+    month=10
     start_time_chunk=time.time()
-    query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
+    #query_string="191__a:/^S\/PV./ AND 992__a:/^"+str(year)+"-"+str(month)+"/"
+    query_string ='191__a:"S/PV" AND 992:"'+str(year)+"-"+str(month)+'"'
     coll_dl5,coll_agendas=connect_db()
     refresh_SCMO()
