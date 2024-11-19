@@ -174,9 +174,12 @@ def refresh_scmo(year:int,month:int):
 # for each doc in documents list find the matching record in the DB
 # if match and if mdb_doc['refresh']==True, update the record in the dl5 with the up to date data; do not update the record if mdb_doc['refresh']==False
     #coll_dl5, _=connect_db()
-    query_string ='191__a:"S/PV" AND 992:"'+str(year)+"-"+str(month)+'"'
+    print(month)
+    print(year)
+    query_string ='191__a:"S/PV." AND 992:"'+str(year)+"-"+str(month)+'"'
     coll_dl5,coll_agendas=connect_db()
     documents=process_records(coll_agendas,query_string,year)
+    print("--------------------------")
     print(documents)
     for doc in documents:
         update_filter = {'meeting_record': doc['meeting_record']}

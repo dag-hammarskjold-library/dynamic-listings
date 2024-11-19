@@ -728,7 +728,7 @@ def displayDatasetsSecurityCounsel(year):
 def get_sc_listings_values(meeting):
 
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["dl5"]
+    my_collection = my_database["dl_cd_data_collection"]
 
     # get all the listings_id
     my_fields=my_collection.find({"listing_id": meeting}).sort('meeting_record',-1)
@@ -742,7 +742,7 @@ def get_sc_listings_values(meeting):
 def get_sc_listings_Id():
 
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["dl5"]
+    my_collection = my_database["dl_cd_data_collection"]
 
     # get all the listings_id
     my_field=my_collection.distinct("listing_id")
@@ -758,7 +758,7 @@ def get_sc_listings_Id():
 def update_sc_listing():
 
         my_database=my_client["DynamicListings"]
-        my_collection = my_database["dl5"]
+        my_collection = my_database["dl_cd_data_collection"]
         my_languague_selected=request.form.get("languageSelected")
 
         if (request.form.get("refresh")=="false"):
@@ -766,8 +766,14 @@ def update_sc_listing():
         else:
              my_refresh=True
             
-        
-        
+        recup=request.form.get("outcomes")
+        # print(type(recup))
+        recup=json.loads(recup)
+        # print(len(recup))
+        # print(type(recup))
+        # print(recup)
+
+  
         if my_languague_selected=="EN":
             my_collection.update_one(
                 {'_id':   ObjectId(request.form.get("_id"))}, 
@@ -776,9 +782,7 @@ def update_sc_listing():
                             'meeting_record':request.form.get("record"),
                             'date.0.value': request.form.get("date"),
                             'topic.0.value':request.form.get("topic"),
-                            'outcomes.0.outcome_vote':request.form.get("vote"),
-                            'outcomes.0.outcome.0.lang':my_languague_selected, 
-                            'outcomes.0.outcome.0.outcome_text': request.form.get("security_council_document"),                            
+                            'outcomes':recup,                    
                             "refresh": my_refresh
                         }
                     }
@@ -792,9 +796,7 @@ def update_sc_listing():
                             'meeting_record':request.form.get("record"),
                             'date.1.value': request.form.get("date"),
                             'topic.1.value':request.form.get("topic"),
-                            'outcomes.0.outcome_vote':request.form.get("vote"),
-                            'outcomes.0.outcome.1.lang':my_languague_selected, 
-                            'outcomes.0.outcome.1.outcome_text': request.form.get("security_council_document"),                            
+                            'outcomes':recup,                          
                             "refresh": my_refresh
                         }
                     }
@@ -808,10 +810,8 @@ def update_sc_listing():
                             'meeting_record':request.form.get("record"),
                             'date.2.value': request.form.get("date"),
                             'topic.2.value':request.form.get("topic"),
-                            'outcomes.0.outcome_vote':request.form.get("vote"),
-                            'outcomes.0.outcome.2.lang':my_languague_selected, 
-                            'outcomes.0.outcome.2.outcome_text': request.form.get("security_council_document"),                            
-                            "refresh":  my_refresh
+                            'outcomes':recup,                           
+                            "refresh":my_refresh
                         }
                     }
                 )                    
@@ -829,7 +829,7 @@ def update_sc_listing():
 def create_sc_listing():
 
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["dl5"]
+    my_collection = my_database["dl_cd_data_collection"]
     
     # language selected
     my_languague_selected=request.form.get("languageSelected")
@@ -839,23 +839,6 @@ def create_sc_listing():
     
     # meeting record link
     my_meeting_record_link=request.form.get("meeting_record_link")
-
-    # date
-    my_date=[
-        {"lang":"EN","value":request.form.get("date")},
-        {"lang":"FR","value":request.form.get("date")},
-        {"lang":"ES","value":request.form.get("date")}  
-    ]
-    
-    # press release
-    my_press_release=""
-    
-    # topic
-    my_topic=[
-        {"lang":"EN","value":request.form.get("topic")},
-        {"lang":"FR","value":request.form.get("topic")},
-        {"lang":"ES","value":request.form.get("topic")}  
-    ]
     
     # refresh
     if (request.form.get("refresh")=="false"):
@@ -863,36 +846,63 @@ def create_sc_listing():
     else:
         my_refresh=True
 
-    
     # listing id
     my_listing_id=request.form.get("listing_id")
     
-    # outcomes
-    my_outcome=(
-             {"lang":"EN","outcome_text":request.form.get("outcome_text")},
-             {"lang":"FR","outcome_text":request.form.get("outcome_text")},
-             {"lang":"ES","outcome_text":request.form.get("outcome_text")}
-    )
-    
-    my_outcomes=[
-        {
-         "outcome_vote":request.form.get("outcome_vote"),
-         "outcome":my_outcome
-        }
+    # date
+    my_date=[
+        {"lang":my_languague_selected,"value":request.form.get("date")},
+        {"lang":"","value":""},
+        {"lang":"","value":""}
     ]
+    
+    # topic
+    my_topic=[
+        {"lang":my_languague_selected,"value":request.form.get("topic")},
+        {"lang":"","value":""},
+        {"lang":"","value":""}
+    ]
+    
+    # outcomes
+    recup=request.form.get("outcomes")
+    my_outcomes=json.loads(recup)
+    dataset={}
 
-    my_collection.insert_one(
-                {
-                    'meeting_record':my_meeting_record,
-                    'meeting_record_link':my_meeting_record_link,
-                    'date':my_date,
-                    'press_release':my_press_release,
-                    'topic':my_topic,
-                    'refresh': my_refresh,
-                    'listing_id': my_listing_id,
-                    'outcomes':my_outcomes               
-                })
+    if my_languague_selected=="EN":
+        dataset={
+                        'meeting_record_link':my_meeting_record_link, 
+                        'listing_id': my_listing_id,        
+                        'meeting_record':my_meeting_record,
+                        'date':my_date,
+                        'topic':my_topic,
+                        'outcomes':my_outcomes,                    
+                        "refresh": my_refresh
+                }
             
+    if my_languague_selected=="FR":
+        dataset={
+                        'meeting_record_link':my_meeting_record_link, 
+                        'listing_id': my_listing_id,        
+                        'meeting_record':my_meeting_record,
+                        'date': my_date,
+                        'topic':my_topic,
+                        'outcomes':my_outcomes,                    
+                        "refresh": my_refresh
+                }
+        
+    if my_languague_selected=="ES":
+        dataset={
+                        'meeting_record_link':my_meeting_record_link, 
+                        'listing_id': my_listing_id,        
+                        'meeting_record':my_meeting_record,
+                        'date': my_date,
+                        'topic':my_topic,
+                        'outcomes':my_outcomes,                    
+                        "refresh": my_refresh
+                }
+    
+    # save the log in the database
+    my_dataset=my_collection.insert_one(dataset)
 
     # create log
     add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_record) +  " created!!!")
@@ -905,7 +915,7 @@ def create_sc_listing():
 def delete_sc_listing():
         
         my_database = my_client["DynamicListings"]  
-        my_collection = my_database["dl5"]
+        my_collection = my_database["dl_cd_data_collection"]
 
         record = {
             "_id": ObjectId(request.form.get("_id")),
@@ -925,13 +935,13 @@ def delete_sc_listing():
 def render_meeting(codemeeting,language):
     
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["dl5"]
+    my_collection = my_database["dl_cd_data_collection"]
 
     # title
     title=""
-    title_en=["Meeting Record","Date","Topic","Security Council","Outcome","Vote"]
-    title_fr=["Réunion","Date","Sujet","Conseil de sécurité","Résultat","Vote"]
-    title_es=["Reunión","Fecha","Tema","Consejo de Seguridad","Resultado","Votar"]
+    title_en=["Meeting Record","Date","Topic","Security Council / Vote","Outcome","Vote"]
+    title_fr=["Réunion","Date","Sujet","Conseil de sécurité / Vote","Résultat","Vote"]
+    title_es=["Reunión","Fecha","Tema","Consejo de Seguridad / Votar","Resultado","Votar"]
     
     if language=="EN":
         title=title_en
