@@ -3,4 +3,4 @@ Flask-Session
 mongoengine
 pymongo
 python-dotenv
-requests
+dlx @ git+https://github.com/dag-hammarskjold-library/dlx
