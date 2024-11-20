@@ -288,7 +288,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_sufix']"/><br>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
                           <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
                         </div>  
@@ -322,7 +322,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_sufix']"/><br>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
                           </div>
                           <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
                         </div>  
@@ -356,7 +356,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_sufix']"/><br>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
                           </div>
                           <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
                         </div>  
@@ -445,7 +445,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_sufix']"/><br>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
                           <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
                         </div>  
@@ -509,7 +509,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Refreshing Data process</h4>
-                          <!-- <button type="button" class="close" @click="showMyModal()">&times;</button> -->
+                          <button type="button" class="close" @click="showMyModal()">&times;</button>
                         </div>
                         <div class="modal-body">
                         <label class="form-label"><strong>Please select the year</strong></label>
@@ -599,7 +599,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                                 December
                               </label>
                             </div>  
-                          <hr>                                             
+                          <hr>
                           <button class="btn btn-primary" @click="refresh_data()">Refresh</button>
                         </div>
                     </div>

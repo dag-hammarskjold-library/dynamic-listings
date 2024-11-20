@@ -960,6 +960,8 @@ def render_meeting(codemeeting,language):
     for record in my_records:
         data.append(record)
 
+    print(data)
+
     # just return the listings
     return render_template("render.html",language=language,data=data,title=title)
 
