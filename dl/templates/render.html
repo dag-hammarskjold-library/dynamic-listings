@@ -40,17 +40,7 @@
                     <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0]}} <br/></th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[1]}} </th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="30%">{{title[2]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[3]}} <br />
-                    {{title[4]}} </th>
-                    {% if language == "EN" %}
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (Y-N-A)</th>
-                    {% endif %}
-                    {% if language == "FR" %}
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (O-N-A)</th>
-                    {% endif %}
-                    {% if language == "ES" %}
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[5]}} <br> (S-N-A)</th>
-                    {% endif %}
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[3]}} </th>
                 </tr>
                 <tr style="border: 1px solid black;border-collapse: collapse;">
                     {% if language == "EN" %}
@@ -70,8 +60,17 @@
                             <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][0]["outcome_text"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}} </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {% for my_record in record.outcomes %}                                    
+                                    <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
+                                    <span> <a href={{my_record['outcome'][0]['outcome_text_link']}} > {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                                    <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
+                                    <br>
+                                    <span> {{my_record["outcome_vote"]}} </span>
+                                    <br>
+                                {% endfor %}  
+                            </td>
+                            
                         </tr>
                         {% endfor %}      
                     {% endif %}  
@@ -82,8 +81,17 @@
                             <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome"][1]["outcome_text"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["outcomes"][0]["outcome_vote"]}} </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {% for my_record in record.outcomes %}                                    
+                                    <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
+                                    <span> <a href={{my_record['outcome'][1]['outcome_text_link']}} > {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                                    <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
+                                    <br>
+                                    <span> {{my_record["outcome_vote"]}} </span>
+                                    <br>
+                                {% endfor %}  
+                            </td>
+                           
                         </tr>
                         {% endfor %}      
                     {% endif %}  
@@ -94,8 +102,17 @@
                         <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
-                        <td style="border: 1px solid black;border-collapse: collapse;"> {{record["outcomes"][0]["outcome"][2]["outcome_text"]}} </td>
-                        <td style="border: 1px solid black;border-collapse: collapse;"> {{record["outcomes"][0]["outcome_vote"]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;" >
+                            {% for my_record in record.outcomes %}                                    
+                                <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
+                                <span> <a href={{my_record['outcome'][2]['outcome_text_link']}} > {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                                <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
+                                <br>
+                                <span> {{my_record["outcome_vote"]}} </span>
+                                <br>
+                            {% endfor %}  
+                        </td>
+                 
                     </tr>
                     {% endfor %}      
                 {% endif %}  

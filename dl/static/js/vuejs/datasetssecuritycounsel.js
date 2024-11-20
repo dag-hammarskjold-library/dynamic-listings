@@ -21,7 +21,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <option value="AR">Arabic</option>
                 <option value="ZH">Chinese</option> -->
               </select>
-                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;"><i class="fas fa-plus"></i> Create a  new record</button> 
+                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button> 
                 <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
                 <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button> 
@@ -52,9 +52,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Meeting<br />Record</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Date</th>
                           <th width="30%" style="border: 1px solid black;border-collapse: collapse;">Topic</th>
-                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council<br />
-                          Outcome</th>
-                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Vote <br> (Y-N-A) </th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council / Vote </th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
                       </tr>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
@@ -66,34 +64,24 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
                             <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                            <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                            <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
-                            <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
-                            <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
-                            <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                          <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
-                          <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
-                          <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
-                          <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
-                          <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
-                          </td>
-                           
-                          <td style="border: 1px solid black;border-collapse: collapse;"> 
-                            <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
-                            <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
-                            <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
-                            <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
-                            <span v-if="languageSelected==='AR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[4].outcome_text}} </span>
-                            <span v-if="languageSelected==='ZH' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[5].outcome_text}} </span>
-                            <span v-else>  </span>
                           </td>
                           
-                          <td v-if="record.outcomes.length>0" style="border: 1px solid black;border-collapse: collapse;"> {{record.outcomes[0].outcome_vote}}  </td>
-                          <td v-else>  </td>
+                          <td style="border: 1px solid black;border-collapse: collapse;"> 
+                            <span v-for="my_record in record.outcomes">
+                              <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
+                              <span> <a :href="my_record['outcome'][0]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                              <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
+                              <br>
+                              <span> {{my_record["outcome_vote"]}} </span>
+                              <span v-else>  </span>
+                              <br>
+                            </span>
+                          </td>
+
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
                               <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
@@ -113,9 +101,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Reunión<br /></th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Fecha</th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Tema</th>
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad <br />
-                        Resultado</th>
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Votar <br> (S-N-A) </th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad / Votar</th>
+                       
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Acciones</th>
                     </tr>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
@@ -143,17 +130,17 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                         </td>
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"> <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
-                          <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
-                          <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
-                          <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
-                          <span v-if="languageSelected==='AR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[4].outcome_text}} </span>
-                          <span v-if="languageSelected==='ZH' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[5].outcome_text}} </span>
-                          <span v-else>  </span>
-                        </td>
-                        
-                        <td style="border: 1px solid black;border-collapse: collapse;" v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}}  </td>
-                        <td v-else>  </td>
+                          <td style="border: 1px solid black;border-collapse: collapse;"> 
+                            <span v-for="my_record in record.outcomes">
+                              <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
+                              <span> <a :href="my_record['outcome'][2]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                              <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
+                              <br>
+                              <span> {{my_record["outcome_vote"]}} </span>
+                              <span v-else>  </span>
+                              <br>
+                            </span>
+                          </td>
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           
@@ -174,9 +161,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Réunion<br /></th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Date</th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Sujet</th>
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité<br />
-                  Résultat</th>
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Vote <br> (O-N-A)</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité / Vote </th>
+    
                   <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Actions</th>
               </tr>
               <tr style="border: 1px solid black;border-collapse: collapse;">
@@ -203,19 +189,18 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
                     <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
                   </td>
-                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"> 
-                    <span v-if="languageSelected==='EN' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[0].outcome_text}} </span>
-                    <span v-if="languageSelected==='FR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[1].outcome_text}} </span>                          
-                    <span v-if="languageSelected==='ES' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[2].outcome_text}} </span>                          
-                    <span v-if="languageSelected==='RU' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[3].outcome_text}}</span>
-                    <span v-if="languageSelected==='AR' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[4].outcome_text}} </span>
-                    <span v-if="languageSelected==='ZH' && record.outcomes.length>0 "> {{record.outcomes[0].outcome[5].outcome_text}} </span>
-                    <span v-else>  </span>
-                  </td>
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"v-if="record.outcomes.length>0"> {{record.outcomes[0].outcome_vote}} </td>
-                  <td v-else>  </td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"> 
+                    <span v-for="my_record in record.outcomes">
+                      <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
+                      <span> <a :href="my_record['outcome'][1]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                      <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
+                      <br>
+                      <span> {{my_record["outcome_vote"]}} </span>
+                      <span v-else>  </span>
+                      <br>
+                    </span>
+                  </td>
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
                       
@@ -270,14 +255,116 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <label for="inputName" class="form-label">Topic</label>
                         <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
                     </div>   
-                    <div class="mb-3">
-                        <label for="inputName" class="form-label">Outcome Text</label>
-                        <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
+
+                    <div>
+                      
+                      <button class="btn btn-primary mb-2" @click="AddOutcomeEmpty()">Add Outcome</button>
+                      
+                      
+                      <div v-if="languageSelected==='EN'" v-for="(outcome, index) in outcomes" :key="index" class="row">
+
+                        <div class="cell card bg-light">
+                        
+                          <div class="mb-1">
+                              <label for="outcomevote" class="form-label">Vote</label>
+                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                          </div>
+
+                          <div class="mb-1">
+                            <label for="lang" class="form-label">Language</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text link</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text prefix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text sufix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                          </div>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                        </div>  
+                      </div>
+
+                      
+                      <div v-if="languageSelected==='FR'" v-for="(outcome, index) in outcomes" :key="index" class="row">
+
+                        <div class="cell card bg-light">
+                        
+                          <div class="mb-1">
+                              <label for="outcomevote" class="form-label">Vote</label>
+                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                          </div>
+
+                          <div class="mb-1">
+                            <label for="lang" class="form-label">Language</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['lang']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text link</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text prefix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text sufix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
+                          </div>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                        </div>  
+                      </div>
+
+                      
+                      <div v-if="languageSelected==='ES'" v-for="(outcome, index) in outcomes" :key="index" class="row">
+
+                        <div class="cell card bg-light">
+                        
+                          <div class="mb-1">
+                              <label for="outcomevote" class="form-label">Vote</label>
+                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                          </div>
+
+                          <div class="mb-1">
+                            <label for="lang" class="form-label">Language</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['lang']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text link</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text prefix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text sufix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
+                          </div>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                        </div>  
+                      </div>                      
+
                     </div> 
-                    <div class="mb-3">
-                        <label for="inputName" class="form-label">Outcome Vote</label>
-                        <input type="text" class="form-control" id="vote" name="vote" v-model="vote">
-                    </div>     
+
+
                     <div class="form-check mb-3">
                       <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
                       <label class="form-check-label" for="flexCheckDefault">
@@ -322,14 +409,50 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <label for="inputName" class="form-label">Topic</label>
                   <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
               </div>   
-              <div class="mb-3">
-                  <label for="inputName" class="form-label">Outcome Text </label>
-                  <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document">
+
+              <!-- INJECTION DATA -->
+              
+              <div>
+                      
+                      <button class="btn btn-primary mb-2" @click="AddOutcomeEmpty()">Add Outcome</button>
+                      
+                      
+                      
+                      <div v-for="(outcome, index) in outcomes" :key="index" class="row">
+
+                        <div class="cell card bg-light">
+                        
+                          <div class="mb-1">
+                              <label for="outcomevote" class="form-label">Vote</label>
+                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                          </div>
+
+                          <div class="mb-1">
+                            <label for="lang" class="form-label">Language</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text link</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text prefix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                          </div>
+                          <div class="mb-1">
+                            <label for="outcometext" class="form-label">Outcome text sufix</label>
+                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                          </div>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                        </div>  
+                      </div>                                          
               </div> 
-              <div class="mb-3">
-                  <label for="inputName" class="form-label">Outcome Vote</label>
-                  <input type="text" class="form-control" id="vote" name="vote" v-model="vote">
-              </div>     
+              <!-- END -->
+
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
                 <label class="form-check-label" for="flexCheckDefault">
@@ -368,10 +491,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             <div class="mb-3">
                 <label for="inputName" class="form-label">Outcome Text</label>
                 <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document" disabled>
-            </div> 
-            <div class="mb-3">
-                <label for="inputName" class="form-label">Outcome Vote</label>
-                <input type="text" class="form-control" id="vote" name="vote" v-model="vote" disabled>
             </div>     
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh" disabled>  
@@ -480,21 +599,19 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                                 December
                               </label>
                             </div>  
-                          <hr>                                             
+                          <hr>
                           <button class="btn btn-primary" @click="refresh_data()">Refresh</button>
                         </div>
                     </div>
             </div>
         </div>
-            
+  
      </div>`,
 
 
     data: function () {
       return {
-        rows: [
-          [{ value1: "" }, { value2: "" }, { value3: "" },{ value4: "" }, { value5: "" }],
-        ],
+        outcomes:[],
         initPage:true,
         displayFTP:false,
         meetingsIds:[],
@@ -536,17 +653,48 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     methods:{
       addRow() {
         // Adds a new row with three empty cells
-        this.rows.push([{ value1: "" }, { value2: "" }, { value3: "" }, { value4: "" }, { value5: "" }]);
+       this.AddOutcomeEmpty()
       },
       removeRow(index) {
         // Removes a row at the specified index
-        this.rows.splice(index, 1);
+        this.outcomes.splice(index, 1);
       },
       openFTP(){
         alert("define the ftp")
         this.initPage=false
         this.displayRecordFromQuery=false
         this.displayFTP=true
+      },
+      AddOutcomeEmpty(){
+        const myRecord=
+        {
+          outcome_vote:"0-0-0",
+          outcome:[
+            {
+            lang:"EN",
+            outcome_text:"",
+            outcome_text_link:"",
+            outcome_text_prefix:"",
+            outcome_text_sufix:""
+          },
+          {
+            lang:"FR",
+            outcome_text:"",
+            outcome_text_link:"",
+            outcome_text_prefix:"",
+            outcome_text_sufix:""
+          },
+          {
+            lang:"ES",
+            outcome_text:"",
+            outcome_text_link:"",
+            outcome_text_prefix:"",
+            outcome_text_sufix:""
+          }
+        ]
+        }
+        this.outcomes.push(myRecord)
+        console.log(this.outcomes)
       },
       showMyModal() {
         
@@ -639,6 +787,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         })
       this.initPage=false
       this.displayRecordFromQuery=true
+      
       },
 
       openRecord(record){
@@ -732,7 +881,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             }  
 
             this.refresh=element.refresh
-            this.vote=element.outcomes[0].outcome_vote
+            
+            this.outcomes=element.outcomes
  
           }
         });
@@ -742,12 +892,12 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('meeting_record',this.record)
         dataset.append('meeting_record_link',this.record_link)
         dataset.append('topic',this.topic)
-        dataset.append('outcome_vote',this.vote)
         dataset.append('date',this.date)
-        dataset.append('outcome_text',this.security_council_document)
+        const my_outcomes=JSON.stringify(this.outcomes)
+        dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('listing_id',this.listing_id)
-        dataset.append('languageSelected',this.languageSelected)
+        dataset.append('languageSelected',"EN")
         const my_response = await fetch("./create_sc_listing",{
           "method":"POST",
           "body":dataset
@@ -758,14 +908,15 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         location.reload()
       },
       async updateRecord(){
+        
         let dataset = new FormData()
         dataset.append('_id',this.my_id)
         dataset.append('record',this.record)
         dataset.append('name',this.name)
         dataset.append('topic',this.topic)
-        dataset.append('vote',this.vote)
         dataset.append('date',this.date)
-        dataset.append('security_council_document',this.security_council_document)
+        const my_outcomes=JSON.stringify(this.outcomes)
+        dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)
         const my_response = await fetch("./update_sc_listing",{
@@ -778,6 +929,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         location.reload()
       },
       displayUpdateRecordFromQuery(){
+        
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
