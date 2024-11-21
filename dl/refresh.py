@@ -170,11 +170,11 @@ def process_records(coll_agendas,query_string,year):
     #print(documents)
     return documents
 
-def refresh_scmo(year:int,month:int):
+def refresh_scmo(year:str,month:str):
 # for each doc in documents list find the matching record in the DB
 # if match and if mdb_doc['refresh']==True, update the record in the dl5 with the up to date data; do not update the record if mdb_doc['refresh']==False
     #coll_dl5, _=connect_db()
-    query_string ='191__a:"S/PV." AND 992:"'+str(year)+"-"+str(month)+'"'
+    query_string ='191__a:"S/PV." AND 992:"'+year+"-"+month+'"'
     coll_dl5,coll_agendas=connect_db()
     documents=process_records(coll_agendas,query_string,year)
     for doc in documents:
@@ -187,4 +187,5 @@ def refresh_scmo(year:int,month:int):
         except:
             #in case there is not a match an exception will insert a new record
             coll_dl5.update_one(update_filter, new_values, upsert=True)
+    print(documents)
     

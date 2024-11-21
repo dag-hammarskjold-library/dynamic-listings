@@ -964,8 +964,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         if (document.getElementById("december").checked) myMonth="12"
 
         let dataset = new FormData()
-        dataset.append('year',Number(myYear))
-        dataset.append('month',Number(myMonth))
+        dataset.append('year',myYear)
+        dataset.append('month',myMonth)
         alert("The process has started the data will be updated in few seconds!!!")
         const my_response = await fetch("./refresh_data",{
           "method":"POST",
