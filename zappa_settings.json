@@ -6,6 +6,9 @@
         "project_name": "dynamic-listings",
         "runtime": "python3.9",
         "s3_bucket": "zappa-k9eerg0ne",
-        "remote_env": "s3://zappa-k9eerg0ne/settings.json"
+        "remote_env": "s3://zappa-k9eerg0ne/settings.json",
+        "environment_variables": {
+            "DLX_REST_PRODUCTION": "True"
+        }
     }
 }
