@@ -187,5 +187,5 @@ def refresh_scmo(year:str,month:str):
         except:
             #in case there is not a match an exception will insert a new record
             coll_dl5.update_one(update_filter, new_values, upsert=True)
-    print(documents)
+   
     
