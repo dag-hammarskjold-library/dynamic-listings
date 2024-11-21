@@ -52,6 +52,12 @@
   }
   
   </style>
+  <style>
+    .dark-mode {
+        background-color: black;
+        color: white;
+    }
+</style>
 
 
 <body>
@@ -122,6 +128,8 @@
         <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
         
           <span class="fs-5 fw-semibold"> User connected : {{session_username}}</span>
+
+          <button onclick="darkMode()">Darkmode</button>
 
           <hr>
     
@@ -195,6 +203,13 @@
       <script src="{{url_for('static',filename='js/vuejs/datasets.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/datasetssecuritycounsel.js')}}"></script>
 
+      <!-- Darkmode -->
+      <script>
+        function darkMode() {
+            const element = document.body;
+            element.classList.toggle("dark-mode");
+        }
+      </script>
      <!-- Option 1: Bootstrap Bundle with Popper -->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
