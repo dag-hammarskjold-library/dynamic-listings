@@ -53,12 +53,37 @@
   
   </style>
   <style>
-    .dark-mode {
-        background-color: black;
-        color: white;
+    body {
+      --btn-bg: #fff;
+      --btn-border: #ccc;
+      --btn-hover-bg: #eee;
+    }
+    body.dark {
+      --btn-bg: #333;
+      --btn-border: #555;
+      --btn-hover-bg: #444;
+      color: #fff;
+      background-color: #000;
     }
 </style>
 
+<script>
+  import DarkModeToggle from './components/DarkModeToggle.vue';
+  
+  export default {
+    components: { DarkModeToggle },
+    data() {
+      return {
+        darkModeActive: false,
+      };
+    },
+    methods: {
+      handleDarkModeChange(isDarkMode) {
+        this.darkModeActive = isDarkMode;
+      },
+    },
+  };
+  </script>
 
 <body>
    
