@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -11,7 +11,12 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="https://d2jv02qf7xgjwx.cloudfront.net/sites/50/include/style1.css">
-        <style type="text/css">a {border-bottom: dotted 0.1rem #333333;}</style>
+        <style type="text/css">
+            a {border-bottom: dotted 0.1rem #333333;}
+            td {padding: 0.75em 0.75em 0.75em 0.75em !important;}
+            th {text-align: center;}
+            tr {font-size: 13px;}
+          </style>
     </head>
     <body>
     
@@ -20,19 +25,19 @@
             <tbody>
                 {% if language == "EN" %}
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th class="tbltitle" colspan="4" >Meetings conducted by the Security Council in  <br />
+                    <th class="" colspan="4" >Meetings conducted by the Security Council in {{year}}  <br />
                         (in reverse chronological order)</th>
                 </tr>                
                 {% endif %}
                 {% if language == "FR" %}
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th class="tbltitle" colspan="4" >Réunions conduites par le Conseil de sécurité en <br />
+                    <th class="" colspan="4" >Réunions conduites par le Conseil de sécurité en {{year}}<br />
                     (Dans l'ordre chronologique inverse)</th>
                 </tr>                
                 {% endif %}
                 {% if language == "ES" %}
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th class="tbltitle" colspan="4" >Reuniones realizadas por el Consejo de Seguridad en <br />
+                    <th class="" colspan="4" >Reuniones realizadas por el Consejo de Seguridad en {{year}}<br />
                         (en orden cronológico inverso)</th>
                 </tr>                
                 {% endif %}                
@@ -64,7 +69,7 @@
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
                                     <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                                    <span> <a href={{my_record['outcome'][0]['outcome_text_link']}} > {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                                    <span> <a href={{my_record['outcome'][0]['outcome_text_link']}}   target="blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
                                     <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
                                     <br>
                                     <span> {{my_record["outcome_vote"]}} </span>
@@ -85,7 +90,7 @@
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
                                     <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                                    <span> <a href={{my_record['outcome'][1]['outcome_text_link']}} > {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                                    <span> <a href={{my_record['outcome'][1]['outcome_text_link']}}  target="blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
                                     <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
                                     <br>
                                     <span> {{my_record["outcome_vote"]}} </span>
@@ -106,7 +111,7 @@
                         <td style="border: 1px solid black;border-collapse: collapse;" >
                             {% for my_record in record.outcomes %}                                    
                                 <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                                <span> <a href={{my_record['outcome'][2]['outcome_text_link']}} > {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                                <span> <a href={{my_record['outcome'][2]['outcome_text_link']}}  target="blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
                                 <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
                                 <br>
                                 <span> {{my_record["outcome_vote"]}} </span>

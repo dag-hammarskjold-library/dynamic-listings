@@ -940,8 +940,8 @@ def render_meeting(codemeeting,language):
     # title
     title=""
     title_en=["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"]
-    title_fr=["Réunion","Date","Sujet","Conseil de sécurité Résultat/ Vote","Résultat","Vote"]
-    title_es=["Reunión","Fecha","Tema","Consejo de Seguridad Resultado/ Votar","Resultado","Votar"]
+    title_fr=["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"]
+    title_es=["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
     
     if language=="EN":
         title=title_en
@@ -960,10 +960,10 @@ def render_meeting(codemeeting,language):
     for record in my_records:
         data.append(record)
 
-    print(data)
+    year=data[0]["listing_id"][-4:]
 
     # just return the listings
-    return render_template("render.html",language=language,data=data,title=title)
+    return render_template("render.html",language=language,data=data,title=title,year=year)
 
 
 # route to display the user page
