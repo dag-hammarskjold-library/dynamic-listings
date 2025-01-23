@@ -940,8 +940,8 @@ def render_meeting(codemeeting,language):
     # title
     title=""
     title_en=["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"]
-    title_fr=["Réunion","Date","Sujet","Conseil de sécurité Résultat/ Vote","Résultat","Vote"]
-    title_es=["Reunión","Fecha","Tema","Consejo de Seguridad Resultado/ Votar","Resultado","Votar"]
+    title_fr=["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"]
+    title_es=["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
     
     if language=="EN":
         title=title_en
