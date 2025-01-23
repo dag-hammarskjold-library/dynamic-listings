@@ -960,10 +960,10 @@ def render_meeting(codemeeting,language):
     for record in my_records:
         data.append(record)
 
-    print(data)
+    year=data[0]["listing_id"][-4:]
 
     # just return the listings
-    return render_template("render.html",language=language,data=data,title=title)
+    return render_template("render.html",language=language,data=data,title=title,year=year)
 
 
 # route to display the user page
