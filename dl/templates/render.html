@@ -63,7 +63,7 @@
                     {% if language == "EN" %}
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
-                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link']}}"  target="blank">{{record["meeting_record"]}}</a></td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
@@ -84,7 +84,7 @@
                     {% if language == "FR" %}
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
-                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link_fr']}}"  target="blank">{{record["meeting_record"]}}</a></td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
@@ -105,7 +105,7 @@
                 {% if language == "ES" %}
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a href="https://undocs.org/{{language.lower()}}/{{record["meeting_record"]}}"  target="blank">{{record["meeting_record"]}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link_es']}}"  target="blank">{{record["meeting_record"]}}</a></td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;" >

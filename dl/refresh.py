@@ -151,6 +151,8 @@ def process_records(coll_agendas,query_string,year):
     documents=[
         {"meeting_record":document_symbol,
         "meeting_record_link":"https://undocs.org/"+document_symbol,
+        "meeting_record_link_fr":"https://undocs.org/"+document_symbol,
+        "meeting_record_link_es":"https://undocs.org/"+document_symbol,
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
