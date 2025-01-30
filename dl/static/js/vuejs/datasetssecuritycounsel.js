@@ -60,7 +60,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                       </tr>
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                           
-                          <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                          <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link"  target="top">{{record.meeting_record}}</a></td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
                             <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -73,7 +73,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td style="border: 1px solid black;border-collapse: collapse;"> 
                             <span v-for="my_record in record.outcomes">
                               <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][0]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                              <span> <a :href="my_record['outcome'][0]['outcome_text_link']" target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
                               <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
                               <br>
                               <span> {{my_record["outcome_vote"]}} </span>
@@ -110,7 +110,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     </tr>
                     <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="top">{{record.meeting_record}}</a></td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -133,7 +133,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td style="border: 1px solid black;border-collapse: collapse;"> 
                             <span v-for="my_record in record.outcomes">
                               <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][2]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                              <span> <a :href="my_record['outcome'][2]['outcome_text_link']" target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
                               <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
                               <br>
                               <span> {{my_record["outcome_vote"]}} </span>
@@ -170,7 +170,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </tr>
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="'https://undocs.org/' + languageSelected.toLowerCase() + '/' + record.meeting_record"  target="top">{{record.meeting_record}}</a></td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="top">{{record.meeting_record}}</a></td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -193,7 +193,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <td style="border: 1px solid black;border-collapse: collapse;"> 
                     <span v-for="my_record in record.outcomes">
                       <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                      <span> <a :href="my_record['outcome'][1]['outcome_text_link']" target="_blamk"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                      <span> <a :href="my_record['outcome'][1]['outcome_text_link']" target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
                       <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
                       <br>
                       <span> {{my_record["outcome_vote"]}} </span>
@@ -797,6 +797,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
               this.my_id=element._id.$oid
               this.record=element.meeting_record
+              this.meeting_record_link=element.meeting_record_link
               this.listing_id=element.listing_id
 
               // Management of the date depending of the language
