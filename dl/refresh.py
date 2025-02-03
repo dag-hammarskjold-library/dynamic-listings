@@ -150,9 +150,9 @@ def process_records(coll_agendas,query_string,year):
     #translate_from_en is using a separate module translatePhrase.py to tranlsate agenda subjects to French and Spanish
     documents=[
         {"meeting_record":document_symbol,
-        "meeting_record_link":"https://undocs.org/"+document_symbol,
-        "meeting_record_link_fr":"https://undocs.org/"+document_symbol,
-        "meeting_record_link_es":"https://undocs.org/"+document_symbol,
+        "meeting_record_link":"https://undocs.org/en"+document_symbol,
+        "meeting_record_link_fr":"https://undocs.org/fr/"+document_symbol,
+        "meeting_record_link_es":"https://undocs.org/es/"+document_symbol,
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
