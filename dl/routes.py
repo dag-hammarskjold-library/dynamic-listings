@@ -767,16 +767,12 @@ def update_sc_listing():
              my_refresh=True
             
         recup=request.form.get("outcomes")
-        # print(type(recup))
         recup=json.loads(recup)
-        # print(len(recup))
-        # print(type(recup))
-        # print(recup)
 
   
         if my_languague_selected=="EN":
             my_collection.update_one(
-                {'_id':   ObjectId(request.form.get("_id"))}, 
+                {'_id': ObjectId(request.form.get("_id"))}, 
                     {"$set":
                         {
                             'meeting_record':request.form.get("record"),
