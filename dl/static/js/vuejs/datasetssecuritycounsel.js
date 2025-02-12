@@ -231,8 +231,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           <input type="submit" name="sendftp" class="btn btn-primary">
         </div>
 
-
-             <div v-if="updateRecordFromQuery">
+        <div v-if="updateRecordFromQuery">
                 <div class="mb-3">
                   <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
                   <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This update will affect the record in French </h3>
@@ -787,6 +786,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         })
       this.initPage=false
       this.displayRecordFromQuery=true
+      console.log(this.listOfRecords)
       
       },
 
@@ -856,7 +856,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 this.topic=element.topic[5].value
               }    
               
-              // Management of the outcome text dependiing of the language
+              // Management of the outcome text depending of the language
               if (this.languageSelected==='EN') {
                 this.security_council_document=element.outcomes[0].outcome[0].outcome_text
               }
@@ -917,6 +917,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
         const my_outcomes=JSON.stringify(this.outcomes)
+        console.log(my_outcomes)
         dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)

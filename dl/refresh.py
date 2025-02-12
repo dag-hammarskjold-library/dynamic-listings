@@ -100,14 +100,14 @@ def process_records(coll_agendas,query_string,year):
         outcome_text=bib.get_value('993','a')
         outcome_text_link=""
         outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"outcome_vote":outcome_vote},{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
         
         if outcome_text:
             outcome_text_link="https://undocs.org/"+outcome_text
             outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"outcome_vote":outcome_vote},{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
     # this is to create outcome text structure if we have text or if not we generate 
@@ -150,9 +150,7 @@ def process_records(coll_agendas,query_string,year):
     #translate_from_en is using a separate module translatePhrase.py to tranlsate agenda subjects to French and Spanish
     documents=[
         {"meeting_record":document_symbol,
-        "meeting_record_link":"https://undocs.org/en/"+document_symbol,
-        "meeting_record_link_fr":"https://undocs.org/fr/"+document_symbol,
-        "meeting_record_link_es":"https://undocs.org/es/"+document_symbol,
+        "meeting_record_link":"https://undocs.org/"+document_symbol,
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
