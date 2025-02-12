@@ -246,6 +246,24 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <label for="inputMeeting" class="form-label">Meeting</label>
                         <input type="text" class="form-control" id="meeting" name="meeting" v-model="record">
                     </div>   
+
+                    <div v-if="languageSelected==='EN'" class="mb-3">
+                        <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
+                        <input type="text" class="form-control" id="meetinglinken" name="meetinglinken" v-model="meetinglinken">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='FR'" class="mb-3">
+                        <label for="inputMeetingLinkFR" class="form-label">Meeting Link</label>
+                        <input type="text" class="form-control" id="meetinglinkfr" name="meetinglinkfr" v-model="meetinglinkfr">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='ES'" class="mb-3">
+                        <label for="inputMeetingLinkES" class="form-label">Meeting Link</label>
+                        <input type="text" class="form-control" id="meetinglinkes" name="meetinglinkes" v-model="meetinglinkes">
+                    </div> 
+
+
+
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Date</label>
                         <input type="text" class="form-control" id="date" name="date" v-model="date">
@@ -391,7 +409,23 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               <div class="mb-3">
                   <label for="inputMeeting" class="form-label">Meeting</label>
                   <input type="text" class="form-control" id="meeting" name="record" v-model="record">
-              </div>   
+              </div> 
+
+              <div v-if="languageSelected==='EN'" class="mb-3">
+                  <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
+                  <input type="text" class="form-control" id="meetinglinken" name="meetinglinken" v-model="meetinglinken">
+              </div> 
+              
+              <div v-if="languageSelected==='FR'" class="mb-3">
+                  <label for="inputMeetingLinkFR" class="form-label">Meeting Link</label>
+                  <input type="text" class="form-control" id="meetinglinkfr" name="meetinglinkfr" v-model="meetinglinkfr">
+              </div> 
+              
+              <div v-if="languageSelected==='ES'" class="mb-3">
+                  <label for="inputMeetingLinkES" class="form-label">Meeting Link</label>
+                  <input type="text" class="form-control" id="meetinglinkes" name="meetinglinkes" v-model="meetinglinkes">
+              </div> 
+
               <div class="mb-3">
                   <label for="inputMeetingLink" class="form-label">Record Link</label>
                   <input type="text" class="form-control" id="record_link" name="record_link" v-model="record_link">
@@ -631,6 +665,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         vote:"",
         refresh:Boolean,
         record:"",
+        meetinglinken:"",
+        meetinglinkfr:"",
+        meetinglinkes:"",
         my_id:"",
         listing_id:"",
         record_link:"",
@@ -800,6 +837,12 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               this.meeting_record_link=element.meeting_record_link
               this.listing_id=element.listing_id
 
+              // meeting link management
+              this.meetinglinken=element.meeting_record_link
+              this.meetinglinkfr=element.meeting_record_link_fr
+              this.meetinglinkes=element.meeting_record_link_es
+              
+
               // Management of the date depending of the language
               if (this.languageSelected==='EN') {
                 this.date=element.date[0].value
@@ -894,6 +937,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('meeting_record_link',this.record_link)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
+        dataset.append('meeting_record_link',this.meetinglinken)
+        dataset.append('meeting_record_link_es',this.meetinglinkes)
+        dataset.append('meeting_record_link_fr',this.meetinglinkfr)
         const my_outcomes=JSON.stringify(this.outcomes)
         dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
@@ -916,8 +962,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('name',this.name)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
+        dataset.append('meeting_record_link',this.meetinglinken)
+        dataset.append('meeting_record_link_es',this.meetinglinkes)
+        dataset.append('meeting_record_link_fr',this.meetinglinkfr)
         const my_outcomes=JSON.stringify(this.outcomes)
-        console.log(my_outcomes)
         dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)

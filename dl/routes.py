@@ -757,68 +757,74 @@ def get_sc_listings_Id():
 @main.route("/update_sc_listing", methods=["PUT"])
 def update_sc_listing():
 
-        my_database=my_client["DynamicListings"]
-        my_collection = my_database["dl_cd_data_collection"]
-        my_languague_selected=request.form.get("languageSelected")
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_cd_data_collection"]
+    my_languague_selected=request.form.get("languageSelected")
 
-        if (request.form.get("refresh")=="false"):
-            my_refresh=False
-        else:
-             my_refresh=True
-            
-        recup=request.form.get("outcomes")
-        recup=json.loads(recup)
+    if (request.form.get("refresh")=="false"):
+        my_refresh=False
+    else:
+        my_refresh=True
+        
+    recup=request.form.get("outcomes")
+    recup=json.loads(recup)
+    
+    print(request.form.get("meeting_record_link"))
+    print(request.form.get("meeting_record_link_es"))
+    print(request.form.get("meeting_record_link_fr"))
 
-  
-        if my_languague_selected=="EN":
-            my_collection.update_one(
-                {'_id': ObjectId(request.form.get("_id"))}, 
-                    {"$set":
-                        {
-                            'meeting_record':request.form.get("record"),
-                            'date.0.value': request.form.get("date"),
-                            'topic.0.value':request.form.get("topic"),
-                            'outcomes':recup,                    
-                            "refresh": my_refresh
-                        }
+    if my_languague_selected=="EN":
+        my_collection.update_one(
+            {'_id': ObjectId(request.form.get("_id"))}, 
+                {"$set":
+                    {
+                        'meeting_record':request.form.get("record"),
+                        'meeting_record_link':request.form.get("meeting_record_link"),
+                        'date.0.value': request.form.get("date"),
+                        'topic.0.value':request.form.get("topic"),
+                        'outcomes':recup,                    
+                        "refresh": my_refresh
                     }
-                )
-            
-        if my_languague_selected=="FR":
-            my_collection.update_one(
-                {'_id':   ObjectId(request.form.get("_id"))}, 
-                    {"$set":
-                        {
-                            'meeting_record':request.form.get("record"),
-                            'date.1.value': request.form.get("date"),
-                            'topic.1.value':request.form.get("topic"),
-                            'outcomes':recup,                          
-                            "refresh": my_refresh
-                        }
-                    }
-                )
-            
-        if my_languague_selected=="ES":
-            my_collection.update_one(
-                {'_id':   ObjectId(request.form.get("_id"))}, 
-                    {"$set":
-                        {
-                            'meeting_record':request.form.get("record"),
-                            'date.2.value': request.form.get("date"),
-                            'topic.2.value':request.form.get("topic"),
-                            'outcomes':recup,                           
-                            "refresh":my_refresh
-                        }
-                    }
-                )                    
-                    
-        meeting=request.form.get("meeting_record")
+                }
+            )
         
-        # create log
-        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(meeting) +  " updated!!!")
+    if my_languague_selected=="FR":
+        my_collection.update_one(
+            {'_id':   ObjectId(request.form.get("_id"))}, 
+                {"$set":
+                    {
+                        'meeting_record':request.form.get("record"),
+                        'meeting_record_link_fr':request.form.get("meeting_record_link_fr"),
+                        'date.1.value': request.form.get("date"),
+                        'topic.1.value':request.form.get("topic"),
+                        'outcomes':recup,                          
+                        "refresh": my_refresh
+                    }
+                }
+            )
         
-        # just render the users
-        return jsonify(message="Record updated")
+    if my_languague_selected=="ES":
+        my_collection.update_one(
+            {'_id':   ObjectId(request.form.get("_id"))}, 
+                {"$set":
+                    {
+                        'meeting_record':request.form.get("record"),
+                        'meeting_record_link_es':request.form.get("meeting_record_link_es"),
+                        'date.2.value': request.form.get("date"),
+                        'topic.2.value':request.form.get("topic"),
+                        'outcomes':recup,                           
+                        "refresh":my_refresh
+                    }
+                }
+            )                    
+                
+    meeting=request.form.get("meeting_record")
+    
+    # create log
+    add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(meeting) +  " updated!!!")
+    
+    # just render the users
+    return jsonify(message="Record updated")
 
 
 @main.route("/create_sc_listing", methods=["POST"])
@@ -833,8 +839,21 @@ def create_sc_listing():
     # meeting record
     my_meeting_record=request.form.get("meeting_record")
     
-    # meeting record link
-    my_meeting_record_link=request.form.get("meeting_record_link")
+    print(request.form.get("meeting_record_link"))
+    print(request.form.get("meeting_record_link_es"))
+    print(request.form.get("meeting_record_link_fr"))
+    
+    # EN meeting record link
+    if my_languague_selected=="EN":
+        my_meeting_record_link=request.form.get("meeting_record_link")
+    
+    # FR meeting record link
+    if my_languague_selected=="FR":
+        my_meeting_record_link_fr=request.form.get("meeting_record_link_fr")
+    
+    # ES meeting record link
+    if my_languague_selected=="ES":
+        my_meeting_record_link_es=request.form.get("meeting_record_link_es")
     
     # refresh
     if (request.form.get("refresh")=="false"):
@@ -877,7 +896,7 @@ def create_sc_listing():
             
     if my_languague_selected=="FR":
         dataset={
-                        'meeting_record_link':my_meeting_record_link, 
+                        'meeting_record_link_fr':my_meeting_record_link_fr, 
                         'listing_id': my_listing_id,        
                         'meeting_record':my_meeting_record,
                         'date': my_date,
@@ -888,7 +907,7 @@ def create_sc_listing():
         
     if my_languague_selected=="ES":
         dataset={
-                        'meeting_record_link':my_meeting_record_link, 
+                        'meeting_record_link_es':my_meeting_record_link_es, 
                         'listing_id': my_listing_id,        
                         'meeting_record':my_meeting_record,
                         'date': my_date,
