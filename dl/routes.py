@@ -736,6 +736,18 @@ def get_sc_listings_values(meeting):
     # just return the listings
     return json.loads(json_util.dumps(my_fields))  
 
+# route to display the listings
+@main.route("/exportjson/<meeting>", methods=["GET"])
+def export_json(meeting):
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_cd_data_collection"]
+
+    # get all the listings_id
+    my_fields=my_collection.find({"listing_id": meeting},{'_id': 0}).sort('meeting_record',-1)
+    
+    # just return the listings
+    return json.loads(json_util.dumps(my_fields))  
 
 # route to display the listings ID
 @main.route("/getsclistingsId")
