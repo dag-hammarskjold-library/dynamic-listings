@@ -1044,7 +1044,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           this.languageSelected=myLanguageValue
 
           // // loading all the data
-          const my_response = await fetch("./getsclistings/" + myMeetingValue);
+          const my_response = await fetch("./exportjson/" + myMeetingValue);
           const my_data = await my_response.json();
           
           my_data.forEach(element => {
