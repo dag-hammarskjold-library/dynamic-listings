@@ -25,6 +25,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
                 <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button> 
+                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> JSON export </button> 
                 <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
             <div v-if="displayRecordFromQuery">
@@ -1025,6 +1026,37 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         alert(my_data["message"])
         this.showMyModal()
       },
+      async exportDataToJson(listofmeetings,listoflanguages){
+
+          // clearing the variables
+          this.listOfRecords=[]
+          
+          //retrieve the parameters
+          const myMeeting = document.getElementById(listofmeetings);
+          const myMeetingValue = myMeeting.value;      
+  
+          const myLanguage = document.getElementById(listoflanguages);
+          const myLanguageValue = myLanguage.value;  
+          
+
+          // assign the languages
+          this.meetingSelected=myLanguageValue
+          this.languageSelected=myLanguageValue
+
+          // // loading all the data
+          const my_response = await fetch("./exportjson/" + myMeetingValue);
+          const my_data = await my_response.json();
+          
+          my_data.forEach(element => {
+            // We find the meeting
+            if (element["listing_id"]===myMeetingValue){
+                this.listOfRecords.push(element)
+              }
+            })
+          let myFileName="extract_security_counsel_table"+Date.now()+".json"
+          this.downloadJsonFile(this.listOfRecords,myFileName) 
+      }
+      ,
       async exportHTML(){
         try {
               
@@ -1057,6 +1089,17 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           alert(error.message)
         }
       },    
+      downloadJsonFile(data, filename) {
+        // Creating a blob object from non-blob data using the Blob constructor
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        // Create a new anchor element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename || 'download';
+        a.click();
+        a.remove();
+     },
       exportExcel(tableName) {
         const uri = 'data:application/vnd.ms-excel;base64,',
         template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
