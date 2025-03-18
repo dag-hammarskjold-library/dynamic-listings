@@ -86,6 +86,6 @@ class Config(object):
     
     if "@" in connect_string:
         print(f'Loading {environment}: {connect_string.split("@")[-1].split("/")[0]}')
-        print(connect_string)
+        #print(connect_string)
     else:
         print(f'Loading {environment}')
