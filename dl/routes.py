@@ -781,9 +781,9 @@ def update_sc_listing():
     recup=request.form.get("outcomes")
     recup=json.loads(recup)
     
-    print(request.form.get("meeting_record_link"))
-    print(request.form.get("meeting_record_link_es"))
-    print(request.form.get("meeting_record_link_fr"))
+    #print(request.form.get("meeting_record_link"))
+    #print(request.form.get("meeting_record_link_es"))
+    #print(request.form.get("meeting_record_link_fr"))
 
     if my_languague_selected=="EN":
         my_collection.update_one(
@@ -851,9 +851,9 @@ def create_sc_listing():
     # meeting record
     my_meeting_record=request.form.get("meeting_record")
     
-    print(request.form.get("meeting_record_link"))
-    print(request.form.get("meeting_record_link_es"))
-    print(request.form.get("meeting_record_link_fr"))
+    #print(request.form.get("meeting_record_link"))
+    #print(request.form.get("meeting_record_link_es"))
+    #print(request.form.get("meeting_record_link_fr"))
     
     # EN meeting record link
     if my_languague_selected=="EN":
