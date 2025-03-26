@@ -703,8 +703,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       my_data.forEach(element => {
         this.meetingsIds.push(element)
       });
-      //this.meetingsIds=this.meetingsIds.sort()
-
     },
 
     methods:{
@@ -954,10 +952,16 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       },
       async createRecord(){
         let dataset = new FormData()
+        // meeting record management
         dataset.append('meeting_record',this.record)
+        dataset.append('meeting_record_en',this.record)
+        dataset.append('meeting_record_fr',this.record)
+        dataset.append('meeting_record_es',this.record)
+
         dataset.append('meeting_record_link',this.record_link)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
+        // meeting link management
         dataset.append('meeting_record_link',this.meetinglinken)
         dataset.append('meeting_record_link_es',this.meetinglinkes)
         dataset.append('meeting_record_link_fr',this.meetinglinkfr)
@@ -979,7 +983,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         
         let dataset = new FormData()
         dataset.append('_id',this.my_id)
-        dataset.append('record',this.record)
+        dataset.append('meeting_record',this.record)
+        dataset.append('meeting_record_en',this.record)
+        dataset.append('meeting_record_fr',this.record)
+        dataset.append('meeting_record_es',this.record)
         dataset.append('name',this.name)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
