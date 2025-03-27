@@ -24,8 +24,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button> 
                 <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
-                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button> 
-                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> JSON export </button> 
+                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
+                <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Partial JSON export (language selected) </button> 
+                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Full JSON export (all languages) </button> 
                 <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
             <div v-if="displayRecordFromQuery">
@@ -819,6 +820,19 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         // open the url generated
         window.open(url, '_blank').focus();
       },
+      renderDataJSON(my_meeting,my_language){
+        // getting values for the meeting and the language selected
+        const my_meeting_value=document.getElementById(my_meeting).value
+        const my_language_value=document.getElementById(my_language).value
+        // getting the domain
+         const my_location=window.location.toString()
+         const my_string_to_replace="/datasetSecurityCounsel"
+         const my_final_location=my_location.replace(my_string_to_replace,'')
+         // generation of the url to open
+         const url=`${my_final_location}/render_meeting/${my_meeting_value}/json/${my_language_value}`
+         // open the url generated
+         window.open(url, '_blank').focus();
+       },
       async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
@@ -1083,7 +1097,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           let myFileName="extract_security_counsel_table"+Date.now()+".json"
           this.downloadJsonFile(this.listOfRecords,myFileName) 
       }
-      ,
+    ,
       async exportHTML(){
         try {
               

@@ -993,6 +993,102 @@ def render_meeting(codemeeting,language):
     return render_template("render.html",language=language,data=data,title=title,year=year)
 
 
+@main.route("/render_meeting/<codemeeting>/json/<language>", methods=["GET"])
+def render_meeting_json(codemeeting,language):
+    
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_cd_data_collection"]
+
+    # get all the listings_id
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
+
+    # Init our storage structures
+    recup_data={}
+    final={}
+    my_index=0
+    
+    # Loop to feed our storage structure
+    for data in my_records: # the display will take care of the selected language and check the availibity of the data before insert it to avoid error
+        
+
+        #increment the index
+        my_index+=1
+        
+        # Id management
+        # recup_data["_id"]=data["_id"]
+  
+        # Meeting record management
+        if language=="EN":
+            if "meeting_record" in data.keys():
+                recup_data["meeting_record"]=data["meeting_record"]
+        if language=="FR":
+            if "meeting_record_fr" in data.keys():
+                recup_data["meeting_record"]=data["meeting_record_fr"]
+        if language=="ES":
+            if "meeting_record_es" in data.keys():
+                recup_data["meeting_record"]=data["meeting_record_es"]      
+                    
+        # Date management
+        if language=="EN":
+            if data["date"][0]:
+                recup_data["date"]=data["date"][0]
+        if language=="FR":
+            if data["date"][1]:
+                recup_data["date"]=data["date"][1]
+        if language=="ES":
+            if data["date"][2]:
+                recup_data["date"]=data["date"][2]      
+        
+        # Meeting Record Link management
+        if language=="EN":
+            if "meeting_record_link" in data.keys():
+                recup_data["meeting_record_link"]=data["meeting_record_link"]
+        if language=="FR":
+            if "meeting_record_link_fr" in data.keys():
+                recup_data["meeting_record_link_fr"]=data["meeting_record_link_fr"]
+        if language=="ES":
+            if "meeting_record_link_es" in data.keys():
+                recup_data["meeting_record_link_es"]=data["meeting_record_link_es"]        
+            
+        # listing Id management    
+        if data["listing_id"]:   
+            recup_data["listing_id"]=data["listing_id"]    
+            
+        # Outcomes Vote Management
+        if data["outcomes"][0]["outcome_vote"]:
+            recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
+        
+        # Outcome Text Management
+        if language=="EN":
+            if data["outcomes"][0]["outcome"][0]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
+        if language=="FR":
+            if data["outcomes"][0]["outcome"][1]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
+        if language=="ES":
+            if data["outcomes"][0]["outcome"][2]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
+          
+        # Topic Management
+        if language=="EN":
+            if data["topic"][0]["value"]:
+                recup_data["topic"]=data["topic"][0]["value"]
+        if language=="FR":
+            if data["topic"][1]["value"]:
+                recup_data["topic"]=data["topic"][1]["value"]
+        if language=="ES":
+            if data["topic"][2]["value"]:
+                recup_data["topic"]=data["topic"][2]["value"]                     
+
+        # loading the values in the
+        final[my_index]=recup_data
+
+        # year=data[0]["listing_id"][-4:]
+
+    # just return the listings
+    return jsonify(final)
+
 # route to display the user page
 @main.route("/refresh_data", methods=["POST"])
 def refresh_data():
