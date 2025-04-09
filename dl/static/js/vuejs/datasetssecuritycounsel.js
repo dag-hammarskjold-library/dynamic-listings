@@ -864,7 +864,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
          const my_final_location=my_location.replace(my_string_to_replace,'')
          // generation of the url to open
          const url=`${my_final_location}/render_meeting/${my_meeting_value}/json/${my_language_value}`
-         alert(url)
+        
          // open the url generated
          window.open(url, '_blank').focus();
        },
