@@ -1092,6 +1092,17 @@ def render_meeting_json(codemeeting,language):
                 if data["outcomes"][0]["outcome"][2]["outcome_text"]:
                     recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
             
+             # Outcome Text Link Management
+            if language=="EN":
+                if data["outcomes"][0]["outcome"][0]["outcome_text_link"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text_link"]
+            if language=="FR":
+                if data["outcomes"][0]["outcome"][1]["outcome_text_link"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text_link"]
+            if language=="ES":
+                if data["outcomes"][0]["outcome"][2]["outcome_text_link"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text_link"]       
+            
             # Topic Management
             if language=="EN":
                 if data["topic"][0]["value"]:
