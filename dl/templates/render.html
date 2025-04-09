@@ -63,7 +63,7 @@
                     {% if language == "EN" %}
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
-                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link_en']}}"  target="blank">{{record["meeting_record_en"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link']}}"  target="blank">{{record["meeting_record_en"]}}</a></td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
