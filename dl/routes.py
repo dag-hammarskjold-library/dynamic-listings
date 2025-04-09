@@ -780,17 +780,13 @@ def update_sc_listing():
         
     recup=request.form.get("outcomes")
     recup=json.loads(recup)
-    
-    #print(request.form.get("meeting_record_link"))
-    #print(request.form.get("meeting_record_link_es"))
-    #print(request.form.get("meeting_record_link_fr"))
 
     if my_languague_selected=="EN":
         my_collection.update_one(
             {'_id': ObjectId(request.form.get("_id"))}, 
                 {"$set":
                     {
-                        'meeting_record':request.form.get("record"),
+                        'meeting_record_en':request.form.get("meeting_record_en"),
                         'meeting_record_link':request.form.get("meeting_record_link"),
                         'date.0.value': request.form.get("date"),
                         'topic.0.value':request.form.get("topic"),
@@ -805,7 +801,7 @@ def update_sc_listing():
             {'_id':   ObjectId(request.form.get("_id"))}, 
                 {"$set":
                     {
-                        'meeting_record':request.form.get("record"),
+                       'meeting_record_fr':request.form.get("meeting_record_fr"),
                         'meeting_record_link_fr':request.form.get("meeting_record_link_fr"),
                         'date.1.value': request.form.get("date"),
                         'topic.1.value':request.form.get("topic"),
@@ -820,7 +816,7 @@ def update_sc_listing():
             {'_id':   ObjectId(request.form.get("_id"))}, 
                 {"$set":
                     {
-                        'meeting_record':request.form.get("record"),
+                       'meeting_record_es':request.form.get("meeting_record_es"),
                         'meeting_record_link_es':request.form.get("meeting_record_link_es"),
                         'date.2.value': request.form.get("date"),
                         'topic.2.value':request.form.get("topic"),
@@ -829,11 +825,19 @@ def update_sc_listing():
                     }
                 }
             )                    
-                
-    meeting=request.form.get("meeting_record")
+    if my_languague_selected=="ES":            
+        meeting=request.form.get("meeting_record_es")
+
+    if my_languague_selected=="FR":            
+        meeting=request.form.get("meeting_record_fr")
+        
+    if my_languague_selected=="EN":            
+        meeting=request.form.get("meeting_record_en")
     
     # create log
     add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(meeting) +  " updated!!!")
+    
+    
     
     # just render the users
     return jsonify(message="Record updated")
@@ -849,23 +853,16 @@ def create_sc_listing():
     my_languague_selected=request.form.get("languageSelected")
     
     # meeting record
-    my_meeting_record=request.form.get("meeting_record")
+    my_meeting_recorden=request.form.get("meeting_recorden")
+    my_meeting_recordfr=request.form.get("meeting_recordfr")
+    my_meeting_recordes=request.form.get("meeting_recordes")
+
     
-    #print(request.form.get("meeting_record_link"))
-    #print(request.form.get("meeting_record_link_es"))
-    #print(request.form.get("meeting_record_link_fr"))
+    # record link
     
-    # EN meeting record link
-    if my_languague_selected=="EN":
-        my_meeting_record_link=request.form.get("meeting_record_link")
-    
-    # FR meeting record link
-    if my_languague_selected=="FR":
-        my_meeting_record_link_fr=request.form.get("meeting_record_link_fr")
-    
-    # ES meeting record link
-    if my_languague_selected=="ES":
-        my_meeting_record_link_es=request.form.get("meeting_record_link_es")
+    my_meeting_record_link=request.form.get("meeting_record_link")
+    my_meeting_record_link_fr=request.form.get("meeting_record_link_fr")
+    my_meeting_record_link_es=request.form.get("meeting_record_link_es")
     
     # refresh
     if (request.form.get("refresh")=="false"):
@@ -898,19 +895,27 @@ def create_sc_listing():
     if my_languague_selected=="EN":
         dataset={
                         'meeting_record_link':my_meeting_record_link, 
+                        'meeting_record_link_fr':my_meeting_record_link_fr, 
+                        'meeting_record_link_es':my_meeting_record_link_es, 
                         'listing_id': my_listing_id,        
-                        'meeting_record':my_meeting_record,
+                        'meeting_record_en':my_meeting_recorden,
+                        'meeting_record_fr':my_meeting_recordfr,
+                        'meeting_record_es':my_meeting_recordes,
                         'date':my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
                         "refresh": my_refresh
                 }
-            
+        
     if my_languague_selected=="FR":
         dataset={
+                        'meeting_record_link':my_meeting_record_link, 
                         'meeting_record_link_fr':my_meeting_record_link_fr, 
+                        'meeting_record_link_es':my_meeting_record_link_es, 
                         'listing_id': my_listing_id,        
-                        'meeting_record':my_meeting_record,
+                        'meeting_record_en':my_meeting_recorden,
+                        'meeting_record_fr':my_meeting_recordfr,
+                        'meeting_record_es':my_meeting_recordes,
                         'date': my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
@@ -919,9 +924,13 @@ def create_sc_listing():
         
     if my_languague_selected=="ES":
         dataset={
+                        'meeting_record_link':my_meeting_record_link, 
+                        'meeting_record_link_fr':my_meeting_record_link_fr, 
                         'meeting_record_link_es':my_meeting_record_link_es, 
                         'listing_id': my_listing_id,        
-                        'meeting_record':my_meeting_record,
+                        'meeting_record_en':my_meeting_recorden,
+                        'meeting_record_fr':my_meeting_recordfr,
+                        'meeting_record_es':my_meeting_recordes,
                         'date': my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
@@ -932,7 +941,15 @@ def create_sc_listing():
     my_dataset=my_collection.insert_one(dataset)
 
     # create log
-    add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_record) +  " created!!!")
+    if my_languague_selected=="EN":
+        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_recorden) +  " created!!!")
+    
+    if my_languague_selected=="FR":
+        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_recordfr) +  " created!!!")
+    
+    if my_languague_selected=="ES":
+        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"Meeting record " + str(my_meeting_recordes) +  " created!!!")
+    
     
     # just render the users
     return jsonify(message="Record created")
@@ -1002,89 +1019,92 @@ def render_meeting_json(codemeeting,language):
 
     # get all the listings_id
     my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
-
+   
     # Init our storage structures
     recup_data={}
     final={}
     my_index=0
     
-    # Loop to feed our storage structure
-    for data in my_records: # the display will take care of the selected language and check the availibity of the data before insert it to avoid error
-        
+    try:
 
-        #increment the index
-        my_index+=1
-        
-        # Id management
-        # recup_data["_id"]=data["_id"]
-  
-        # Meeting record management
-        if language=="EN":
-            if "meeting_record" in data.keys():
-                recup_data["meeting_record"]=data["meeting_record"]
-        if language=="FR":
-            if "meeting_record_fr" in data.keys():
-                recup_data["meeting_record"]=data["meeting_record_fr"]
-        if language=="ES":
-            if "meeting_record_es" in data.keys():
-                recup_data["meeting_record"]=data["meeting_record_es"]      
-                    
-        # Date management
-        if language=="EN":
-            if data["date"][0]:
-                recup_data["date"]=data["date"][0]
-        if language=="FR":
-            if data["date"][1]:
-                recup_data["date"]=data["date"][1]
-        if language=="ES":
-            if data["date"][2]:
-                recup_data["date"]=data["date"][2]      
-        
-        # Meeting Record Link management
-        if language=="EN":
-            if "meeting_record_link" in data.keys():
-                recup_data["meeting_record_link"]=data["meeting_record_link"]
-        if language=="FR":
-            if "meeting_record_link_fr" in data.keys():
-                recup_data["meeting_record_link_fr"]=data["meeting_record_link_fr"]
-        if language=="ES":
-            if "meeting_record_link_es" in data.keys():
-                recup_data["meeting_record_link_es"]=data["meeting_record_link_es"]        
+        # Loop to feed our storage structure
+        for data in my_records: # the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
+
+            #increment the index
+            my_index+=1
             
-        # listing Id management    
-        if data["listing_id"]:   
-            recup_data["listing_id"]=data["listing_id"]    
+            # Id management
+            # recup_data["_id"]=data["_id"]
+
+            # Meeting record management
+            recup_data["meeting_record"]=data["meeting_record"]
+            # if language=="EN":
+            #     if "meeting_record" in data.keys():
+            #         recup_data["meeting_record"]=data["meeting_record_en"]
+            # if language=="FR":
+            #     if "meeting_record_fr" in data.keys():
+            #         recup_data["meeting_record"]=data["meeting_record_fr"]
+            # if language=="ES":
+            #     if "meeting_record_es" in data.keys():
+            #         recup_data["meeting_record"]=data["meeting_record_es"]      
+                        
+            # Date management
+            if language=="EN":
+                if data["date"][0]:
+                    recup_data["date"]=data["date"][0]
+            if language=="FR":
+                if data["date"][1]:
+                    recup_data["date"]=data["date"][1]
+            if language=="ES":
+                if data["date"][2]:
+                    recup_data["date"]=data["date"][2]      
             
-        # Outcomes Vote Management
-        if data["outcomes"][0]["outcome_vote"]:
-            recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
-        
-        # Outcome Text Management
-        if language=="EN":
-            if data["outcomes"][0]["outcome"][0]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
-        if language=="FR":
-            if data["outcomes"][0]["outcome"][1]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
-        if language=="ES":
-            if data["outcomes"][0]["outcome"][2]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
-          
-        # Topic Management
-        if language=="EN":
-            if data["topic"][0]["value"]:
-                recup_data["topic"]=data["topic"][0]["value"]
-        if language=="FR":
-            if data["topic"][1]["value"]:
-                recup_data["topic"]=data["topic"][1]["value"]
-        if language=="ES":
-            if data["topic"][2]["value"]:
-                recup_data["topic"]=data["topic"][2]["value"]                     
+            # Meeting Record Link management
+            if language=="EN":
+                if "meeting_record_link" in data.keys():
+                    recup_data["meeting_record_link"]=data["meeting_record_link"]
+            if language=="FR":
+                if "meeting_record_link_fr" in data.keys():
+                    recup_data["meeting_record_link"]=data["meeting_record_link_fr"]
+            if language=="ES":
+                if "meeting_record_link_es" in data.keys():
+                    recup_data["meeting_record_link"]=data["meeting_record_link_es"]        
+                
+            # listing Id management    
+            if data["listing_id"]:   
+                recup_data["listing_id"]=data["listing_id"]    
+                
+            # Outcomes Vote Management
+            if data["outcomes"][0]["outcome_vote"]:
+                recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
+            
+            # Outcome Text Management
+            if language=="EN":
+                if data["outcomes"][0]["outcome"][0]["outcome_text"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
+            if language=="FR":
+                if data["outcomes"][0]["outcome"][1]["outcome_text"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
+            if language=="ES":
+                if data["outcomes"][0]["outcome"][2]["outcome_text"]:
+                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
+            
+            # Topic Management
+            if language=="EN":
+                if data["topic"][0]["value"]:
+                    recup_data["topic"]=data["topic"][0]["value"]
+            if language=="FR":
+                if data["topic"][1]["value"]:
+                    recup_data["topic"]=data["topic"][1]["value"]
+            if language=="ES":
+                if data["topic"][2]["value"]:
+                    recup_data["topic"]=data["topic"][2]["value"]                     
 
-        # loading the values in the
-        final[my_index]=recup_data
-
-        # year=data[0]["listing_id"][-4:]
+            # loading the values in the
+            final[my_index]=recup_data
+    except :
+        print(data["meeting_record"])
+        print("An exception occurred")
 
     # just return the listings
     return jsonify(final)

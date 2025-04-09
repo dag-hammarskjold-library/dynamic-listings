@@ -25,8 +25,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
                 <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
-                <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Partial JSON export (language selected) </button> 
-                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Full JSON export (all languages) </button> 
+                <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Partial JSON (language selected) </button> 
+                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Full JSON (all languages) </button> 
                 <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
             <div v-if="displayRecordFromQuery">
@@ -62,7 +62,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                       </tr>
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                           
-                          <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link"  target="top">{{record.meeting_record}}</a></td>
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.meeting_record_link"  target="top">{{record.meeting_record_en}}</a>
+                          </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
                             <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -112,7 +114,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     </tr>
                     <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="top">{{record.meeting_record}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="top">{{record.meeting_record_es}}</a></td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -172,7 +174,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </tr>
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="top">{{record.meeting_record}}</a></td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="top">{{record.meeting_record_fr}}</a></td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -244,10 +246,20 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 </div> 
                 <hr> 
                 <form @submit.prevent="">
-                    <div class="mb-3">
+                    <div v-if="languageSelected==='EN'" class="mb-3">
                         <label for="inputMeeting" class="form-label">Meeting</label>
-                        <input type="text" class="form-control" id="meeting" name="meeting" v-model="record">
+                        <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden">
                     </div>   
+                    
+                    <div v-if="languageSelected==='FR'" class="mb-3">
+                        <label for="inputMeeting" class="form-label">Meeting</label>
+                        <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr">
+                    </div>
+                    
+                    <div v-if="languageSelected==='ES'" class="mb-3">
+                        <label for="inputMeeting" class="form-label">Meeting</label>
+                        <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes">
+                    </div>
 
                     <div v-if="languageSelected==='EN'" class="mb-3">
                         <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
@@ -408,10 +420,21 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </div> 
               <hr> 
               <form @submit.prevent="">
-              <div class="mb-3">
+              <div v-if="languageSelected==='EN'" class="mb-3">
                   <label for="inputMeeting" class="form-label">Meeting</label>
-                  <input type="text" class="form-control" id="meeting" name="record" v-model="record">
-              </div> 
+                  <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden">
+              </div>   
+              
+              <div v-if="languageSelected==='FR'" class="mb-3">
+                  <label for="inputMeeting" class="form-label">Meeting</label>
+                  <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr">
+              </div>
+              
+              <div v-if="languageSelected==='ES'" class="mb-3">
+                  <label for="inputMeeting" class="form-label">Meeting</label>
+                  <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes">
+              </div>
+
 
               <div v-if="languageSelected==='EN'" class="mb-3">
                   <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
@@ -511,9 +534,17 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             </div> 
             <hr> 
             <form @submit.prevent="">
-            <div class="mb-3">
+            <div v-if="languageSelected==='EN'" class="mb-3">
                 <label for="inputMeeting" class="form-label">Meeting</label>
-                <input type="text" class="form-control" id="meeting" name="meeting" v-model="record" disabled>
+                <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden" disabled>
+            </div>
+            <div v-if="languageSelected==='FR'" class="mb-3">
+                <label for="inputMeeting" class="form-label">Meeting</label>
+                <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr" disabled>
+            </div>   
+            <div v-if="languageSelected==='ES'" class="mb-3">
+                <label for="inputMeeting" class="form-label">Meeting</label>
+                <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes" disabled>
             </div>   
             <div class="mb-3">
                 <label for="inputName" class="form-label">Date</label>
@@ -681,6 +712,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         listOfRecords:[],
         listOfYearsAvailable:[],
         meeting_record:"",
+        meeting_recorden:"",
+        meeting_recordfr:"",
+        meeting_recordes:"",
         date:"",
         topic:"",
         security_council_document:"",
@@ -830,6 +864,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
          const my_final_location=my_location.replace(my_string_to_replace,'')
          // generation of the url to open
          const url=`${my_final_location}/render_meeting/${my_meeting_value}/json/${my_language_value}`
+         alert(url)
          // open the url generated
          window.open(url, '_blank').focus();
        },
@@ -866,9 +901,16 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           if (element.meeting_record==record) {
 
               this.my_id=element._id.$oid
-              this.record=element.meeting_record
+             
               this.meeting_record_link=element.meeting_record_link
               this.listing_id=element.listing_id
+
+              // meeting management
+               this.record=element.meeting_record // this one should be removed in the future
+               this.meeting_record=element.meeting_record
+               this.meeting_recorden=element.meeting_record_en
+               this.meeting_recordfr=element.meeting_record_fr  
+               this.meeting_recordes=element.meeting_record_es  
 
               // meeting link management
               this.meetinglinken=element.meeting_record_link
@@ -966,15 +1008,16 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       },
       async createRecord(){
         let dataset = new FormData()
+        
         // meeting record management
         dataset.append('meeting_record',this.record)
-        dataset.append('meeting_record_en',this.record)
-        dataset.append('meeting_record_fr',this.record)
-        dataset.append('meeting_record_es',this.record)
-
+        dataset.append('meeting_record_en',this.meeting_recorden)
+        dataset.append('meeting_record_fr',this.meeting_recordfr)
+        dataset.append('meeting_record_es',this.meeting_recordes)
         dataset.append('meeting_record_link',this.record_link)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
+       
         // meeting link management
         dataset.append('meeting_record_link',this.meetinglinken)
         dataset.append('meeting_record_link_es',this.meetinglinkes)
@@ -998,9 +1041,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         let dataset = new FormData()
         dataset.append('_id',this.my_id)
         dataset.append('meeting_record',this.record)
-        dataset.append('meeting_record_en',this.record)
-        dataset.append('meeting_record_fr',this.record)
-        dataset.append('meeting_record_es',this.record)
+        dataset.append('meeting_record_en',this.meeting_recorden)
+        dataset.append('meeting_record_fr',this.meeting_recordfr)
+        dataset.append('meeting_record_es',this.meeting_recordes)
         dataset.append('name',this.name)
         dataset.append('topic',this.topic)
         dataset.append('date',this.date)
