@@ -845,6 +845,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
        // getting values for the meeting and the language selected
        const my_meeting_value=document.getElementById(my_meeting).value
        const my_language_value=document.getElementById(my_language).value
+
        // getting the domain
         const my_location=window.location.toString()
         const my_string_to_replace="/datasetSecurityCounsel"
@@ -1040,7 +1041,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         
         let dataset = new FormData()
         dataset.append('_id',this.my_id)
-        dataset.append('meeting_record',this.record)
+        //dataset.append('meeting_record',this.record)
         dataset.append('meeting_record_en',this.meeting_recorden)
         dataset.append('meeting_record_fr',this.meeting_recordfr)
         dataset.append('meeting_record_es',this.meeting_recordes)

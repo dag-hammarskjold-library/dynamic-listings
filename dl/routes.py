@@ -1012,7 +1012,8 @@ def render_meeting(codemeeting,language):
 
 @main.route("/render_meeting/<codemeeting>/json/<language>", methods=["GET"])
 def render_meeting_json(codemeeting,language):
-    
+
+    language = language.upper()    
 
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
@@ -1021,14 +1022,16 @@ def render_meeting_json(codemeeting,language):
     my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
    
     # Init our storage structures
-    recup_data={}
+    
     final={}
     my_index=0
     
     try:
 
         # Loop to feed our storage structure
-        for data in my_records: # the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
+        for data in my_records:
+            
+            recup_data={}# the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
 
             #increment the index
             my_index+=1
