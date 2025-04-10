@@ -1113,7 +1113,21 @@ def render_meeting_json(codemeeting,language):
             if language=="ES":
                 if data["topic"][2]["value"]:
                     recup_data["topic"]=data["topic"][2]["value"]                     
-
+                    
+                    
+            # meeting record per language
+            if language=="EN":
+                if data["meeting_record_en"]:
+                    recup_data["meeting_record_en"]=data["meeting_record_en"]
+            
+            if language=="FR":
+                if data["meeting_record_fr"]:
+                    recup_data["meeting_record_fr"]=data["meeting_record_fr"]
+            
+            if language=="ES":
+                if data["meeting_record_es"]:
+                    recup_data["meeting_record_es"]=data["meeting_record_es"]
+            
             # loading the values in the
             final[my_index]=recup_data
     except :
