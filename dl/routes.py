@@ -1082,26 +1082,28 @@ def render_meeting_json(codemeeting,language):
                 recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
             
             # Outcome Text Management
+           
             if language=="EN":
-                if data["outcomes"][0]["outcome"][0]["outcome_text"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
+                # if data["outcomes"][0]["outcome"][0]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
             if language=="FR":
-                if data["outcomes"][0]["outcome"][1]["outcome_text"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
+                # if data["outcomes"][0]["outcome"][1]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
             if language=="ES":
-                if data["outcomes"][0]["outcome"][2]["outcome_text"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
+                # if data["outcomes"][0]["outcome"][2]["outcome_text"]:
+                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
             
-             # Outcome Text Link Management
+            # Outcome Text Link Management
+
             if language=="EN":
-                if data["outcomes"][0]["outcome"][0]["outcome_text_link"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text_link"]
+                # if data["outcomes"][0]["outcome"][0]["outcome_text_link"]:
+                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][0]["outcome_text_link"]
             if language=="FR":
-                if data["outcomes"][0]["outcome"][1]["outcome_text_link"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text_link"]
+                # if data["outcomes"][0]["outcome"][1]["outcome_text_link"]:
+                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][1]["outcome_text_link"]
             if language=="ES":
-                if data["outcomes"][0]["outcome"][2]["outcome_text_link"]:
-                    recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text_link"]       
+                # if data["outcomes"][0]["outcome"][2]["outcome_text_link"]:
+                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][2]["outcome_text_link"]       
             
             # Topic Management
             if language=="EN":
