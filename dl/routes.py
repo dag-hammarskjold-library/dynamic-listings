@@ -1054,13 +1054,15 @@ def render_meeting_json(codemeeting,language):
             # Date management
             if language=="EN":
                 if data["date"][0]:
-                    recup_data["date"]=data["date"][0]
+                    print(data["date"][0])
+                    recup_data["date"]=data["date"][0]["value"]
             if language=="FR":
                 if data["date"][1]:
-                    recup_data["date"]=data["date"][1]
+                    print(data["date"][1])
+                    recup_data["date"]=data["date"][1]["value"]
             if language=="ES":
                 if data["date"][2]:
-                    recup_data["date"]=data["date"][2]      
+                    recup_data["date"]=data["date"][2]["value"]
             
             # Meeting Record Link management
             if language=="EN":
