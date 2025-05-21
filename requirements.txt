@@ -1,8 +1,7 @@
-Babel
-Flask
-Flask-Session
-mongoengine
-pymongo
-python-dotenv
-dlx @ git+https://github.com/dag-hammarskjold-library/dlx
-
+babel==2.17.0
+dlx @ git+https://github.com/dag-hammarskjold-library/dlx@v1.4.22.2
+Flask==3.1.1
+Flask-Session==0.8.0
+mongoengine==0.29.1
+pymongo==4.10.1
+python-dotenv==1.1.0
