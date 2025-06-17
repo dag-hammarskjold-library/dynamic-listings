@@ -105,38 +105,30 @@ def process_records(coll_agendas,query_string,year):
                                 {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
         
         if outcome_text:
-            outcome_text_link="https://undocs.org/"+outcome_text
-            outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-    # this is to create outcome text structure if we have text or if not we generate 
-        else:
-            # we need second query to find a vote value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
-            query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
-            # iterate over the metadata in the bib record to assemble outcome_vote and outcome text
-            for bib in BibSet.from_query(query2):
-                outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-                #if not bib.get
-                
-                outcome_texts=bib.get_values('791','a')
-                for outcome_text in outcome_texts:
-                    if outcome_text:
-                        outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-                        outcome_obj={"outcome_vote":outcome_vote,
-                                "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                        {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                        {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-                    else:
-                        outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-                        outcome_obj={"outcome_vote":outcome_vote,
-                                "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                        {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                        {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+            outcomes.append(outcome_obj)
+    #else:
+        # we need second query to find a vote value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
+        query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
+        print(query2.to_json())
+        # iterate over the metadata in the bib  record to assemble outcome_vote and outcome text
+        for bib in BibSet.from_query(query2):
+            outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+            if outcome_vote=="0-0-0":
+                outcome_vote=bib.get_value('996', 'a')
+            #if not bib.get
+            outcome_texts=bib.get_values('791','a')
+            #print(outcome_texts)
+            #outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+            
 
-
-                outcomes.append(outcome_obj)
-        #i+=1
+            for outcome_text in outcome_texts:
+                outcome_obj={"outcome_vote":outcome_vote,
+                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+            
+            outcomes.append(outcome_obj)
+    #i+=1
         #print(i,document_symbol,outcomes)
         if outcomes==[]:
             outcomes.append(outcome_obj)
