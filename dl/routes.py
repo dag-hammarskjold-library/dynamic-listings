@@ -694,6 +694,153 @@ def datasetVueDeleteDataset():
     
     
     
+    
+    
+
+####################################################################################################################
+####################################################################################################################
+############  DATASET GA RESOLUTIONS ROUTE
+####################################################################################################################
+####################################################################################################################
+
+# route to display the datamodels page
+@main.route("/datasetGAResolutions")
+def datasetGAResolutions():
+    
+    if session:
+        if session['username']!="":
+            return render_template('datasetgaresolutions.html',session_username=session['username'])
+    else:
+        return redirect("login")
+    
+    
+# route to display the listings ID
+@main.route("/getsclistingsId_ga")
+def get_sc_listings_Id_ga():
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+
+    # get all the listings_id
+    my_field=my_collection.distinct("listing_id")
+    
+    # descending sort 
+    my_fields=sorted(my_field,reverse=True)
+    
+    # just return the listings
+    return json.loads(json_util.dumps(my_fields))  
+
+
+@main.route("/render_meeting_ga/<codemeeting>/<language>", methods=["GET"])
+def render_meeting_ga(codemeeting,language):
+    
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+
+    # title
+    Title_en=["Resolution No.","Plenary or Cttee","Agenda Item No","Meeting Record/ Date/ Vote","Draft","Topic"]
+    Title_fr=["Résolution n°","Plénière ou Comité","Numéro de point à l'ordre du jour","Procès-verbal / Date / Vote","Projet","Sujet"]
+    Title_es=["Resolución No.", "Plenaria o Comité", "Número de Punto de Agenda", "Registro de Reunión/ Fecha/ Voto", "Borrador", "Tema"]
+    
+    if language=="EN":
+        title=Title_en
+
+    if language=="FR":
+        title=Title_fr
+
+    if language=="ES":
+        title=Title_es
+
+
+    # get all the listings_id
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('listing_id',-1)
+    
+    data=[]
+    for record in my_records:
+        data.append(record)
+
+    # just return the listings
+    return render_template("render_ga.html",language=language,data=data,title=title)
+
+
+# route to display the listings
+@main.route("/exportjsonga/<meeting>", methods=["GET"])
+def export_jsonga(meeting):
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+
+    # get all the listings_id
+    my_fields=my_collection.find({"listing_id": meeting},{'_id': 0}).sort('listing_id',-1)
+    
+    # just return the listings
+    return json.loads(json_util.dumps(my_fields))  
+
+
+@main.route("/render_meeting_json_ga/<codemeeting>/json/<language>", methods=["GET"])
+def render_meeting_json_ga(codemeeting,language):
+
+    language = language.upper()    
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+
+    # get all the listings_id
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('listing_id',-1)
+   
+    # Init our storage structures
+    
+    final={}
+    my_index=0
+    
+    try:
+
+        # Loop to feed our storage structure
+        for data in my_records:
+            
+            recup_data={}# the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
+
+            #increment the index
+            my_index+=1
+            
+
+            # Select the language
+            if language=="EN":
+                recup_data["Resolution No"]=data["Resolution_prefix_en"]+data["Resolution_en"]+data["Resolution_sufix_en"]
+                recup_data["Plenary or Cttee"]=data["Plenary_en"]
+                recup_data["Agenda Item No"]=data["Agenda_numbers_en"]
+                recup_data["Meeting Record/ Date/ Vote"]=data["Meeting_prefix_en"]+data["Meeting_en"]+data["Meeting_sufix_en"]+data["Plenary_en"]+data["Vote_prefix_en"]+data["Vote_en"]+data["Vote_sufix_en"]
+                recup_data["Draft"]=data["Draft_Resolution_prefix_en"]+data["Draft_Resolution_en"]+data["Draft_Resolution_sufix_en"]
+                recup_data["Topic"]=data["Title_en"]
+               
+            # Select the language
+            if language=="FR":
+                recup_data["Resolution No"]=data["Resolution_prefix_fr"]+data["Resolution_fr"]+data["Resolution_sufix_fr"]
+                recup_data["Plénière ou Comité"]=data["Plenary_fr"]
+                recup_data["Numéro de point à l'ordre du jour"]=data["Agenda_numbers_fr"]
+                recup_data["Procès-verbal / Date / Vote"]=data["Meeting_prefix_en"]+data["Meeting_fr"]+data["Meeting_sufix_fr"]+data["Plenary_fr"]+data["Vote_prefix_fr"]+data["Vote_fr"]+data["Vote_sufix_fr"]
+                recup_data["Projet"]=data["Draft_Resolution_prefix_fr"]+data["Draft_Resolution_fr"]+data["Draft_Resolution_sufix_fr"]
+                recup_data["Sujet"]=data["Title_fr"]    
+
+            # Select the language
+            if language=="ES":
+                recup_data["Resolution No"]=data["Resolution_prefix_es"]+data["Resolution_es"]+data["Resolution_sufix_es"]
+                recup_data["Plenaria o Comité"]=data["Plenary_es"]
+                recup_data["Número de Punto de Agenda"]=data["Agenda_numbers_es"]
+                recup_data["Registro de Reunión/ Fecha/ Voto"]=data["Meeting_prefix_es"]+data["Meeting_es"]+data["Meeting_sufix_es"]+data["Plenary_es"]+data["Vote_prefix_es"]+data["Vote_es"]+data["Vote_sufix_es"]
+                recup_data["Borrador"]=data["Draft_Resolution_prefix_es"]+data["Draft_Resolution_es"]+data["Draft_Resolution_sufix_es"]
+                recup_data["Tema"]=data["Title_es"]    
+
+            # loading the values in the
+            final[my_index]=recup_data
+    except :
+        print(data["meeting_record"])
+        print("An exception occurred")
+        pass
+
+    # just return the listings
+    return jsonify(final)
+
 ####################################################################################################################
 ####################################################################################################################
 ############  DATASET SECURITY COUNSEL ROUTE

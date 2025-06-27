@@ -177,8 +177,8 @@
               </button>
               <div class="collapse show" id="home-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <!-- <li><a href="{{url_for('main.datasets')}}" class="link-dark rounded">Datasets generated from fields</a></li>-->
                   <li><a href="{{url_for('main.datasetSecurityCounsel')}}" class="link-dark rounded"> Security Council</a></li>
+                  <li><a href="{{url_for('main.datasetGAResolutions')}}" class="link-dark rounded"> GA Resolutions</a></li>
                 </ul>
               </div>
             </li>
@@ -227,14 +227,15 @@
       <script src="{{url_for('static',filename='js/vuejs/datamodels.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/datasets.js')}}"></script>
       <script src="{{url_for('static',filename='js/vuejs/datasetssecuritycounsel.js')}}"></script>
+      <script src="{{url_for('static',filename='js/vuejs/datasetgaresolutions.js')}}"></script>
 
-      <!-- Darkmode -->
+      <!-- Darkmode 
       <script>
         function darkMode() {
             const element = document.body;
             element.classList.toggle("dark-mode");
         }
-      </script>
+      </script>-->
      <!-- Option 1: Bootstrap Bundle with Popper -->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

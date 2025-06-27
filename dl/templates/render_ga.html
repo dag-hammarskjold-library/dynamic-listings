@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://d2jv02qf7xgjwx.cloudfront.net/sites/50/include/style1.css">
+        <style type="text/css">
+            a {border-bottom: dotted 0.1rem #333333;}
+            td {padding: 0.75em 0.75em 0.75em 0.75em !important;}
+            th {text-align: center;}
+            tr {font-size: 13px;}
+          </style>
+    </head>
+    <body>
+    
+    <p style="text-align: justify;">&nbsp;</p>
+        <table id="myTable" class="tablefont" style="width:858px;border: 1px solid black;border-collapse: collapse;">
+            <tbody>
+              
+
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0]}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[1]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[2]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[3]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="10%">{{title[4]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="25%">{{title[5]}} </th>
+                </tr>
+
+                
+                    {% if language == "EN" %}
+                        {% for record in data %}
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['Resolution_link_en']}}"  target="blank">{{record['Resolution_en']}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_en"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_en"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Meeting_prefix_en"]}}
+                                <a href="{{record['Meeting_link_en']}}"  target="blank">{{record["Meeting_en"]}}</a>
+                                 {{record["Meeting_sufix_en"]}}
+                                  {{record["date_en"]}}
+                                   {{record["Vote_prefix_en"]}}
+                                    {{record["Vote_en"]}}
+                                     {{record["Vote_sufix_en"]}}
+
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Draft_Resolution_prefix_en"]}}
+                                <a href="{{record['Draft_Resolution_link_en']}}"  target="blank">{{record["Draft_Resolution_en"]}}</a>
+                                {{record["Draft_Resolution_sufix_en"]}}
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_en"]}}</td>
+                        </tr>
+                        {% endfor %}      
+                    {% endif %}  
+
+                    {% if language == "FR" %}
+                        {% for record in data %}
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['Resolution_link_fr']}}"  target="blank">{{record['Resolution_fr']}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_fr"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_fr"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Meeting_prefix_fr"]}}
+                                <a href="{{record['Meeting_link_fr']}}"  target="blank">{{record["Meeting_fr"]}}</a>
+                                 {{record["Meeting_sufix_fr"]}}
+                                  {{record["date_fr"]}}
+                                   {{record["Vote_prefix_fr"]}}
+                                    {{record["Vote_fr"]}}
+                                     {{record["Vote_sufix_fr"]}}
+
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Draft_Resolution_prefix_fr"]}}
+                                <a href="{{record['Draft_Resolution_link_fr']}}"  target="blank">{{record["Draft_Resolution_fr"]}}</a>
+                                {{record["Draft_Resolution_sufix_fr"]}}
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_fr"]}}</td>
+                        </tr>
+                        {% endfor %}      
+                    {% endif %}  
+
+                {% if language == "ES" %}
+                    {% for record in data %}
+                    <tr style="border: 1px solid black;border-collapse: collapse;">
+                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['Resolution_link_es']}}"  target="blank">{{record['Resolution_es']}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_es"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_es"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Meeting_prefix_es"]}}
+                                <a href="{{record['Meeting_link_es']}}"  target="blank">{{record["Meeting_es"]}}</a>
+                                 {{record["Meeting_sufix_es"]}}
+                                  {{record["date_es"]}}
+                                   {{record["Vote_prefix_es"]}}
+                                    {{record["Vote_es"]}}
+                                     {{record["Vote_sufix_es"]}}
+
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                {{record["Draft_Resolution_prefix_es"]}}
+                               <a href="{{record['Draft_Resolution_link_es']}}"  target="blank">{{record["Draft_Resolution_es"]}}</a>
+                                {{record["Draft_Resolution_sufix_es"]}}
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_es"]}}</td>
+                    </tr>
+                    {% endfor %}      
+                {% endif %}  
+                
+            </tbody>
+        </table>
+       
+    </body>
+</html>
