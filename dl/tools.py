@@ -1,5 +1,5 @@
 import datetime
-from pymongo import MongoClient
+from flask import current_app
 import sys
 from dotenv import load_dotenv
 import os
@@ -10,19 +10,10 @@ import os
 load_dotenv
 
 # function managing the creation of the logs depending of the context
-def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
-    
+def add_log(date_log: datetime, user_connected: str, action_log: str) -> int:
     try:
-    
-        # definition of the parameters for the mongo client
-        my_client = MongoClient(
-            #config["DATABASE_CONN"]
-            os.getenv("DATABASE_CONN")
-        )
-        
-        # setup the database and the collection
-        my_database = my_client["DynamicListings"]  
-        my_collection = my_database["dl_logs_collection"]
+        # Use the app's database connection
+        my_collection = current_app.db["dl_logs_collection"]
 
         # creation of the log object
         my_log = {
@@ -36,8 +27,7 @@ def add_log(date_log:datetime,user_connected:str,action_log:str)-> int:
         
         return 0
         
-    except:
-        
-        e = sys.exc_info()[0]
+    except Exception as e:
+        current_app.logger.error(f"Error adding log: {str(e)}")
         return -1
 
