@@ -753,7 +753,7 @@ def render_meeting_ga(codemeeting,language):
 
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('listing_id',-1)
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
     
     data=[]
     for record in my_records:
@@ -786,8 +786,8 @@ def render_meeting_json_ga(codemeeting,language):
     my_collection = my_database["dl_ga_res_data_collection"]
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('listing_id',-1)
-   
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort("listing",-1)
+
     # Init our storage structures
     
     final={}
@@ -797,7 +797,7 @@ def render_meeting_json_ga(codemeeting,language):
 
         # Loop to feed our storage structure
         for data in my_records:
-            
+            print(data["Resolution"])
             recup_data={}# the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
 
             #increment the index
@@ -809,7 +809,9 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Resolution No"]=data["Resolution_prefix_en"]+data["Resolution_en"]+data["Resolution_sufix_en"]
                 recup_data["Plenary or Cttee"]=data["Plenary_en"]
                 recup_data["Agenda Item No"]=data["Agenda_numbers_en"]
-                recup_data["Meeting Record/ Date/ Vote"]=data["Meeting_prefix_en"]+data["Meeting_en"]+data["Meeting_sufix_en"]+data["Plenary_en"]+data["Vote_prefix_en"]+data["Vote_en"]+data["Vote_sufix_en"]
+                recup_data["Meeting Record"]=data["Meeting_prefix_en"]+data["Meeting_en"]+data["Meeting_sufix_en"]
+                recup_data["Date"]=data["date_en"]
+                recup_data["Vote"]=data["Vote_prefix_en"]+data["Vote_en"]+data["Vote_sufix_en"]
                 recup_data["Draft"]=data["Draft_Resolution_prefix_en"]+data["Draft_Resolution_en"]+data["Draft_Resolution_sufix_en"]
                 recup_data["Topic"]=data["Title_en"]
                
@@ -818,7 +820,9 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Resolution No"]=data["Resolution_prefix_fr"]+data["Resolution_fr"]+data["Resolution_sufix_fr"]
                 recup_data["Plénière ou Comité"]=data["Plenary_fr"]
                 recup_data["Numéro de point à l'ordre du jour"]=data["Agenda_numbers_fr"]
-                recup_data["Procès-verbal / Date / Vote"]=data["Meeting_prefix_en"]+data["Meeting_fr"]+data["Meeting_sufix_fr"]+data["Plenary_fr"]+data["Vote_prefix_fr"]+data["Vote_fr"]+data["Vote_sufix_fr"]
+                recup_data["Procès-verbal"]=data["Meeting_prefix_fr"]+data["Meeting_fr"]+data["Meeting_sufix_fr"]
+                recup_data["Date"]=data["date_fr"]
+                recup_data["Vote"]=data["Vote_prefix_fr"]+data["Vote_fr"]+data["Vote_sufix_fr"]
                 recup_data["Projet"]=data["Draft_Resolution_prefix_fr"]+data["Draft_Resolution_fr"]+data["Draft_Resolution_sufix_fr"]
                 recup_data["Sujet"]=data["Title_fr"]    
 
@@ -827,7 +831,9 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Resolution No"]=data["Resolution_prefix_es"]+data["Resolution_es"]+data["Resolution_sufix_es"]
                 recup_data["Plenaria o Comité"]=data["Plenary_es"]
                 recup_data["Número de Punto de Agenda"]=data["Agenda_numbers_es"]
-                recup_data["Registro de Reunión/ Fecha/ Voto"]=data["Meeting_prefix_es"]+data["Meeting_es"]+data["Meeting_sufix_es"]+data["Plenary_es"]+data["Vote_prefix_es"]+data["Vote_es"]+data["Vote_sufix_es"]
+                recup_data["Registro de Reunión"]=data["Meeting_prefix_fr"]+data["Meeting_fr"]+data["Meeting_sufix_fr"]
+                recup_data["Fecha"]=data["date_es"]
+                recup_data["Voto"]=data["Vote_prefix_es"]+data["Vote_es"]+data["Vote_sufix_es"]
                 recup_data["Borrador"]=data["Draft_Resolution_prefix_es"]+data["Draft_Resolution_es"]+data["Draft_Resolution_sufix_es"]
                 recup_data["Tema"]=data["Title_es"]    
 
