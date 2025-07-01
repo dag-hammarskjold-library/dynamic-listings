@@ -1,3 +1,4 @@
+import re
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from flask import Blueprint, jsonify, redirect, render_template,request, send_file, session,redirect
@@ -730,6 +731,9 @@ def get_sc_listings_Id_ga():
     # just return the listings
     return json.loads(json_util.dumps(my_fields))  
 
+def extract_resolution_number(res):
+    match = re.search(r'(\d+)$', res)
+    return int(match.group(1)) if match else 0
 
 @main.route("/render_meeting_ga/<codemeeting>/<language>", methods=["GET"])
 def render_meeting_ga(codemeeting,language):
@@ -753,7 +757,10 @@ def render_meeting_ga(codemeeting,language):
 
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
+    # my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
+    
+    my_records = list(my_collection.find({"listing_id": f"{codemeeting}"}))
+    sorted_records = sorted(my_records, key=lambda r: extract_resolution_number(r["Resolution"]), reverse=True)
     
     data=[]
     for record in my_records:
