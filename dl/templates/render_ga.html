@@ -26,12 +26,12 @@
               
 
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="11%">{{title[0]}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0]}} <br/></th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[1]}} </th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[2]}} </th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[3]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="14%">{{title[4]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="25%">{{title[5]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[4]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[5]}} </th>
                 </tr>
 
                 
@@ -43,12 +43,12 @@
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_en"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {{record["Meeting_prefix_en"]}}
-                                <a href="{{record['Meeting_link_en']}}"  target="blank">{{record["Meeting_en"]}}</a>
-                                 {{record["Meeting_sufix_en"]}}
-                                  {{record["date_en"]}}
-                                   {{record["Vote_prefix_en"]}}
-                                    {{record["Vote_en"]}}
-                                     {{record["Vote_sufix_en"]}}
+                                <a href="{{record['Meeting_link_en']}}"  target="blank">{{record["Meeting_en"]}}</a><br>
+                                    {% if record["Meeting_sufix_en"] %}{{ record["Meeting_sufix_en"] }}<br>{% endif %}
+                                    {% if record["date_en"] %}{{ record["date_en"] }}<br>{% endif %}
+                                    {% if record["Vote_prefix_en"] %}{{ record["Vote_prefix_en"] }}<br>{% endif %}
+                                    {% if record["Vote_en"] %}{{ record["Vote_en"] }}<br>{% endif %}
+                                    {% if record["Vote_sufix_en"] %}{{ record["Vote_sufix_en"] }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
@@ -69,12 +69,12 @@
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_fr"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {{record["Meeting_prefix_fr"]}}
-                                <a href="{{record['Meeting_link_fr']}}"  target="blank">{{record["Meeting_fr"]}}</a>
-                                 {{record["Meeting_sufix_fr"]}}
-                                  {{record["date_fr"]}}
-                                   {{record["Vote_prefix_fr"]}}
-                                    {{record["Vote_fr"]}}
-                                     {{record["Vote_sufix_fr"]}}
+                                <a href="{{record['Meeting_link_fr']}}"  target="blank">{{record["Meeting_fr"]}}</a><br>
+                                    {% if record["Meeting_sufix_fr"] %}{{ record["Meeting_sufix_fr"] }}<br>{% endif %}
+                                    {% if record["date_fr"] %}{{ record["date_fr"] }}<br>{% endif %}
+                                    {% if record["Vote_prefix_fr"] %}{{ record["Vote_prefix_fr"] }}<br>{% endif %}
+                                    {% if record["Vote_fr"] %}{{ record["Vote_fr"] }}<br>{% endif %}
+                                    {% if record["Vote_sufix_fr"] %}{{ record["Vote_sufix_fr"] }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
@@ -95,12 +95,12 @@
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_es"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {{record["Meeting_prefix_es"]}}
-                                <a href="{{record['Meeting_link_es']}}"  target="blank">{{record["Meeting_es"]}}</a>
-                                 {{record["Meeting_sufix_es"]}}
-                                  {{record["date_es"]}}
-                                   {{record["Vote_prefix_es"]}}
-                                    {{record["Vote_es"]}}
-                                     {{record["Vote_sufix_es"]}}
+                                <a href="{{record['Meeting_link_es']}}"  target="blank">{{record["Meeting_es"]}}</a><br>
+                                    {% if record["Meeting_sufix_es"] %}{{ record["Meeting_sufix_es"] }}<br>{% endif %}
+                                    {% if record["date_es"] %}{{ record["date_es"] }}<br>{% endif %}
+                                    {% if record["Vote_prefix_es"] %}{{ record["Vote_prefix_es"] }}<br>{% endif %}
+                                    {% if record["Vote_es"] %}{{ record["Vote_es"] }}<br>{% endif %}
+                                    {% if record["Vote_sufix_es"] %}{{ record["Vote_sufix_es"] }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
