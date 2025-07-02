@@ -757,12 +757,10 @@ def render_meeting_ga(codemeeting,language):
 
 
     # get all the listings_id
-    # my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
-    
-    my_records = list(my_collection.find({"listing_id": f"{codemeeting}"}))
-    sorted_records = sorted(my_records, key=lambda r: extract_resolution_number(r["Resolution"]), reverse=True)
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
     
     data=[]
+    # for record in my_records:
     for record in my_records:
         data.append(record)
 
