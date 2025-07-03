@@ -735,6 +735,14 @@ def extract_resolution_number(res):
     match = re.search(r'(\d+)$', res)
     return int(match.group(1)) if match else 0
 
+
+def extract_resolution_numeric_sort_key(res):
+    if not isinstance(res, str):
+        return 0
+    match = re.search(r'(\d+)', res[::-1])  # reverse + match = last number
+    return int(match.group(1)[::-1]) if match else 0
+
+
 @main.route("/render_meeting_ga/<codemeeting>/<language>", methods=["GET"])
 def render_meeting_ga(codemeeting,language):
     
@@ -757,15 +765,17 @@ def render_meeting_ga(codemeeting,language):
 
 
     # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('Resolution',-1)
+    my_records=my_collection.find({"listing_id":f"{codemeeting}"})
+
     
     data=[]
     # for record in my_records:
     for record in my_records:
+        #print(record["Resolution"])
         data.append(record)
-
+    sorted_data = sorted(data, key=lambda x: extract_resolution_numeric_sort_key(x["Resolution"]), reverse=True)    
     # just return the listings
-    return render_template("render_ga.html",language=language,data=data,title=title)
+    return render_template("render_ga.html",language=language,data=sorted_data,title=title)
 
 
 # route to display the listings
