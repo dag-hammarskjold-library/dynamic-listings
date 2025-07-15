@@ -1513,10 +1513,12 @@ def process_Records_GARES(session):
         #Title=""
         row_raw = {}
         row_final={} 
-        year=2024
+        year=2025
+        month=6
+        monthstr=str(month).zfill(2)  # Ensure month is two digits
         #session="78"
-        #query_string ='(992:'+str(year)+' OR 992:'+str(year+1)+') AND  191__a:"A/RES/'+session+'/"'
-        query_string='791__a:"A/RES/'+session+'/"'+' AND 791__c:"'+session+'"'
+        query_string='791__a:"A/RES/'+session+'/"'+' AND 791__c:"'+session +'"'
+        #query_string='791__a:"A/RES/'+session+'/"'+' AND 791__c:"'+session +'" AND 992:"'+str(year)+'-'+monthstr+'"'
         print(query_string)
         query = Query.from_string(query_string) # Dataset-search_query
         resultLst=[]
