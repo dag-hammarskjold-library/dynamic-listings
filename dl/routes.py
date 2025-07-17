@@ -751,8 +751,8 @@ def render_meeting_ga(codemeeting,language):
 
     # title
     Title_en=["Resolution No.","Plenary or Cttee","Agenda Item No","Meeting Record/ Date/ Vote","Draft","Title"]
-    Title_fr=["Résolution n°","Plénière ou Comité","Numéro de point à l'ordre du jour","Procès-verbal / Date / Vote","Projet","Sujet"]
-    Title_es=["Resolución No.", "Plenaria o Comité", "Número de Punto de Agenda", "Registro de Reunión/ Fecha/ Voto", "Borrador", "Tituloa"]
+    Title_fr=["No de résolution","Plénière ou Comité","No de l'ordre du jour","Compte rendu de séance / Date / Vote","Projet","Sujet"]
+    Title_es=["Número de resolución", "Plenaria o Comisión", "Tema del programa", "Acta de la sesión/Fecha/Votación", "Proyecto de resolución", "Titulo"]
     
     if language=="EN":
         title=Title_en
