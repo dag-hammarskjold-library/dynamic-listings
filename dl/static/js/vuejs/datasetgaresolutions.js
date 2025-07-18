@@ -24,7 +24,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                 <!-- <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button>  
                 <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> -->
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
-                <!-- <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>-->
+                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
                 <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Partial JSON (language selected) </button> 
                 <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Full JSON (all languages) </button> 
                 <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
@@ -578,6 +578,30 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                           <button type="button" class="close" @click="showMyModal()">&times;</button>
                         </div>
                         <div class="modal-body">
+                        <label class="form-label"><strong>Please select the session</strong></label>
+                          <select id="session" class="form-select mb-3" aria-label="Default select example">
+                            <option value="90">90</option>
+                            <option value="89">89</option>
+                            <option value="88">88</option>
+                            <option value="87">87</option>
+                            <option value="86">86</option>
+                            <option value="85">85</option>
+                            <option value="84">84</option>
+                            <option value="83">83</option>
+                            <option value="82">82</option>
+                            <option value="81">81</option>
+                            <option value="80">80</option>
+                            <option value="79">79</option>
+                            <option value="78">78</option>
+                            <option value="77">77</option>
+                            <option value="76">76</option>
+                            <option value="75">75</option>
+                            <option value="74">74</option>
+                            <option value="73">73</option>
+                            <option value="72">72</option>
+                            <option value="71">71</option>
+                            <option value="70">70</option>
+                            </select>
                         <label class="form-label"><strong>Please select the year</strong></label>
                           <select id="year" class="form-select mb-3" aria-label="Default select example">
                             <option value="2030">2030</option>
@@ -686,7 +710,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                               </label>
                             </div>  
                           <hr>
-                          <button class="btn btn-primary" @click="refresh_data()">Refresh</button>
+                          <button class="btn btn-primary" @click="refresh_data_ga()">Refresh</button>
                         </div>
                     </div>
             </div>
@@ -1103,7 +1127,37 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         dataset.append('year',myYear)
         dataset.append('month',myMonth)
         alert("The process has started the data will be updated in few seconds!!!")
-        const my_response = await fetch("./refresh_data",{
+        const my_response = await fetch("./refresh_data_ga",{
+          "method":"POST",
+          "body":dataset
+          }); 
+          const my_data = await my_response.json();  
+        alert(my_data["message"])
+        this.showMyModal()
+      },
+       async refresh_data_ga(){
+        let mySession=document.getElementById("session").value
+        let myYear=document.getElementById("year").value
+        let myMonth=""
+        if (document.getElementById("january").checked) myMonth=1
+        if (document.getElementById("february").checked) myMonth=2
+        if (document.getElementById("march").checked) myMonth=3
+        if (document.getElementById("april").checked) myMonth=4
+        if (document.getElementById("may").checked) myMonth=5
+        if (document.getElementById("june").checked) myMonth=6
+        if (document.getElementById("july").checked) myMonth=7
+        if (document.getElementById("august").checked) myMonth=8
+        if (document.getElementById("september").checked) myMonth=9
+        if (document.getElementById("october").checked) myMonth=10
+        if (document.getElementById("november").checked) myMonth=11
+        if (document.getElementById("december").checked) myMonth=12
+
+        let dataset = new FormData()
+        dataset.append('session',mySession)
+        dataset.append('year',myYear)
+        dataset.append('month',myMonth)
+        alert("The process has started the data will be updated in few seconds!!!")
+        const my_response = await fetch("./refresh_data_ga",{
           "method":"POST",
           "body":dataset
           }); 
