@@ -81,6 +81,29 @@ class DateFormatter:
             return date_obj.strftime(output_format)
         except ValueError:
             return "Invalid date or format"
+        
+
+class TitleExtractor:
+    def __init__(self, items: list[str]):
+        """
+        Initialize with a list structured as [lang, title, lang, title, ...].
+        Converts it into an internal dictionary for fast lookup.
+        """
+        if len(items) % 2 != 0:
+            raise ValueError("List length must be even: alternating [lang, title].")
+        
+        # Build dictionary {lang: title}
+        self.mapping = {
+            items[i]: items[i + 1] for i in range(0, len(items), 2)
+        }
+
+    def get_title(self, lang_code: str) -> str | None:
+        """
+        Return the title for a given 3-letter lang_code,
+        or None if not found.
+        """
+        return self.mapping.get(lang_code)
+    
     
 def concatenate(items, separator=" "):
     return separator.join(str(x) for x in items)
