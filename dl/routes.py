@@ -13,6 +13,7 @@ import requests
 from dotenv import load_dotenv
 from bson import json_util
 import os
+from collections import defaultdict
 
 
 # definition of the Blueprint
