@@ -89,29 +89,38 @@ class TitleExtractor:
         Initialize with a list structured as [lang, title, lang, title, ...].
         Converts it into an internal dictionary for fast lookup.
         """
-        if len(items) % 2 != 0:
-            raise ValueError("List length must be even: alternating [lang, title].")
-        
-        # Build dictionary {lang: title}
-        for i in range(0, len(items), 2):
-                if items[i] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
-                        self.mapping = {
-                        items[i]: items[i + 1] 
-                        }
-                elif items[i+1] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
-                        self.mapping = {
-                        items[i+1]: items[i] 
-                        }  
-                else:
-                      self.mapping = {}                
+        #print(f"Items: {items}")
+        self.mapping = {}
+        if len(items) % 2 != 0 or len(items) == 0:
+            #raise ValueError("List length must be even: alternating [lang, title].")
+            self.mapping = {}
+        try:
+                # Build dictionary {lang: title}
+                for i in range(0, len(items), 2):
+                        if items[i] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
+                                self.mapping[items[i]]= items[i + 1] 
+                        elif items[i+1] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
+                               self.mapping[items[i+1]]= items[i] 
+                        else:
+                                self.mapping = {}
+        except Exception as e: 
+                print(f"Error processing items: {e}")
+                self.mapping = {}                
 
-    def get_title(self, lang_code: str, *, default: str = "") -> str:
+    def get_title(self, lang_code: str, *, default: str = "[]") -> str:
         """
         Return the title for a given 3-letter lang_code,
         or None if not found.
         """
        
-        return self.by_lang.get(lang_code, default)  # still str
+        if self.mapping=={}:
+                #print(f"default is {default}")
+                return default
+                
+        else:
+                #print(f"lang_code is {lang_code}")
+                #print(f"mapping is {self.mapping}")
+                return self.mapping.get(lang_code, default)  # still str
     
     
 def concatenate(items, separator=" "):
@@ -162,13 +171,14 @@ def connect_db_GARES():
 
     DB.connect(Config.connect_string, database="undlFiles")
     #query_agendas_collection("The situation in the Middle East, including the Palestinian question")
-    #this is the parameter value that needs to be selected each time the specific table is refreshed
+    #this is the parameter value that needs to be selected each time the specific table is refreshed 
     return coll_dl5_GARES, coll_titles_GARES, config_collection_GARES
 
 # function that returns translations of the agenda subjects based onthe english text and a query language code from the lookup table
 def query_titles_collection(text_lang,text_en, query_lang,coll_titles_GARES):
     # Aggregation pipeline to find documents where 'body' is 'SC' and 'agenda' array contains an object where 'lang' is 'EN' and 'txt' is 'abc'
-
+        #print(f"Querying for title: {text_en} in lang: {query_lang}")
+        #print(f"text_lang: {text_lang}")
         if text_lang!='[]':
                 return text_lang
 
@@ -207,6 +217,7 @@ def load_ga_resolutions_config(config_collection_GARES=None):
 
     # Remove the _id field before returning
     config_doc.pop('_id', None)
+    #print(config_doc)
     return config_doc
 
 
@@ -229,7 +240,7 @@ def process_Records_GARES(session:str,year:int,month:int):
         query = Query.from_string(query_string) # Dataset-search_query
         resultLst=[]
         for bib in BibSet.from_query(query, sort={"791.subfields.value":-1}):
-
+                #print(bib.id)
                 results = {}
 
                 for task_name, task in config_doc.items():
@@ -440,9 +451,9 @@ def prepare_Documents_GARES(resultLst, session):
                 "Resolution_sufix_en":"",
                 "Resolution_sufix_fr":"",
                 "Resolution_sufix_es":"",
-                "Resolution_link_en":"https://undocs.org/en/"+document_symbol,
-                "Resolution_link_fr":"https://undocs.org/fr/"+document_symbol,
-                "Resolution_link_es":"https://undocs.org/es/"+document_symbol,
+                "Resolution_link_en":"https://docs.un.org/"+document_symbol,
+                "Resolution_link_fr":"https://docs.un.org/"+document_symbol,
+                "Resolution_link_es":"https://docs.un.org/"+document_symbol,
                 #Plenary/Cttee
                 "Plenary_prefix_en":"",
                 "Plenary_prefix_fr":"",
@@ -473,9 +484,9 @@ def prepare_Documents_GARES(resultLst, session):
                 "Meeting_sufix_en":"",
                 "Meeting_sufix_fr":"",
                 "Meeting_sufix_es":"",
-                "Meeting_link_en":"https://undocs.org/en/"+meeting,
-                "Meeting_link_fr":"https://undocs.org/fr/"+meeting,
-                "Meeting_link_es":"https://undocs.org/es/"+meeting,
+                "Meeting_link_en":"https://docs.un.org/"+meeting,
+                "Meeting_link_fr":"https://docs.un.org/"+meeting,
+                "Meeting_link_es":"https://docs.un.org/"+meeting,
                 #"date":action_date,
                 #"date":[{"lang":"EN","value":date},
                 #        {"lang":"FR","value":get_date_in_lang(date,'fr_FR')},
@@ -506,9 +517,9 @@ def prepare_Documents_GARES(resultLst, session):
                 "Draft_Resolution_sufix_en":"",
                 "Draft_Resolution_sufix_fr":"",
                 "Draft_Resolution_sufix_es":"",
-                "Draft_Resolution_link_en":"https://undocs.org/en/"+draft_resolution,
-                "Draft_Resolution_link_fr":"https://undocs.org/fr/"+draft_resolution,
-                "Draft_Resolution_link_es":"https://undocs.org/es/"+draft_resolution,
+                "Draft_Resolution_link_en":"https://docs.un.org/"+draft_resolution,
+                "Draft_Resolution_link_fr":"https://docs.un.org/"+draft_resolution,
+                "Draft_Resolution_link_es":"https://docs.un.org/"+draft_resolution,
                 #Title
                 "Title_prefix_en":"",
                 "Title_prefix_fr":"",
