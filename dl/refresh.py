@@ -98,7 +98,8 @@ def process_records(coll_agendas,query_string,year):
         agenda_subject=agenda_subject.rstrip('.')
         outcomes=[]
         outcome_text=bib.get_value('993','a')
-        outcome_text_link=""
+        outcome_text_link="https://docs.un.org/"+outcome_text
+        print(outcome_text_link)
         outcome_obj={"outcome_vote":outcome_vote,
                         "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
                                 {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
@@ -123,9 +124,9 @@ def process_records(coll_agendas,query_string,year):
 
             for outcome_text in outcome_texts:
                 outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://undocs.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
             
             outcomes.append(outcome_obj)
     #i+=1
@@ -145,9 +146,9 @@ def process_records(coll_agendas,query_string,year):
          "meeting_record_en":document_symbol,
          "meeting_record_fr":document_symbol,
          "meeting_record_es":document_symbol,
-         "meeting_record_link":"https://undocs.org/en/"+document_symbol,
-        "meeting_record_link_fr":"https://undocs.org/fr/"+document_symbol,
-        "meeting_record_link_es":"https://undocs.org/es/"+document_symbol,
+         "meeting_record_link":"https://docs.un.org/"+document_symbol,
+        "meeting_record_link_fr":"https://docs.un.org/"+document_symbol,
+        "meeting_record_link_es":"https://docs.un.org/"+document_symbol,
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},

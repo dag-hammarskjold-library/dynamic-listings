@@ -93,16 +93,25 @@ class TitleExtractor:
             raise ValueError("List length must be even: alternating [lang, title].")
         
         # Build dictionary {lang: title}
-        self.mapping = {
-            items[i]: items[i + 1] for i in range(0, len(items), 2)
-        }
+        for i in range(0, len(items), 2):
+                if items[i] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
+                        self.mapping = {
+                        items[i]: items[i + 1] 
+                        }
+                elif items[i+1] in ['ara', 'chi', 'eng', 'fre', 'rus', 'spa']:
+                        self.mapping = {
+                        items[i+1]: items[i] 
+                        }  
+                else:
+                      self.mapping = {}                
 
-    def get_title(self, lang_code: str) -> str | None:
+    def get_title(self, lang_code: str, *, default: str = "") -> str:
         """
         Return the title for a given 3-letter lang_code,
         or None if not found.
         """
-        return self.mapping.get(lang_code)
+       
+        return self.by_lang.get(lang_code, default)  # still str
     
     
 def concatenate(items, separator=" "):
