@@ -63,7 +63,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.meeting_record_link"  target="top">{{record.meeting_record_en}}</a>
+                              <a :href="record.meeting_record_link"  target="_blank">{{record.meeting_record_en}}</a>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
@@ -114,7 +114,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                     </tr>
                     <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="top">{{record.meeting_record_es}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="_blank">{{record.meeting_record_es}}</a></td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
@@ -174,7 +174,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               </tr>
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="top">{{record.meeting_record_fr}}</a></td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="_blank">{{record.meeting_record_fr}}</a></td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
                     <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
