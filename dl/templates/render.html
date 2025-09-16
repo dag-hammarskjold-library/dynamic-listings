@@ -63,13 +63,18 @@
                     {% if language == "EN" %}
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
-                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link']}}"  target="_blank">{{record["meeting_record_en"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;">
+                                {%  if record['meeting_record_link'] %}      
+                                    <a href="{{record['meeting_record_link']}}"  target="_blank">{{record["meeting_record_en"]}}</a></td>
+                                {% endif %}  
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
                                     <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                                    <span> <a href={{my_record['outcome'][0]['outcome_text_link']}}   target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                                    {%  if (my_record['outcome'][0]['outcome_text']) %}      
+                                        <span> <a href={{my_record['outcome'][0]['outcome_text_link']}}   target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                                    {% endif %}  
                                     <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
                                     <br>
                                     <span> {{my_record["outcome_vote"]}} </span>
@@ -84,14 +89,19 @@
                     {% if language == "FR" %}
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
-                            <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record["meeting_record_fr"]}}</a></td>
+                            <td style="border: 1px solid black;border-collapse: collapse;">
+                            {%  if (record['meeting_record_link_fr']) %}      
+                                <a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record["meeting_record_fr"]}}</a></td>
+                            {% endif %}
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
                                     <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                                    <span> <a href={{my_record['outcome'][1]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
-                                    <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
+                                    {%  if (my_record['outcome'][1]['outcome_text']) %}  
+                                        <span> <a href={{my_record['outcome'][1]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                                    {% endif %}  
+                                        <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
                                     <br>
                                     <span> {{my_record["outcome_vote"]}} </span>
                                     <br>
@@ -105,14 +115,19 @@
                 {% if language == "ES" %}
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record["meeting_record_es"]}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">
+                        {%  if (record['meeting_record_link_es']) %}      
+                            <a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record["meeting_record_es"]}}</a></td>
+                        {% endif %}
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;" >
                             {% for my_record in record.outcomes %}                                    
                                 <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                                <span> <a href={{my_record['outcome'][2]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
-                                <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
+                                {%  if (my_record['outcome'][2]['outcome_text']) %}  
+                                    <span> <a href={{my_record['outcome'][2]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                                {% endif %}  
+                                    <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
                                 <br>
                                 <span> {{my_record["outcome_vote"]}} </span>
                                 <br>
