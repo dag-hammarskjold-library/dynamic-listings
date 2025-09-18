@@ -1144,40 +1144,95 @@ def delete_sc_listing():
         # just render the users
         return jsonify(message="Record deleted")
     
+def extract_meeting_number(record):
+    """
+    Extract numeric meeting number from strings like:
+    'S/PV.9842' or 'S/PV.9842 (Resumption 1)'
+    """
+    match = re.search(r"S/PV\.(\d+)", record)
+    return int(match.group(1)) if match else -1
+
+def extract_resumption_number(record):
+    """
+    Extract resumption number if present, else 0
+    'S/PV.9842' => 0
+    'S/PV.9842 (Resumption 2)' => 2
+    """
+    match = re.search(r"\(Resumption (\d+)\)", record)
+    return int(match.group(1)) if match else 0
 
 @main.route("/render_meeting/<codemeeting>/<language>", methods=["GET"])
-def render_meeting(codemeeting,language):
-    
-    my_database=my_client["DynamicListings"]
+def render_meeting(codemeeting, language):
+    my_database = my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
 
-    # title
-    title=""
-    title_en=["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"]
-    title_fr=["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"]
-    title_es=["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
+    # titles
+    titles = {
+        "EN": ["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"],
+        "FR": ["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"],
+        "ES": ["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
+    }
+    title = titles.get(language, titles["EN"])
+
+    # fetch records
+    records = list(my_collection.find({"listing_id": codemeeting}))
+
+    # sort by meeting number then resumption
+    records.sort(
+        key=lambda r: (extract_meeting_number(r["meeting_record"]), extract_resumption_number(r["meeting_record"])),
+        reverse=True
+    )
+
+    # deduplicate by meeting number, keeping highest resumption
+    unique_records = []
+    seen = set()
+    for rec in records:
+        num = extract_meeting_number(rec["meeting_record"])
+        if num not in seen:
+            unique_records.append(rec)
+            seen.add(num)
+
+    # year
+    year = unique_records[0]["listing_id"][-4:] if unique_records else ""
+
+    # debug
+    print(unique_records)
+
+    return render_template("render.html", language=language, data=unique_records, title=title, year=year)
+# def render_meeting(codemeeting,language):
     
-    if language=="EN":
-        title=title_en
+#     my_database=my_client["DynamicListings"]
+#     my_collection = my_database["dl_cd_data_collection"]
 
-    if language=="FR":
-        title=title_fr
-
-    if language=="ES":
-        title=title_es
-
-
-    # get all the listings_id
-    my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
+#     # title
+#     title=""
+#     title_en=["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"]
+#     title_fr=["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"]
+#     title_es=["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
     
-    data=[]
-    for record in my_records:
-        data.append(record)
+#     if language=="EN":
+#         title=title_en
 
-    year=data[0]["listing_id"][-4:]
+#     if language=="FR":
+#         title=title_fr
 
-    # just return the listings
-    return render_template("render.html",language=language,data=data,title=title,year=year)
+#     if language=="ES":
+#         title=title_es
+
+
+#     # get all the listings_id
+#     my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
+    
+#     data=[]
+#     for record in my_records:
+#         data.append(record)
+
+#     year=data[0]["listing_id"][-4:]
+
+#     print(data)
+
+#     # just return the listings
+#     return render_template("render.html",language=language,data=data,title=title,year=year)
 
 
 @main.route("/render_meeting/<codemeeting>/json/<language>", methods=["GET"])
