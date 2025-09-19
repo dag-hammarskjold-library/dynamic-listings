@@ -1216,7 +1216,7 @@ def render_meeting(codemeeting, language):
     year = unique_records[0]["listing_id"][-4:] if unique_records else ""
 
     # debug
-    print(unique_records)
+    # print(unique_records)
 
     return render_template("render.html", language=language, data=unique_records, title=title, year=year)
 # def render_meeting(codemeeting,language):
