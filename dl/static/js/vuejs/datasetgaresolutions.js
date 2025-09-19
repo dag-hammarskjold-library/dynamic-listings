@@ -21,8 +21,8 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                 <option value="AR">Arabic</option>
                 <option value="ZH">Chinese</option> -->
               </select>
-                <!-- <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button>  
-                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> -->
+                <!-- <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button>   -->
+                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button>
                 <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
                 <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
                 <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Partial JSON (language selected) </button> 
@@ -905,7 +905,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
-      const my_response = await fetch("./getsclistings/" + myMeetingValue);
+      const my_response = await fetch("./getsclistingsId_ga/" + myMeetingValue);
       const my_data = await my_response.json();
       
       my_data.forEach(element => {

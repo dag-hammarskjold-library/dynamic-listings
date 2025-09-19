@@ -719,10 +719,10 @@ def datasetGAResolutions():
     
 # route to display the listings ID
 @main.route("/getsclistingsId_ga")
-def get_sc_listings_Id_ga():
+def get_ga_listings_Id():
 
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["dl_ga_res_data_collection"]
+    my_collection = my_database["GA_Res_cd_data_collection"]
 
     # get all the listings_id
     my_field=my_collection.distinct("listing_id")
@@ -901,7 +901,27 @@ def get_sc_listings_values(meeting):
     my_collection = my_database["dl_cd_data_collection"]
 
     # get all the listings_id
-    my_fields=my_collection.find({"listing_id": meeting}).sort('meeting_record',-1)
+    # my_fields=my_collection.find({"listing_id": meeting}).sort('meeting_record',-1)
+    
+
+     # fetch records
+    my_fields = list(my_collection.find({"listing_id": meeting}))
+
+    # sort by meeting number then resumption
+    my_fields.sort(
+        key=lambda r: (extract_meeting_number(r["meeting_record"]), extract_resumption_number(r["meeting_record"])),
+        reverse=True
+    )
+
+    # deduplicate by meeting number, keeping highest resumption
+    unique_records = []
+    seen = set()
+    for rec in my_fields:
+        num = extract_meeting_number(rec["meeting_record"])
+        if num not in seen:
+            unique_records.append(rec)
+            seen.add(num)
+
     
     # just return the listings
     return json.loads(json_util.dumps(my_fields))  
@@ -1196,7 +1216,7 @@ def render_meeting(codemeeting, language):
     year = unique_records[0]["listing_id"][-4:] if unique_records else ""
 
     # debug
-    print(unique_records)
+    # print(unique_records)
 
     return render_template("render.html", language=language, data=unique_records, title=title, year=year)
 # def render_meeting(codemeeting,language):
