@@ -40,52 +40,52 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         </div>
         <hr>
         <div class="shadow" v-if="displayRecordFromQuery" style="width:1200px;">
-          <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="The table has five columns and should be read per row. The first column indicate the document 
-              symbol of the meeting record, which is linked to the actual document in PDF format. 
-              The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
-              The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
-              taken with links provided to the actual document in PDF format if a presidential statement has been issued or a resolution adopted.">
+          <table style="width:1000px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
-                          <th class="tbltitle" colspan="5" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
-                          (in reverse chronological order)</th>
-                      </tr>
-                      <tr style="border: 1px solid black;border-collapse: collapse;">
-                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Meeting<br />Record</th>
-                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Date</th>
-                          <th width="30%" style="border: 1px solid black;border-collapse: collapse;">Topic</th>
-                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council / Vote </th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Resolution No</th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Plenary or Cttee</th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Agenda Item No</th>
+                          <th width="25%" style="border: 1px solid black;border-collapse: collapse;">Meeting Record / Date / Note </th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Draft</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Title</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
                       </tr>
-                      <tr style="border: 1px solid black;border-collapse: collapse;">
-                          <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
-                      </tr>
+
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
+                          {{record}}
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                          </td>
+                         
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                          </td>
+                          
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.meeting_record_link"  target="_blank">{{record.meeting_record_en}}</a>
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                            <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                          <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                          </td>
-                          
-                          <td style="border: 1px solid black;border-collapse: collapse;"> 
-                            <span v-for="my_record in record.outcomes">
-                              <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][0]['outcome_text_link']" target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
-                              <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
-                              <br>
-                              <span> {{my_record["outcome_vote"]}} </span>
-                              <span v-else>  </span>
-                              <br>
-                            </span>
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
                           </td>
 
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>        
+                          </td>
+                          
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                          </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
                               <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
@@ -757,7 +757,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
     
     created:async function(){
       // loading all the meetings ID
-      const my_response = await fetch("./getsclistingsId_ga");
+      const my_response = await fetch("./getgalistingsId");
       const my_data = await my_response.json();
       my_data.forEach(element => {
         this.meetingsIds.push(element)
@@ -905,7 +905,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
-      const my_response = await fetch("./getsclistingsId_ga/" + myMeetingValue);
+      const my_response = await fetch("./getgalistings/" + myMeetingValue);
       const my_data = await my_response.json();
       
       my_data.forEach(element => {
