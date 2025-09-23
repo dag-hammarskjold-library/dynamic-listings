@@ -715,20 +715,39 @@ def datasetGAResolutions():
             return render_template('datasetgaresolutions.html',session_username=session['username'])
     else:
         return redirect("login")
-    
-    
+
 # route to display the listings ID
-@main.route("/getsclistingsId_ga")
+@main.route("/getgalistingsId")
 def get_ga_listings_Id():
 
     my_database=my_client["DynamicListings"]
-    my_collection = my_database["GA_Res_cd_data_collection"]
+    my_collection = my_database["dl_ga_res_data_collection"]
 
     # get all the listings_id
     my_field=my_collection.distinct("listing_id")
     
     # descending sort 
     my_fields=sorted(my_field,reverse=True)
+    
+    # just return the listings
+    return json.loads(json_util.dumps(my_fields))      
+    
+# route to display the listings ID
+@main.route("/getgalistings/<meeting>", methods=["GET"])
+def get_ga_listings(meeting):
+
+    print("Fetching GA listings IDs...")
+
+    my_database=my_client["DynamicListings"]
+    my_collection = my_database["GA_Res_cd_data_collection"]
+
+    # get all the listings_id
+    my_field=my_collection.distinct(meeting)
+    
+    # descending sort 
+    my_fields=sorted(my_field,reverse=True)
+    
+    print(my_fields)
     
     # just return the listings
     return json.loads(json_util.dumps(my_fields))  
@@ -899,12 +918,8 @@ def get_sc_listings_values(meeting):
 
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
-
-    # get all the listings_id
-    # my_fields=my_collection.find({"listing_id": meeting}).sort('meeting_record',-1)
     
-
-     # fetch records
+    # fetch records
     my_fields = list(my_collection.find({"listing_id": meeting}))
 
     # sort by meeting number then resumption
@@ -1183,6 +1198,7 @@ def extract_resumption_number(record):
 
 @main.route("/render_meeting/<codemeeting>/<language>", methods=["GET"])
 def render_meeting(codemeeting, language):
+    
     my_database = my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
 
@@ -1195,10 +1211,11 @@ def render_meeting(codemeeting, language):
     title = titles.get(language, titles["EN"])
 
     # fetch records
-    records = list(my_collection.find({"listing_id": codemeeting}))
+    my_fields = list(my_collection.find({"listing_id": codemeeting}))
+    
 
     # sort by meeting number then resumption
-    records.sort(
+    my_fields.sort(
         key=lambda r: (extract_meeting_number(r["meeting_record"]), extract_resumption_number(r["meeting_record"])),
         reverse=True
     )
@@ -1206,7 +1223,7 @@ def render_meeting(codemeeting, language):
     # deduplicate by meeting number, keeping highest resumption
     unique_records = []
     seen = set()
-    for rec in records:
+    for rec in my_fields:
         num = extract_meeting_number(rec["meeting_record"])
         if num not in seen:
             unique_records.append(rec)
@@ -1218,7 +1235,7 @@ def render_meeting(codemeeting, language):
     # debug
     # print(unique_records)
 
-    return render_template("render.html", language=language, data=unique_records, title=title, year=year)
+    return render_template("render.html", language=language, data=my_fields, title=title, year=year)
 # def render_meeting(codemeeting,language):
     
 #     my_database=my_client["DynamicListings"]
