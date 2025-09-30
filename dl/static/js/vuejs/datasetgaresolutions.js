@@ -46,50 +46,46 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Resolution No</th>
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Plenary or Cttee</th>
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Agenda Item No</th>
-                          <th width="25%" style="border: 1px solid black;border-collapse: collapse;">Meeting Record / Date / Note </th>
+                          <th width="25%" style="border: 1px solid black;border-collapse: collapse;">Meeting Record / Date / Vote </th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Draft</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Title</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
                       </tr>
 
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
-                          {{record}}
+                          
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                              <a :href="record.Resolution_link_en"  target="_blank">  {{record.Resolution_prefix_en}} {{record.Resolution_en}}  {{record.Resolution_sufix_en}} </a>
                           </td>
                          
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
-                          </td>
-                          
-                          
-                          <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                               {{record.Plenary_en}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                               {{record.Agenda_numbers_en}}
                           </td>
                           
-                          <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                          <td style="border: 1px solid black;border-collapse: collapse;">                              
+                               {{record.Meeting_prefix_en}} {{record.Meeting_en}} {{record.Meeting_sufix_en}}<br>
+                               {{record.date_en}} <br>
+                               {{record.Vote_en}}
+
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>        
-                          </td>
-                          
-                          <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                                 {{record.Draft_Resolution_prefix_en}} {{record.Draft_Resolution_en}} {{record.Draft_Resolution_sufix_en}}
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Meeting_link_en"  target="_blank">{{record.Resolution}}</a>
+                                {{record.Title_prefix_en}} {{record.Title_en}}  {{record.Title_sufix_en}}
+
                           </td>
 
+
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>  
+                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>               
                           </td>
                       </tr>
                   </tbody>
@@ -98,58 +94,48 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
           <tbody>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <th class="tbltitle" colspan="5" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
-                        (en orden cronológico inverso)</th>
-                    </tr>
-                    <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Reunión<br /></th>
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Fecha</th>
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Tema</th>
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad / Votar</th>
-                       
-                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Acciones</th>
-                    </tr>
-                    <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <td colspan="6"><strong>Enlaces de documentos</strong> funcionará una vez que el documento haya sido publicado en el Sistema de Documento Oficial.</td>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Número de resolución</th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Plenaria o Comisión</th>
+                          <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Tema del programa</th>
+                          <th width="25%" style="border: 1px solid black;border-collapse: collapse;">Acta de la sesión/Fecha/Votación </th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Proyecto de resolución</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Titulo</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Acciones</th>
                     </tr>
                     <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="_blank">{{record.meeting_record_es}}</a></td>
-                        
-                        <td style="border: 1px solid black;border-collapse: collapse;">
-                          <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                          <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                          <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
-                          <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
-                          <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
-                          <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
-                        </td>
-                        
-                        <td style="border: 1px solid black;border-collapse: collapse;">
-                        <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                        <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
-                        <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
-                        <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
-                        <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
-                        <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
-                        </td>
-                        
-                          <td style="border: 1px solid black;border-collapse: collapse;"> 
-                            <span v-for="my_record in record.outcomes">
-                              <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][2]['outcome_text_link']" target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
-                              <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
-                              <br>
-                              <span> {{my_record["outcome_vote"]}} </span>
-                              <span v-else>  </span>
-                              <br>
-                            </span>
+                    
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Resolution_link_es"  target="_blank">  {{record.Resolution_prefix_es}} {{record.Resolution_es}}  {{record.Resolution_sufix_es}} </a>
+                          </td>
+                         
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                               {{record.Plenary_es}}
+                          </td>
+                          
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                               {{record.Agenda_numbers_es}}
+                          </td>
+                          
+                          <td style="border: 1px solid black;border-collapse: collapse;">                              
+                               {{record.Meeting_prefix_es}} {{record.Meeting_es}} {{record.Meeting_sufix_es}}<br>
+                               {{record.date_es}} <br>
+                               {{record.Agenda_numbers_es}}
+
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                                 {{record.Draft_Resolution_prefix_es}} {{record.Draft_Resolution_es}} {{record.Draft_Resolution_sufix_es}}
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                                {{record.Title_prefix_es}} {{record.Title_es}}  {{record.Title_sufix_es}}
                           </td>
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                          
-                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+
+                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>
+                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>
                         </td>
                     </tr>
                 </tbody>
@@ -158,58 +144,47 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
           <tbody>
               <tr style="border: 1px solid black;border-collapse: collapse;">
-                  <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
-                  (Dans l'ordre chronologique inverse)</th>
-              </tr>
-              <tr style="border: 1px solid black;border-collapse: collapse;">
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Réunion<br /></th>
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Date</th>
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Sujet</th>
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité / Vote </th>
-    
-                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Actions</th>
-              </tr>
-              <tr style="border: 1px solid black;border-collapse: collapse;">
-                  <td colspan="6"><strong>Les liens vers les documents</strong> fonctionneront une fois que le document aura été publié dans le système de documents officiel.</td>
+                  <th width="15%" style="border: 1px solid black;border-collapse: collapse;">No de résolution</th>
+                  <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Plénière ou Comité</th>
+                  <th width="15%" style="border: 1px solid black;border-collapse: collapse;">No de l'ordre du jour</th>
+                  <th width="25%" style="border: 1px solid black;border-collapse: collapse;">Compte rendu de séance / Date / Vote</th>
+                  <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Projet</th>
+                  <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Sujet</th>
+                  <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
               </tr>
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="_blank">{{record.meeting_record_fr}}</a></td>
-                  
-                  <td style="border: 1px solid black;border-collapse: collapse;">
-                    <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                    <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
-                    <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
-                    <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
-                    <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
-                  </td>
-                  
-                  <td style="border: 1px solid black;border-collapse: collapse;">
-                    <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
-                    <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
-                    <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
-                    <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
-                    <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
-                  </td>
-                  
-                  <td style="border: 1px solid black;border-collapse: collapse;"> 
-                    <span v-for="my_record in record.outcomes">
-                      <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                      <span> <a :href="my_record['outcome'][1]['outcome_text_link']" target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
-                      <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
-                      <br>
-                      <span> {{my_record["outcome_vote"]}} </span>
-                      <span v-else>  </span>
-                      <br>
-                    </span>
-                  </td>
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                              <a :href="record.Resolution_link_fr"  target="_blank">  {{record.Resolution_prefix_fr}} {{record.Resolution_fr}}  {{record.Resolution_sufix_fr}} </a>
+                          </td>
+                         
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                               {{record.Plenary_fr}}
+                          </td>
+                          
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                               {{record.Agenda_numbers_fr}}
+                          </td>
+                          
+                          <td style="border: 1px solid black;border-collapse: collapse;">                              
+                               {{record.Meeting_prefix_fr}} {{record.Meeting_fr}} {{record.Meeting_sufix_fr}}<br>
+                               {{record.date_fr}} <br>
+                               {{record.Agenda_numbers_fr}}
+
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                                 {{record.Draft_Resolution_prefix_fr}} {{record.Draft_Resolution_fr}} {{record.Draft_Resolution_sufix_fr}}
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                                {{record.Title_prefix_fr}} {{record.Title_fr}}  {{record.Title_sufix_fr}}
+                          </td>
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
-                      
-                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+
+                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>
+                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>
                   </td>
               </tr>
           </tbody>
@@ -219,189 +194,284 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
         </div>
 
-        <div v-if="displayFTP" class="form-section ">
-          <h3> FTP parameters </h3>
-          <hr>
-              <p> <strong> Host ->      </strong> </p> 
-              <p> <strong> Username ->  </strong> </p> 
-              <p> <strong> Password ->  </strong> </p> 
-              <p> <strong> Timeout ->  </strong> </p> 
-              <p> <strong> Encoding ->  </strong> </p> 
-          <hr>
-          <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupFile01">Upload</label>
-            <input type="file" class="form-control" id="inputGroupFile01">
-          </div>
-          <input type="submit" name="sendftp" class="btn btn-primary">
-        </div>
-
         <div v-if="updateRecordFromQuery">
                 <div class="mb-3">
                   <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
-                  <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This update will affect the record in French </h3>
-                  <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This update will affect the record in Spanish </h3>
+                  <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> Cette mise à jour affectera l'enregistrement </h3>
+                  <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> Esta actualización afectará el registro en español </h3>
                   <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This update will affect the record in Russian</h3>
                   <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This update will affect the record in Arabic </h3>
                   <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This update will affect the record in Chinese</h3>
                 </div> 
                 <hr> 
                 <form @submit.prevent="">
-                    <div v-if="languageSelected==='EN'" class="mb-3">
-                        <label for="inputMeeting" class="form-label">Meeting</label>
-                        <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden">
-                    </div>   
-                    
-                    <div v-if="languageSelected==='FR'" class="mb-3">
-                        <label for="inputMeeting" class="form-label">Meeting</label>
-                        <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr">
-                    </div>
-                    
-                    <div v-if="languageSelected==='ES'" class="mb-3">
-                        <label for="inputMeeting" class="form-label">Meeting</label>
-                        <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes">
-                    </div>
+    
+                  <!-- ------------------- ENGLISH ----------------------- --> 
 
-                    <div v-if="languageSelected==='EN'" class="mb-3">
-                        <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
-                        <input type="text" class="form-control" id="meetinglinken" name="meetinglinken" v-model="meetinglinken">
-                    </div> 
-                    
-                    <div v-if="languageSelected==='FR'" class="mb-3">
-                        <label for="inputMeetingLinkFR" class="form-label">Meeting Link</label>
-                        <input type="text" class="form-control" id="meetinglinkfr" name="meetinglinkfr" v-model="meetinglinkfr">
-                    </div> 
-                    
-                    <div v-if="languageSelected==='ES'" class="mb-3">
-                        <label for="inputMeetingLinkES" class="form-label">Meeting Link</label>
-                        <input type="text" class="form-control" id="meetinglinkes" name="meetinglinkes" v-model="meetinglinkes">
-                    </div> 
-
-
-
-                    <div class="mb-3">
-                        <label for="inputName" class="form-label">Date</label>
-                        <input type="text" class="form-control" id="date" name="date" v-model="date">
-                    </div>   
-                    <div class="mb-3">
-                        <label for="inputName" class="form-label">Topic</label>
-                        <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
-                    </div>   
-
-                    <div>
-                      
-                      <button class="btn btn-primary mb-2" @click="AddOutcomeEmpty()">Add Outcome</button>
-                      
-                      
                       <div v-if="languageSelected==='EN'" v-for="(outcome, index) in outcomes" :key="index" class="row">
 
-                        <div class="cell card bg-light">
-                        
-                          <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
-                          </div>
+                            <div class="mb-1">
+                                <label for="Resolution_prefix_en" class="form-label">Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_en"/><br>
+                            </div>
 
-                          <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
-                          </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
-                        </div>  
-                      </div>
+                            <div class="mb-1">
+                                <label for="Resolution_en" class="form-label">Resolution  </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_en"/><br>
+                            </div>
 
-                      
+                            <div class="mb-1">
+                                <label for="Resolution_sufix_en" class="form-label">Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_sufix_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Plenary_en" class="form-label">Plenary </label>
+                                <input class="form-control mt-2" v-model="outcome.Plenary_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Agenda_numbers_en" class="form-label">Agenda Numbers </label>
+                                <input class="form-control mt-2" v-model="outcome.Agenda_numbers_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_prefix_en" class="form-label">Meeting prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_prefix_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_en" class="form-label">Meeting </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_sufix_en" class="form-label">Meeting sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_sufix_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_prefix_en" class="form-label">Draft Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_Resolution_en" class="form-label">Draft Resolution </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_sufix_en" class="form-label">Draft Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_sufix_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_prefix_en" class="form-label">Title Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_prefix_en"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                                <label for="Title_en" class="form-label">Title </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_sufix_en" class="form-label">Title Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_sufix_en"/><br>
+                            </div>
+          
+                            <div class="mb-1">
+                                <label for="date_en" class="form-label">Date </label>
+                                <input class="form-control mt-2" v-model="outcome.date_en"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                              <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
+                              <label class="form-check-label" for="flexCheckDefault">
+                                Allow Refresh
+                              </label>
+                            </div>
+
+                      </div>                  
+
+          <!-- ------------------- SPANISH ----------------------- --> 
+
+            <div v-if="languageSelected==='ES'" v-for="(outcome, index) in outcomes" :key="index" class="row">
+
+                            <div class="mb-1">
+                                <label for="Resolution_prefix_es" class="form-label">Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_es" class="form-label">Resolution  </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_sufix_es" class="form-label">Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_sufix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Plenary_es  " class="form-label">Plenary </label>
+                                <input class="form-control mt-2" v-model="outcome.Plenary_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Agenda_numbers_es " class="form-label">Agenda Numbers </label>
+                                <input class="form-control mt-2" v-model="outcome.Agenda_numbers_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_prefix_es" class="form-label">Meeting prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_prefix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_es" class="form-label">Meeting </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_sufix_es" class="form-label">Meeting sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_sufix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_prefix_es" class="form-label">Draft Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_Resolution_es" class="form-label">Draft Resolution </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_sufix_es" class="form-label">Draft Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_sufix_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_prefix_es" class="form-label">Title Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_prefix_es"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                                <label for="Title_es" class="form-label">Title </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_sufix_es" class="form-label">Title Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_sufix_es"/><br>
+                            </div>
+          
+                            <div class="mb-1">
+                                <label for="date_es" class="form-label">Date </label>
+                                <input class="form-control mt-2" v-model="outcome.date_es"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                              <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
+                              <label class="form-check-label" for="flexCheckDefault">
+                                Allow Refresh
+                              </label>
+                            </div>
+
+                      </div>                     
+
+                      <!-- ------------------- FRENCH ----------------------- --> 
+
                       <div v-if="languageSelected==='FR'" v-for="(outcome, index) in outcomes" :key="index" class="row">
 
-                        <div class="cell card bg-light">
-                        
-                          <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
-                          </div>
+                            <div class="mb-1">
+                                <label for="Resolution_prefix_fr" class="form-label">Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_fr"/><br>
+                            </div>
 
-                          <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['lang']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
-                          </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
-                        </div>  
-                      </div>
+                            <div class="mb-1">
+                                <label for="Resolution_fr" class="form-label">Resolution  </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_fr"/><br>
+                            </div>
 
-                      
-                      <div v-if="languageSelected==='ES'" v-for="(outcome, index) in outcomes" :key="index" class="row">
+                            <div class="mb-1">
+                                <label for="Resolution_sufix_fr" class="form-label">Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_sufix_fr"/><br>
+                            </div>
 
-                        <div class="cell card bg-light">
-                        
-                          <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
-                          </div>
+                            <div class="mb-1">
+                                <label for="Plenary_fr" class="form-label">Plenary </label>
+                                <input class="form-control mt-2" v-model="outcome.Plenary_fr"/><br>
+                            </div>
 
-                          <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['lang']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
-                          </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
-                        </div>  
-                      </div>                      
+                            <div class="mb-1">
+                                <label for="Agenda_numbers_fr" class="form-label">Agenda Numbers </label>
+                                <input class="form-control mt-2" v-model="outcome.Agenda_numbers_fr"/><br>
+                            </div>
 
-                    </div> 
+                            <div class="mb-1">
+                                <label for="Meeting_prefix_fr" class="form-label">Meeting prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_prefix_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_fr" class="form-label">Meeting </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Meeting_sufix_fr" class="form-label">Meeting sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Meeting_sufix_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_prefix_fr" class="form-label">Draft Resolution Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_Resolution_fr" class="form-label">Draft Resolution </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Draft_Resolution_sufix_fr" class="form-label">Draft Resolution Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_sufix_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_prefix_fr" class="form-label">Title Prefix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_prefix_fr"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                                <label for="Title_fr" class="form-label">Title </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Title_sufix_fr" class="form-label">Title Sufix </label>
+                                <input class="form-control mt-2" v-model="outcome.Title_sufix_fr"/><br>
+                            </div>
+          
+                            <div class="mb-1">
+                                <label for="date_fr" class="form-label">Date </label>
+                                <input class="form-control mt-2" v-model="outcome.date_fr"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                              <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
+                              <label class="form-check-label" for="flexCheckDefault">
+                                Allow Refresh
+                              </label>
+                            </div>
+
+                      </div>                     
 
 
-                    <div class="form-check mb-3">
-                      <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
-                      <label class="form-check-label" for="flexCheckDefault">
-                        Allow Refresh
-                      </label>
-                    </div>
+
                     <hr>
                     <button type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
                     <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
@@ -468,48 +538,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                   <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
               </div>   
 
-              <!-- INJECTION DATA -->
-              
-              <div>
-                      
-                      <button class="btn btn-primary mb-2" @click="AddOutcomeEmpty()">Add Outcome</button>
-                      
-                      
-                      
-                      <div v-for="(outcome, index) in outcomes" :key="index" class="row">
-
-                        <div class="cell card bg-light">
-                        
-                          <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
-                          </div>
-
-                          <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
-                          </div>
-                          <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
-                          </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
-                        </div>  
-                      </div>                                          
-              </div> 
-              <!-- END -->
+             
 
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
@@ -518,7 +547,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                 </label>
               </div>
               <hr>
-              <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button>
+              <!-- <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button> -->
               <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
               </form>
         </div>
@@ -526,47 +555,84 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         <div v-if="deleteRecordFromQuery">
             <div class="mb-3">
               <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This deletion will affect the record in English </h3>
-              <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This deletion will affect the record in French </h3>
-              <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This deletion will affect the record in Spanish </h3>
-              <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This deletion will affect the record in Russian</h3>
-              <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This deletion will affect the record in Arabic </h3>
-              <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This deletion will affect the record in Chinese</h3>
-            </div> 
-            <hr> 
-            <form @submit.prevent="">
-            <div v-if="languageSelected==='EN'" class="mb-3">
-                <label for="inputMeeting" class="form-label">Meeting</label>
-                <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden" disabled>
-            </div>
-            <div v-if="languageSelected==='FR'" class="mb-3">
-                <label for="inputMeeting" class="form-label">Meeting</label>
-                <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr" disabled>
-            </div>   
-            <div v-if="languageSelected==='ES'" class="mb-3">
-                <label for="inputMeeting" class="form-label">Meeting</label>
-                <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes" disabled>
-            </div>   
-            <div class="mb-3">
-                <label for="inputName" class="form-label">Date</label>
-                <input type="text" class="form-control" id="date" name="date" v-model="date" disabled>
-            </div>     
-            <div class="mb-3">
-                <label for="inputName" class="form-label">Topic</label>
-                <input type="text" class="form-control" id="topic" name="topic" v-model="topic" disabled>
-            </div>   
-            <div class="mb-3">
-                <label for="inputName" class="form-label">Outcome Text</label>
-                <input type="text" class="form-control" id="security_council_document" name="security_council_document" v-model="security_council_document" disabled>
-            </div>     
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh" disabled>  
-              <label class="form-check-label" for="flexCheckDefault">
-                Allow Refresh
-              </label>
+              <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> Cette suppression affectera l'enregistrement </h3>
+              <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> Esta eliminación afectará el registro en español </h3>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary" @click="deleteRecord()"> Delete your record </button>
-            <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+            <form @submit.prevent="">
+              <div v-if="languageSelected==='EN'">
+              
+                <div class="mb-1"><label class="form-label">Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Resolution_prefix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution</label><input class="form-control" v-model="outcomes[0].Resolution_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Resolution_sufix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Plenary</label><input class="form-control" v-model="outcomes[0].Plenary_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Agenda Numbers</label><input class="form-control" v-model="outcomes[0].Agenda_numbers_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Prefix</label><input class="form-control" v-model="outcomes[0].Meeting_prefix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting</label><input class="form-control" v-model="outcomes[0].Meeting_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Sufix</label><input class="form-control" v-model="outcomes[0].Meeting_sufix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_prefix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_sufix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Prefix</label><input class="form-control" v-model="outcomes[0].Title_prefix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Title</label><input class="form-control" v-model="outcomes[0].Title_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Sufix</label><input class="form-control" v-model="outcomes[0].Title_sufix_en" disabled></div>
+                <div class="mb-1"><label class="form-label">Date</label><input class="form-control" v-model="outcomes[0].date_en" disabled></div>
+                <div class="mb-1">
+                  <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcomes[0].refresh" disabled>  
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Allow Refresh
+                  </label>
+                </div>
+              </div>
+              <div v-if="languageSelected==='FR'">
+                <div class="mb-1"><label class="form-label">Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Resolution_prefix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution</label><input class="form-control" v-model="outcomes[0].Resolution_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Resolution_sufix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Plenary</label><input class="form-control" v-model="outcomes[0].Plenary_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Agenda Numbers</label><input class="form-control" v-model="outcomes[0].Agenda_numbers_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Prefix</label><input class="form-control" v-model="outcomes[0].Meeting_prefix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting</label><input class="form-control" v-model="outcomes[0].Meeting_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Sufix</label><input class="form-control" v-model="outcomes[0].Meeting_sufix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_prefix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_sufix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Prefix</label><input class="form-control" v-model="outcomes[0].Title_prefix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Title</label><input class="form-control" v-model="outcomes[0].Title_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Sufix</label><input class="form-control" v-model="outcomes[0].Title_sufix_fr" disabled></div>
+                <div class="mb-1"><label class="form-label">Date</label><input class="form-control" v-model="outcomes[0].date_fr" disabled></div>
+                <div class="mb-1">
+                  <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcomes[0].refresh" disabled>  
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Allow Refresh
+                  </label>
+                </div>
+              </div>
+              <div v-if="languageSelected==='ES'">
+                <div class="mb-1"><label class="form-label">Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Resolution_prefix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution</label><input class="form-control" v-model="outcomes[0].Resolution_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Resolution_sufix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Plenary</label><input class="form-control" v-model="outcomes[0].Plenary_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Agenda Numbers</label><input class="form-control" v-model="outcomes[0].Agenda_numbers_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Prefix</label><input class="form-control" v-model="outcomes[0].Meeting_prefix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting</label><input class="form-control" v-model="outcomes[0].Meeting_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Meeting Sufix</label><input class="form-control" v-model="outcomes[0].Meeting_sufix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Prefix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_prefix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Draft Resolution Sufix</label><input class="form-control" v-model="outcomes[0].Draft_Resolution_sufix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Prefix</label><input class="form-control" v-model="outcomes[0].Title_prefix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Title</label><input class="form-control" v-model="outcomes[0].Title_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Title Sufix</label><input class="form-control" v-model="outcomes[0].Title_sufix_es" disabled></div>
+                <div class="mb-1"><label class="form-label">Date</label><input class="form-control" v-model="outcomes[0].date_es" disabled></div>
+                <div class="mb-1">
+                  <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcomes[0].refresh" disabled>  
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Allow Refresh
+                  </label>
+                </div>
+              </div>
+            </form>
+              <button type="submit" class="btn btn-primary" @click="deleteRecord()"> Delete your record </button>
+              <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
             </form>
         </div>
 
@@ -721,37 +787,72 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
     data: function () {
       return {
-        outcomes:[],
-        initPage:true,
-        displayFTP:false,
-        meetingsIds:[],
-        meetingSelected:"",
-        languageSelected:"",
-        displayRecordFromQuery:false,
-        updateRecordFromQuery:false,
-        createRecordFromQuery:false,
-        deleteRecordFromQuery:false,
+        outcomes: [],
+        initPage: true,
+        displayFTP: false,
+        meetingsIds: [],
+        languageSelected: "",
+        displayRecordFromQuery: false,
+        updateRecordFromQuery: false,
+        createRecordFromQuery: false,
+        deleteRecordFromQuery: false,
         prefix: this.prefix,
-        actualYear:"",
-        listOfRecords:[],
-        listOfYearsAvailable:[],
-        meeting_record:"",
-        meeting_recorden:"",
-        meeting_recordfr:"",
-        meeting_recordes:"",
-        date:"",
-        topic:"",
-        security_council_document:"",
-        vote:"",
-        refresh:Boolean,
-        record:"",
-        meetinglinken:"",
-        meetinglinkfr:"",
-        meetinglinkes:"",
-        my_id:"",
-        listing_id:"",
-        record_link:"",
-        modalClasses: ['modal','fade'],
+        listOfRecords: [],
+        my_id: "",
+        listing_id: "",
+        modalClasses: ['modal', 'fade'],
+        refresh: false,
+
+        // ENGLISH FIELDS
+        Plenary_en: "",
+        Resolution_en: "",
+        Resolution_prefix_en: "",
+        Resolution_sufix_en: "",
+        Agenda_numbers_en: "",
+        Meeting_en: "",
+        Meeting_prefix_en: "",
+        Meeting_sufix_en: "",
+        Draft_Resolution_en: "",
+        Draft_Resolution_prefix_en: "",
+        Draft_Resolution_sufix_en: "",
+        Title_en: "",
+        Title_prefix_en: "",
+        Title_sufix_en: "",
+        date_en: "",
+
+        // FRENCH FIELDS
+        Plenary_fr: "",
+        Resolution_fr: "",
+        Resolution_prefix_fr: "",
+        Resolution_sufix_fr: "",
+        Agenda_numbers_fr: "",
+        Meeting_fr: "",
+        Meeting_prefix_fr: "",
+        Meeting_sufix_fr: "",
+        Draft_Resolution_fr: "",
+        Draft_Resolution_prefix_fr: "",
+        Draft_Resolution_sufix_fr: "",
+        Title_fr: "",
+        Title_prefix_fr: "",
+        Title_sufix_fr: "",
+        date_fr: "",
+
+        // SPANISH FIELDS
+        Plenary_es: "",
+        Resolution_es: "",
+        Resolution_prefix_es: "",
+        Resolution_sufix_es: "",
+        Agenda_numbers_es: "",
+        Meeting_es: "",
+        Meeting_prefix_es: "",
+        Meeting_sufix_es: "",
+        Draft_Resolution_es: "",
+        Draft_Resolution_prefix_es: "",
+        Draft_Resolution_sufix_es: "",
+        Title_es: "",
+        Title_prefix_es: "",
+        Title_sufix_es: "",
+        date_es: "",
       }
     },
     
@@ -765,51 +866,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
     },
 
     methods:{
-      addRow() {
-        // Adds a new row with three empty cells
-       this.AddOutcomeEmpty()
-      },
-      removeRow(index) {
-        // Removes a row at the specified index
-        this.outcomes.splice(index, 1);
-      },
-      openFTP(){
-        alert("define the ftp")
-        this.initPage=false
-        this.displayRecordFromQuery=false
-        this.displayFTP=true
-      },
-      AddOutcomeEmpty(){
-        const myRecord=
-        {
-          outcome_vote:"0-0-0",
-          outcome:[
-            {
-            lang:"EN",
-            outcome_text:"",
-            outcome_text_link:"",
-            outcome_text_prefix:"",
-            outcome_text_sufix:""
-          },
-          {
-            lang:"FR",
-            outcome_text:"",
-            outcome_text_link:"",
-            outcome_text_prefix:"",
-            outcome_text_sufix:""
-          },
-          {
-            lang:"ES",
-            outcome_text:"",
-            outcome_text_link:"",
-            outcome_text_prefix:"",
-            outcome_text_sufix:""
-          }
-        ]
-        }
-        this.outcomes.push(myRecord)
-        console.log(this.outcomes)
-      },
+      
       showMyModal() {
         
         document.body.className += ' modal-open'
@@ -897,6 +954,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
       const myMeetingValue = myMeeting.value;       
+
       const myLanguage = document.getElementById(listoflanguages);
       const myLanguageValue = myLanguage.value;  
 
@@ -905,9 +963,8 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
-      const my_response = await fetch("./getgalistings/" + myMeetingValue);
+      const my_response = await fetch("./getgalistings/" + myMeetingValue)
       const my_data = await my_response.json();
-      
       my_data.forEach(element => {
         // We find the meeting
         if (element["listing_id"]===myMeetingValue){
@@ -916,118 +973,17 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         })
       this.initPage=false
       this.displayRecordFromQuery=true
-      console.log(this.listOfRecords)
       
       },
 
       openRecord(record){
-
+   
+        this.outcomes = [];
         this.listOfRecords.forEach(element => {
-          if (element.meeting_record==record) {
-
+          if (element.Resolution==record) {
               this.my_id=element._id.$oid
-             
-              this.meeting_record_link=element.meeting_record_link
-              this.listing_id=element.listing_id
-
-              // meeting management
-               this.record=element.meeting_record // this one should be removed in the future
-               this.meeting_record=element.meeting_record
-               this.meeting_recorden=element.meeting_record_en
-               this.meeting_recordfr=element.meeting_record_fr  
-               this.meeting_recordes=element.meeting_record_es  
-
-              // meeting link management
-              this.meetinglinken=element.meeting_record_link
-              this.meetinglinkfr=element.meeting_record_link_fr
-              this.meetinglinkes=element.meeting_record_link_es
-              
-
-              // Management of the date depending of the language
-              if (this.languageSelected==='EN') {
-                this.date=element.date[0].value
-                
-              }
-
-              if (this.languageSelected==='FR') {
-                this.date=element.date[1].value
-               
-              }
-
-              if (this.languageSelected==='ES') {
-                this.date=element.date[2].value
-               
-              }
-              
-              if (this.languageSelected==='RU') {
-                this.date=element.date[3].value
-                
-              }
-
-              if (this.languageSelected==='AR') {
-                this.date=element.date[4].value
-               
-              }              
-
-              if (this.languageSelected==='ZH') {
-                this.date=element.date[5].value
-               
-              }    
-
-              // Management of the topic depending of the language
-              if (this.languageSelected==='EN') {
-                  this.topic=element.topic[0].value
-                }
-
-              if (this.languageSelected==='FR') {
-                this.topic=element.topic[1].value
-              }
-
-              if (this.languageSelected==='ES') {
-                this.topic=element.topic[2].value
-              }
-              
-              if (this.languageSelected==='RU') {
-                this.topic=element.topic[3].value
-              }
-
-              if (this.languageSelected==='AR') {
-                this.topic=element.topic[4].value
-              }              
-
-              if (this.languageSelected==='ZH') {
-                this.topic=element.topic[5].value
-              }    
-              
-              // Management of the outcome text depending of the language
-              if (this.languageSelected==='EN') {
-                this.security_council_document=element.outcomes[0].outcome[0].outcome_text
-              }
-
-            if (this.languageSelected==='FR') {
-              this.security_council_document=element.outcomes[0].outcome[1].outcome_text
-            }
-
-            if (this.languageSelected==='ES') {
-              this.security_council_document=element.outcomes[0].outcome[2].outcome_text
-            }
-            
-            if (this.languageSelected==='RU') {
-              this.security_council_document=element.outcomes[0].outcome[3].outcome_text
-            }
-
-            if (this.languageSelected==='AR') {
-              this.security_council_document=element.outcomes[0].outcome[4].outcome_text
-            }              
-
-            if (this.languageSelected==='ZH') {
-              this.security_council_document=element.outcomes[0].outcome[5].outcome_text
-            }  
-
-            this.refresh=element.refresh
-            
-            this.outcomes=element.outcomes
- 
+              this.listing_id=element.listing_id;
+              this.outcomes.push(element)
           }
         });
       },
@@ -1061,52 +1017,162 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         alert("Record created!!!")
         location.reload()
       },
-      async updateRecord(){
-        
-        let dataset = new FormData()
-        dataset.append('_id',this.my_id)
-        //dataset.append('meeting_record',this.record)
-        dataset.append('meeting_record_en',this.meeting_recorden)
-        dataset.append('meeting_record_fr',this.meeting_recordfr)
-        dataset.append('meeting_record_es',this.meeting_recordes)
-        dataset.append('name',this.name)
-        dataset.append('topic',this.topic)
-        dataset.append('date',this.date)
-        dataset.append('meeting_record_link',this.meetinglinken)
-        dataset.append('meeting_record_link_es',this.meetinglinkes)
-        dataset.append('meeting_record_link_fr',this.meetinglinkfr)
-        const my_outcomes=JSON.stringify(this.outcomes)
-        dataset.append('outcomes',my_outcomes)
-        dataset.append('refresh',this.refresh)
-        dataset.append('languageSelected',this.languageSelected)
-        const my_response = await fetch("./update_sc_listing",{
-          "method":"PUT",
-          "body":dataset
-          });
+      async updateRecord() {
+        if (!this.my_id || this.my_id === "") {
+          alert("Error: No record selected for update. Please select a record first.");
+          return;
+        }
+        let dataset = new FormData();
+        dataset.append('_id', this.my_id);
+        dataset.append('listing_id', this.listing_id);
+        dataset.append('refresh', this.outcomes[0].refresh);
+        dataset.append('languageSelected', this.languageSelected);
+
+        // English fields
+        if (this.languageSelected === 'EN') {
+          dataset.append('Resolution_prefix_en', this.outcomes[0].Resolution_prefix_en);
+          dataset.append('Resolution_en', this.outcomes[0].Resolution_en);
+          dataset.append('Resolution_sufix_en', this.outcomes[0].Resolution_sufix_en);
+          dataset.append('Plenary_en', this.outcomes[0].Plenary_en);
+          dataset.append('Agenda_numbers_en', this.outcomes[0].Agenda_numbers_en);
+          dataset.append('Meeting_prefix_en', this.outcomes[0].Meeting_prefix_en);
+          dataset.append('Meeting_en', this.outcomes[0].Meeting_en);
+          dataset.append('Meeting_sufix_en', this.outcomes[0].Meeting_sufix_en);
+          dataset.append('Draft_Resolution_prefix_en', this.outcomes[0].Draft_Resolution_prefix_en);
+          dataset.append('Draft_Resolution_en', this.outcomes[0].Draft_Resolution_en);
+          dataset.append('Draft_Resolution_sufix_en', this.outcomes[0].Draft_Resolution_sufix_en);
+          dataset.append('Title_prefix_en', this.outcomes[0].Title_prefix_en);
+          dataset.append('Title_en', this.outcomes[0].Title_en);
+          dataset.append('Title_sufix_en', this.outcomes[0].Title_sufix_en);
+          dataset.append('date_en', this.outcomes[0].date_en);
+        }
+        // French fields
+        else if (this.languageSelected === 'FR') {
+          dataset.append('Resolution_prefix_fr', this.outcomes[0].Resolution_prefix_fr);
+          dataset.append('Resolution_fr', this.outcomes[0].Resolution_fr);
+          dataset.append('Resolution_sufix_fr', this.outcomes[0].Resolution_sufix_fr);
+          dataset.append('Plenary_fr', this.outcomes[0].Plenary_fr);
+          dataset.append('Agenda_numbers_fr', this.outcomes[0].Agenda_numbers_fr);
+          dataset.append('Meeting_prefix_fr', this.outcomes[0].Meeting_prefix_fr);
+          dataset.append('Meeting_fr', this.outcomes[0].Meeting_fr);
+          dataset.append('Meeting_sufix_fr', this.outcomes[0].Meeting_sufix_fr);
+          dataset.append('Draft_Resolution_prefix_fr', this.outcomes[0].Draft_Resolution_prefix_fr);
+          dataset.append('Draft_Resolution_fr', this.outcomes[0].Draft_Resolution_fr);
+          dataset.append('Draft_Resolution_sufix_fr', this.outcomes[0].Draft_Resolution_sufix_fr);
+          dataset.append('Title_prefix_fr', this.outcomes[0].Title_prefix_fr);
+          dataset.append('Title_fr', this.outcomes[0].Title_fr);
+          dataset.append('Title_sufix_fr', this.outcomes[0].Title_sufix_fr);
+          dataset.append('date_fr', this.outcomes[0].date_fr);
+        }
+        // Spanish fields
+        else if (this.languageSelected === 'ES') {
+          dataset.append('Resolution_prefix_es', this.outcomes[0].Resolution_prefix_es);
+          dataset.append('Resolution_es', this.outcomes[0].Resolution_es);
+          dataset.append('Resolution_sufix_es', this.outcomes[0].Resolution_sufix_es);
+          dataset.append('Plenary_es', this.outcomes[0].Plenary_es);
+          dataset.append('Agenda_numbers_es', this.outcomes[0].Agenda_numbers_es);
+          dataset.append('Meeting_prefix_es', this.outcomes[0].Meeting_prefix_es);
+          dataset.append('Meeting_es', this.outcomes[0].Meeting_es);
+          dataset.append('Meeting_sufix_es', this.outcomes[0].Meeting_sufix_es);
+          dataset.append('Draft_Resolution_prefix_es', this.outcomes[0].Draft_Resolution_prefix_es);
+          dataset.append('Draft_Resolution_es', this.outcomes[0].Draft_Resolution_es);
+          dataset.append('Draft_Resolution_sufix_es', this.outcomes[0].Draft_Resolution_sufix_es);
+          dataset.append('Title_prefix_es', this.outcomes[0].Title_prefix_es);
+          dataset.append('Title_es', this.outcomes[0].Title_es);
+          dataset.append('Title_sufix_es', this.outcomes[0].Title_sufix_es);
+          dataset.append('date_es', this.outcomes[0].date_es);
+        }
+
+        // // Debug: log all FormData entries
+        // for (let pair of dataset.entries()) {
+        //   console.log(pair[0]+ ': ' + pair[1]);
+        // }
+
+        const my_response = await fetch("./update_ga_listing", {
+          method: "PUT",
+          body: dataset
+        });
         const my_data = await my_response.json();
-        this.displayRecordFromQuery=true
-        alert("Record updated!!!")
-        location.reload()
+        this.displayRecordFromQuery = true;
+        alert("Record updated!!!");
+        location.reload();
       },
+
       displayUpdateRecordFromQuery(){
         
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
-      async deleteRecord(){
-        if (confirm(`Do you really want to delete this record ? `) == true) {
-          let dataset = new FormData()
-          dataset.append('_id',this.my_id)
-          const my_response = await fetch("./delete_sc_listing",{
-            "method":"POST",
-            "body":dataset
-            });
+      async deleteRecord() {
+        if (confirm(`Do you really want to delete this record ?`) === true) {
+          let dataset = new FormData();
+          dataset.append('_id', this.my_id);
+          dataset.append('listing_id', this.listing_id);
+          dataset.append('languageSelected', this.languageSelected);
+          // English fields
+          if (this.languageSelected === 'EN') {
+            dataset.append('Resolution_prefix_en', this.Resolution_prefix_en);
+            dataset.append('Resolution_en', this.Resolution_en);
+            dataset.append('Resolution_sufix_en', this.Resolution_sufix_en);
+            dataset.append('Plenary_en', this.Plenary_en);
+            dataset.append('Agenda_numbers_en', this.Agenda_numbers_en);
+            dataset.append('Meeting_prefix_en', this.Meeting_prefix_en);
+            dataset.append('Meeting_en', this.Meeting_en);
+            dataset.append('Meeting_sufix_en', this.Meeting_sufix_en);
+            dataset.append('Draft_Resolution_prefix_en', this.Draft_Resolution_prefix_en);
+            dataset.append('Draft_Resolution_en', this.Draft_Resolution_en);
+            dataset.append('Draft_Resolution_sufix_en', this.Draft_Resolution_sufix_en);
+            dataset.append('Title_prefix_en', this.Title_prefix_en);
+            dataset.append('Title_en', this.Title_en);
+            dataset.append('Title_sufix_en', this.Title_sufix_en);
+            dataset.append('date_en', this.date_en);
+          }
+          // French fields
+          else if (this.languageSelected === 'FR') {
+            dataset.append('Resolution_prefix_fr', this.Resolution_prefix_fr);
+            dataset.append('Resolution_fr', this.Resolution_fr);
+            dataset.append('Resolution_sufix_fr', this.Resolution_sufix_fr);
+            dataset.append('Plenary_fr', this.Plenary_fr);
+            dataset.append('Agenda_numbers_fr', this.Agenda_numbers_fr);
+            dataset.append('Meeting_prefix_fr', this.Meeting_prefix_fr);
+            dataset.append('Meeting_fr', this.Meeting_fr);
+            dataset.append('Meeting_sufix_fr', this.Meeting_sufix_fr);
+            dataset.append('Draft_Resolution_prefix_fr', this.Draft_Resolution_prefix_fr);
+            dataset.append('Draft_Resolution_fr', this.Draft_Resolution_fr);
+            dataset.append('Draft_Resolution_sufix_fr', this.Draft_Resolution_sufix_fr);
+            dataset.append('Title_prefix_fr', this.Title_prefix_fr);
+            dataset.append('Title_fr', this.Title_fr);
+            dataset.append('Title_sufix_fr', this.Title_sufix_fr);
+            dataset.append('date_fr', this.date_fr);
+          }
+          // Spanish fields
+          else if (this.languageSelected === 'ES') {
+            dataset.append('Resolution_prefix_es', this.Resolution_prefix_es);
+            dataset.append('Resolution_es', this.Resolution_es);
+            dataset.append('Resolution_sufix_es', this.Resolution_sufix_es);
+            dataset.append('Plenary_es', this.Plenary_es);
+            dataset.append('Agenda_numbers_es', this.Agenda_numbers_es);
+            dataset.append('Meeting_prefix_es', this.Meeting_prefix_es);
+            dataset.append('Meeting_es', this.Meeting_es);
+            dataset.append('Meeting_sufix_es', this.Meeting_sufix_es);
+            dataset.append('Draft_Resolution_prefix_es', this.Draft_Resolution_prefix_es);
+            dataset.append('Draft_Resolution_es', this.Draft_Resolution_es);
+            dataset.append('Draft_Resolution_sufix_es', this.Draft_Resolution_sufix_es);
+            dataset.append('Title_prefix_es', this.Title_prefix_es);
+            dataset.append('Title_es', this.Title_es);
+            dataset.append('Title_sufix_es', this.Title_sufix_es);
+            dataset.append('date_es', this.date_es);
+          }
+          const my_response = await fetch("./delete_ga_listing", {
+            method: "POST",
+            body: dataset
+          });
           const my_data = await my_response.json();
-          this.deleteRecordFromQuery=false
-          alert("Record deleted!!!")
-          location.reload()
+          this.deleteRecordFromQuery = false;
+          alert("Record deleted!!!");
+          location.reload();
         }
-        },
+      },
       async refresh_data(){
         let myYear=document.getElementById("year").value
         let myMonth=""
