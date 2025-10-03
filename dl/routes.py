@@ -757,20 +757,28 @@ def get_ga_listings_Id():
 @main.route("/getgalistings/<listing>", methods=["GET"])
 def get_ga_listings(listing):
 
-    my_database=my_client["DynamicListings"]
+    my_database = my_client["DynamicListings"]
     my_collection = my_database["dl_ga_res_data_collection"]
 
-    # get all the listings_id
-    my_fields=my_collection.find({"listing_id": listing})
-    # print(my_field)
-    
-    # # descending sort 
-    # my_fields=sorted(my_field,reverse=True)
-    
-    
-    
+    # fetch records
+    my_fields = list(my_collection.find({"listing_id": listing}))
+
+    # sort by numeric part of Resolution, descending
+    def extract_resolution_numeric_sort_key(res):
+        if not isinstance(res, str):
+            return 0
+        import re
+        match = re.search(r'(\d+)$', res)
+        return int(match.group(1)) if match else 0
+
+    my_fields.sort(
+        key=lambda r: extract_resolution_numeric_sort_key(r.get("Resolution", "")),
+        reverse=True
+    )
+
     # just return the listings
-    return json.loads(json_util.dumps(my_fields))  
+    return json.loads(json_util.dumps(my_fields))
+   
 
 def extract_resolution_number(res):
     match = re.search(r'(\d+)$', res)
