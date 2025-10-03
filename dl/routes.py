@@ -706,6 +706,26 @@ def datasetVueDeleteDataset():
 ####################################################################################################################
 ####################################################################################################################
 
+
+@main.route("/delete_ga_listing", methods=["POST"])
+def delete_ga_listing():
+        
+        my_database = my_client["DynamicListings"]  
+        my_collection = my_database["dl_ga_res_data_collection"]
+
+        record = {
+            "_id": ObjectId(request.form.get("_id")),
+        }
+        
+        # save the user in the database
+        my_collection.delete_one(record)
+        
+        # create log
+        add_log(datetime.datetime.now(tz=datetime.timezone.utc),session['username'],"GA Listing " + str(request.form.get("_id")) + "  deleted from the database!!!")
+        
+        # just render the users
+        return jsonify(message="Record deleted")
+
 # route to display the datamodels page
 @main.route("/datasetGAResolutions")
 def datasetGAResolutions():
@@ -725,32 +745,40 @@ def get_ga_listings_Id():
 
     # get all the listings_id
     my_field=my_collection.distinct("listing_id")
-    
+
     # descending sort 
     my_fields=sorted(my_field,reverse=True)
+
     
     # just return the listings
     return json.loads(json_util.dumps(my_fields))      
     
 # route to display the listings ID
-@main.route("/getgalistings/<meeting>", methods=["GET"])
-def get_ga_listings(meeting):
+@main.route("/getgalistings/<listing>", methods=["GET"])
+def get_ga_listings(listing):
 
-    print("Fetching GA listings IDs...")
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
 
-    my_database=my_client["DynamicListings"]
-    my_collection = my_database["GA_Res_cd_data_collection"]
+    # fetch records
+    my_fields = list(my_collection.find({"listing_id": listing}))
 
-    # get all the listings_id
-    my_field=my_collection.distinct(meeting)
-    
-    # descending sort 
-    my_fields=sorted(my_field,reverse=True)
-    
-    print(my_fields)
-    
+    # sort by numeric part of Resolution, descending
+    def extract_resolution_numeric_sort_key(res):
+        if not isinstance(res, str):
+            return 0
+        import re
+        match = re.search(r'(\d+)$', res)
+        return int(match.group(1)) if match else 0
+
+    my_fields.sort(
+        key=lambda r: extract_resolution_numeric_sort_key(r.get("Resolution", "")),
+        reverse=True
+    )
+
     # just return the listings
-    return json.loads(json_util.dumps(my_fields))  
+    return json.loads(json_util.dumps(my_fields))
+   
 
 def extract_resolution_number(res):
     match = re.search(r'(\d+)$', res)
@@ -1442,3 +1470,165 @@ def refresh_data_ga():
         # user not authentificated
         return redirect("login")
 
+# route to update the GA listing
+@main.route("/update_ga_listing", methods=["PUT"])
+def update_ga_listing():
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+    my_language_selected = request.form.get("languageSelected")
+    my_id = request.form.get("_id")
+    my_listing_id = request.form.get("listing_id")
+    my_refresh = request.form.get("refresh") != "false"
+
+    update_fields = {}
+    # English
+    if my_language_selected == "EN":
+        update_fields = {
+            'Resolution_prefix_en': request.form.get('Resolution_prefix_en'),
+            'Resolution_en': request.form.get('Resolution_en'),
+            'Resolution_sufix_en': request.form.get('Resolution_sufix_en'),
+            'Plenary_en': request.form.get('Plenary_en'),
+            'Agenda_numbers_en': request.form.get('Agenda_numbers_en'),
+            'Meeting_prefix_en': request.form.get('Meeting_prefix_en'),
+            'Meeting_en': request.form.get('Meeting_en'),
+            'Meeting_sufix_en': request.form.get('Meeting_sufix_en'),
+            'Draft_Resolution_prefix_en': request.form.get('Draft_Resolution_prefix_en'),
+            'Draft_Resolution_en': request.form.get('Draft_Resolution_en'),
+            'Draft_Resolution_sufix_en': request.form.get('Draft_Resolution_sufix_en'),
+            'Title_prefix_en': request.form.get('Title_prefix_en'),
+            'Title_en': request.form.get('Title_en'),
+            'Title_sufix_en': request.form.get('Title_sufix_en'),
+            'date_en': request.form.get('date_en'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+    # French
+    elif my_language_selected == "FR":
+        update_fields = {
+            'Resolution_prefix_fr': request.form.get('Resolution_prefix_fr'),
+            'Resolution_fr': request.form.get('Resolution_fr'),
+            'Resolution_sufix_fr': request.form.get('Resolution_sufix_fr'),
+            'Plenary_fr': request.form.get('Plenary_fr'),
+            'Agenda_numbers_fr': request.form.get('Agenda_numbers_fr'),
+            'Meeting_prefix_fr': request.form.get('Meeting_prefix_fr'),
+            'Meeting_fr': request.form.get('Meeting_fr'),
+            'Meeting_sufix_fr': request.form.get('Meeting_sufix_fr'),
+            'Draft_Resolution_prefix_fr': request.form.get('Draft_Resolution_prefix_fr'),
+            'Draft_Resolution_fr': request.form.get('Draft_Resolution_fr'),
+            'Draft_Resolution_sufix_fr': request.form.get('Draft_Resolution_sufix_fr'),
+            'Title_prefix_fr': request.form.get('Title_prefix_fr'),
+            'Title_fr': request.form.get('Title_fr'),
+            'Title_sufix_fr': request.form.get('Title_sufix_fr'),
+            'date_fr': request.form.get('date_fr'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+    # Spanish
+    elif my_language_selected == "ES":
+        update_fields = {
+            'Resolution_prefix_es': request.form.get('Resolution_prefix_es'),
+            'Resolution_es': request.form.get('Resolution_es'),
+            'Resolution_sufix_es': request.form.get('Resolution_sufix_es'),
+            'Plenary_es': request.form.get('Plenary_es'),
+            'Agenda_numbers_es': request.form.get('Agenda_numbers_es'),
+            'Meeting_prefix_es': request.form.get('Meeting_prefix_es'),
+            'Meeting_es': request.form.get('Meeting_es'),
+            'Meeting_sufix_es': request.form.get('Meeting_sufix_es'),
+            'Draft_Resolution_prefix_es': request.form.get('Draft_Resolution_prefix_es'),
+            'Draft_Resolution_es': request.form.get('Draft_Resolution_es'),
+            'Draft_Resolution_sufix_es': request.form.get('Draft_Resolution_sufix_es'),
+            'Title_prefix_es': request.form.get('Title_prefix_es'),
+            'Title_es': request.form.get('Title_es'),
+            'Title_sufix_es': request.form.get('Title_sufix_es'),
+            'date_es': request.form.get('date_es'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+
+    my_collection.update_one({'_id': ObjectId(my_id)}, {"$set": update_fields})
+
+    # Log
+    add_log(datetime.datetime.now(tz=datetime.timezone.utc), session.get('username', 'unknown'), f"GA Listing {my_listing_id} updated!")
+    return jsonify(message="GA record updated")
+
+
+# route to update the GA listing (mirroring update_sc_listing)
+@main.route("/update_ga_listings", methods=["PUT"])
+def update_ga_listings():
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+    my_language_selected = request.form.get("languageSelected")
+    my_id = request.form.get("_id")
+    my_listing_id = request.form.get("listing_id")
+    my_refresh = request.form.get("refresh") != "false"
+
+    update_fields = {}
+    # English
+    if my_language_selected == "EN":
+        update_fields = {
+            'Resolution_prefix_en': request.form.get('Resolution_prefix_en'),
+            'Resolution_en': request.form.get('Resolution_en'),
+            'Resolution_sufix_en': request.form.get('Resolution_sufix_en'),
+            'Plenary_en': request.form.get('Plenary_en'),
+            'Agenda_numbers_en': request.form.get('Agenda_numbers_en'),
+            'Meeting_prefix_en': request.form.get('Meeting_prefix_en'),
+            'Meeting_en': request.form.get('Meeting_en'),
+            'Meeting_sufix_en': request.form.get('Meeting_sufix_en'),
+            'Draft_Resolution_prefix_en': request.form.get('Draft_Resolution_prefix_en'),
+            'Draft_Resolution_en': request.form.get('Draft_Resolution_en'),
+            'Draft_Resolution_sufix_en': request.form.get('Draft_Resolution_sufix_en'),
+            'Title_prefix_en': request.form.get('Title_prefix_en'),
+            'Title_en': request.form.get('Title_en'),
+            'Title_sufix_en': request.form.get('Title_sufix_en'),
+            'date_en': request.form.get('date_en'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+    # French
+    elif my_language_selected == "FR":
+        update_fields = {
+            'Resolution_prefix_fr': request.form.get('Resolution_prefix_fr'),
+            'Resolution_fr': request.form.get('Resolution_fr'),
+            'Resolution_sufix_fr': request.form.get('Resolution_sufix_fr'),
+            'Plenary_fr': request.form.get('Plenary_fr'),
+            'Agenda_numbers_fr': request.form.get('Agenda_numbers_fr'),
+            'Meeting_prefix_fr': request.form.get('Meeting_prefix_fr'),
+            'Meeting_fr': request.form.get('Meeting_fr'),
+            'Meeting_sufix_fr': request.form.get('Meeting_sufix_fr'),
+            'Draft_Resolution_prefix_fr': request.form.get('Draft_Resolution_prefix_fr'),
+            'Draft_Resolution_fr': request.form.get('Draft_Resolution_fr'),
+            'Draft_Resolution_sufix_fr': request.form.get('Draft_Resolution_sufix_fr'),
+            'Title_prefix_fr': request.form.get('Title_prefix_fr'),
+            'Title_fr': request.form.get('Title_fr'),
+            'Title_sufix_fr': request.form.get('Title_sufix_fr'),
+            'date_fr': request.form.get('date_fr'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+    # Spanish
+    elif my_language_selected == "ES":
+        update_fields = {
+            'Resolution_prefix_es': request.form.get('Resolution_prefix_es'),
+            'Resolution_es': request.form.get('Resolution_es'),
+            'Resolution_sufix_es': request.form.get('Resolution_sufix_es'),
+            'Plenary_es': request.form.get('Plenary_es'),
+            'Agenda_numbers_es': request.form.get('Agenda_numbers_es'),
+            'Meeting_prefix_es': request.form.get('Meeting_prefix_es'),
+            'Meeting_es': request.form.get('Meeting_es'),
+            'Meeting_sufix_es': request.form.get('Meeting_sufix_es'),
+            'Draft_Resolution_prefix_es': request.form.get('Draft_Resolution_prefix_es'),
+            'Draft_Resolution_es': request.form.get('Draft_Resolution_es'),
+            'Draft_Resolution_sufix_es': request.form.get('Draft_Resolution_sufix_es'),
+            'Title_prefix_es': request.form.get('Title_prefix_es'),
+            'Title_es': request.form.get('Title_es'),
+            'Title_sufix_es': request.form.get('Title_sufix_es'),
+            'date_es': request.form.get('date_es'),
+            'refresh': my_refresh,
+            'listing_id': my_listing_id
+        }
+
+    my_collection.update_one({'_id': ObjectId(my_id)}, {"$set": update_fields})
+
+    # Log
+    add_log(datetime.datetime.now(tz=datetime.timezone.utc), session.get('username', 'unknown'), f"GA Listing {my_listing_id} updated!")
+    return jsonify(message="GA record updated")
