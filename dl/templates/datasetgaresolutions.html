@@ -1,9 +1,34 @@
 {% extends "base.html" %}
-{% block content %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">GA Resolutions</li>
+{% endblock %}
 
-<!-- Vue -->
-<div id="dldatasetgaresolutions" >
-    <displaylistdatasetgaresolutionscomponent title="Dataset for GA Resolutions" prefix=""></displaylistdatasetgaresolutionscomponent>
+{% block content %}
+<!-- Modern GA Resolutions Page -->
+<div class="modern-card fade-in">
+    <!-- Description -->
+    <div class="description-section mb-4">
+        <h1 class="card-title">
+            <i class="fas fa-file-contract me-3"></i>
+            GA Resolutions Dataset
+        </h1>
+        <p class="card-subtitle">Manage and process General Assembly resolutions data with multi-language support.</p>
+    </div>
+    
+    <!-- Description -->
+    <!-- <div class="description-section mb-4">
+        <h5 class="mb-3">Dynamic Listings</h5>
+        <p class="text-muted">
+            Dynamic Listing (DL) application interfaces with the DHL Central Database (CDB) to generate and display HTML tables containing data. 
+            The DL application dynamically updates listings as new data becomes available, featuring HTML table representation with automatic 
+            real-time data pulling from the database. When data values are unavailable in the CDB, the system provides manual data entry via web forms.
+        </p>
+    </div> -->
+    
+    <!-- Vue Component -->
+    <div id="dldatasetgaresolutions">
+        <displaylistdatasetgaresolutionscomponent title="Dataset for GA Resolutions" prefix=""></displaylistdatasetgaresolutionscomponent>
+    </div>
 </div>
 
 {% endblock %}

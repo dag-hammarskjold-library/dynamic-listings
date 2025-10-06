@@ -1,46 +1,85 @@
 Vue.component('displaylistdatasetssecuritycounselcomponent',{
     props: ["title",'prefix'],
     template: `
-     <div class="mt-3" id="test">
+     <div class="container" id="test" style="min-height: 60vh;">
         <div class="alert alert-success" role="alert">
-            <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
+            <h3 class="alert-heading"> Dynamic Listings - {{title}} </h3>
         </div>
-        <hr>
-        <div class="mb-3">
+        
+        <div class="container-fluid">
             <div v-if="initPage==true">
-              <label for="browser" class="form-label"><strong>Choose your meeting from the list:</strong></label>
-              <select class="form-select" aria-label="Default select example" name="listofmeetings"  id="listofmeetings" >
-                <option v-for="meeting in meetingsIds" v-bind:value="meeting">{{meeting}}</option>
-              </select> 
-              <label for="listoflanguages" class="form-label"><strong>Choose your language from the list:</strong></label>
-              <select class="form-select" aria-label="Default select example" name="listoflanguages" id="listoflanguages">
-                <option value="FR">French</option>
-                <option value="EN" selected="selected">English</option>
-                <option value="ES">Spanish</option>
-                <!-- <option value="RU">Russian</option>
-                <option value="AR">Arabic</option>
-                <option value="ZH">Chinese</option> -->
-              </select>
-                <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button> 
-                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button> 
-                <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
-                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
-                <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Partial JSON (language selected) </button> 
-                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Full JSON (all languages) </button> 
-                <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="browser" class="form-label">
+                    Choose your meeting from the list:
+                  </label>
+                  <select class="form-select" aria-label="Default select example" name="listofmeetings" id="listofmeetings">
+                    <option v-for="meeting in meetingsIds" v-bind:value="meeting">{{meeting}}</option>
+                  </select> 
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="listoflanguages" class="form-label">
+                    Choose your language from the list:
+                  </label>
+                  <select class="form-select" aria-label="Default select example" name="listoflanguages" id="listoflanguages">
+                    <option value="FR">🇫🇷 French</option>
+                    <option value="EN" selected="selected">🇺🇸 English</option>
+                    <option value="ES">🇪🇸 Spanish</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="row mt-4">
+                <div class="col">
+                  <button type="button" class="btn btn-success me-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();">
+                    Create new record
+                  </button>
+                  <button type="button" class="btn btn-primary me-2" @click="displayData('listofmeetings','listoflanguages')">
+                    Update the table
+                  </button>
+                  <button type="button" class="btn btn-secondary me-2" @click="renderData('listofmeetings','listoflanguages')">
+                    Display
+                  </button> 
+                  <button type="button" class="btn btn-warning me-2" @click="showMyModal()">
+                    Refresh
+                  </button>
+                  <button type="button" class="btn btn-info me-2" @click="renderDataJSON('listofmeetings','listoflanguages')">
+                    Display Partial JSON
+                  </button> 
+                  <button type="button" class="btn btn-secondary me-2" @click="exportDataToJson('listofmeetings','listoflanguages')">
+                    Full JSON
+                  </button> 
+                </div>
+              </div>
             </div>
             <div v-if="displayRecordFromQuery">
-              <button type="button" class="btn btn-success" @click="exportExcel('myTable')">Extract to Excel</button>
-              <button type="button" class="btn btn-secondary" @click="exportHTML()">Extract to HTML</button>
-              <button type="button" class="btn btn-primary" @click="document.location.reload(true);">Go Back</button>
+              <div class="row mt-3">
+                <div class="col">
+                  <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
+                    Extract to Excel
+                  </button>
+                  <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
+                    Extract to HTML
+                  </button>
+                  <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
+                    Go Back
+                  </button>
+                </div>
+              </div>
             </div>
             <div v-if="displayFTP">
-              <button type="button" class="btn btn-primary" @click="document.location.reload(true);">Go Back</button>
+              <div class="row mt-3">
+                <div class="col">
+                  <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
+                    Go Back
+                  </button>
+                </div>
+              </div>
             </div>
         </div>
-        <hr>
-        <div class="shadow" v-if="displayRecordFromQuery" style="width:1200px;">
-          <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="The table has five columns and should be read per row. The first column indicate the document 
+        <div v-if="displayRecordFromQuery" class="mt-4">
+          <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped" summary="The table has five columns and should be read per row. The first column indicate the document 
               symbol of the meeting record, which is linked to the actual document in PDF format. 
               The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
               The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
@@ -531,8 +570,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This deletion will affect the record in Russian</h3>
               <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This deletion will affect the record in Arabic </h3>
               <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This deletion will affect the record in Chinese</h3>
-            </div> 
-            <hr> 
+            </div>
+            <hr>
             <form @submit.prevent="">
             <div v-if="languageSelected==='EN'" class="mb-3">
                 <label for="inputMeeting" class="form-label">Meeting</label>
@@ -570,8 +609,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             </form>
         </div>
 
-        <div :class="modalClasses" class="fade" id="reject" role="dialog">
-            <div class="modal-dialog">
+        <div class="modal" id="reject" role="dialog" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1055; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog" style="position: relative; top: 50%; transform: translateY(-50%); margin: 0 auto; max-width: 500px;">
                   <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Refreshing Data process</h4>
@@ -686,7 +725,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                               </label>
                             </div>  
                           <hr>
-                          <button class="btn btn-primary" @click="refresh_data()">Refresh</button>
+                          <button class="btn btn-primary me-2" @click="refresh_data()">Refresh</button>
+                          <button class="btn btn-secondary" @click="showMyModal()">Close</button>
                         </div>
                     </div>
             </div>
@@ -727,7 +767,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         my_id:"",
         listing_id:"",
         record_link:"",
-        modalClasses: ['modal','fade'],
       }
     },
     
@@ -750,7 +789,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         this.outcomes.splice(index, 1);
       },
       openFTP(){
-        alert("define the ftp")
+        showWarning("define the ftp")
         this.initPage=false
         this.displayRecordFromQuery=false
         this.displayFTP=true
@@ -788,25 +827,17 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       },
       showMyModal() {
         
-        document.body.className += ' modal-open'
-        let modalClasses = this.modalClasses
+        let modalElement = document.getElementById('reject')
     
-        if (modalClasses.indexOf('d-block') > -1) {
-            modalClasses.pop()
-            modalClasses.pop()
-    
-            //hide backdrop
-            let backdrop = document.querySelector('.modal-backdrop')
-            document.body.removeChild(backdrop)
+        if (modalElement && modalElement.style.display === 'block') {
+            // Hide modal
+            modalElement.style.display = 'none'
         }
         else {
-            modalClasses.push('d-block')
-            modalClasses.push('show')
-    
-            //show backdrop
-            let backdrop = document.createElement('div')
-            backdrop.classList = "modal-backdrop fade show"
-            document.body.appendChild(backdrop)
+            // Show modal
+            if (modalElement) {
+                modalElement.style.display = 'block'
+            }
         }
 
         const date = new Date();
@@ -1034,8 +1065,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           });
         const my_data = await my_response.json();
         this.displayRecordFromQuery=true
-        alert("Record created!!!")
-        location.reload()
+        showSuccess("Record created!!!")
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       },
       async updateRecord(){
         
@@ -1061,8 +1094,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           });
         const my_data = await my_response.json();
         this.displayRecordFromQuery=true
-        alert("Record updated!!!")
-        location.reload()
+        showSuccess("Record updated!!!")
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       },
       displayUpdateRecordFromQuery(){
         
@@ -1079,8 +1114,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             });
           const my_data = await my_response.json();
           this.deleteRecordFromQuery=false
-          alert("Record deleted!!!")
-          location.reload()
+          showSuccess("Record deleted!!!")
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
         }
         },
       async refresh_data(){
@@ -1102,14 +1139,13 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         let dataset = new FormData()
         dataset.append('year',myYear)
         dataset.append('month',myMonth)
-        alert("The process has started the data will be updated in few seconds!!!")
+        showInfo("The process has started the data will be updated in few seconds!!!")
         const my_response = await fetch("./refresh_data",{
           "method":"POST",
           "body":dataset
           }); 
           const my_data = await my_response.json();  
-        alert(my_data["message"])
-        this.showMyModal()
+        showInfo(my_data["message"])
       },
       async exportDataToJson(listofmeetings,listoflanguages){
 
@@ -1153,7 +1189,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     }
               }
               let myDataHTML=myData.outerHTML
-              alert("Your data has been exported with HTML format!!!")
+              showSuccess("Your data has been exported with HTML format!!!")
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
               <h4 style="text-align: center;">&nbsp;</h4>
@@ -1171,7 +1207,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },    
       downloadJsonFile(data, filename) {

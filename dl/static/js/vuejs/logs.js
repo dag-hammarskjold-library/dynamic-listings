@@ -6,11 +6,18 @@ Vue.component('displaylistcomponent',{
   props: ["title","prefix"],
   template: `
   <div class="page mt-3">
-      <div class="alert alert-success" role="alert">
-          <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
-      </div>
       <div class="mb-3">
-        <button type="button" class="btn btn-success" @click="exportToExcel" ><i class="far fa-file-excel"></i>  Extract to Excel</button>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
+              <input type="text" class="form-control" v-model="nameFilter" placeholder="Filter by user name...">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-success" @click="exportToExcel"><i class="far fa-file-excel"></i> Extract to Excel</button>
+          </div>
+        </div>
       </div>
       <div class="shadow">
           <table class="table table-striped tableau" id="listlogs">
@@ -22,7 +29,7 @@ Vue.component('displaylistcomponent',{
             </tr>
           </thead>
           <tbody>
-            <tr v-for="field in listOfFields">
+            <tr v-for="field in filteredFields">
               <th scope="row"> {{field.user}} </th>
               <td>{{field.action}}</td>
               <td>{{field.date.$date}}</td>
@@ -36,6 +43,17 @@ Vue.component('displaylistcomponent',{
   data: function () {
     return {
       listOfFields:[],
+      nameFilter: ''
+    }
+  },
+  computed: {
+    filteredFields() {
+      if (!this.nameFilter) {
+        return this.listOfFields;
+      }
+      return this.listOfFields.filter(field => 
+        field.user.toLowerCase().includes(this.nameFilter.toLowerCase())
+      );
     }
   },
   created:async function(){
