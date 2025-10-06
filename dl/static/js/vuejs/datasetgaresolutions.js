@@ -1,46 +1,79 @@
 Vue.component('displaylistdatasetgaresolutionscomponent',{
     props: ["title",'prefix'],
     template: `
-     <div class="mt-3" id="test">
+     <div class="container" id="test" style="min-height: 70vh;">
         <div class="alert alert-success" role="alert">
-            <h2 class="alert-heading"> Dynamic Listings - {{title}} </h2>
+            <h3 class="alert-heading"> Dynamic Listings - {{title}} </h3>
         </div>
-        <hr>
-        <div class="mb-3">
+        
+        <div class="container-fluid">
             <div v-if="initPage==true">
-              <label for="browser" class="form-label"><strong>Choose your meeting from the list:</strong></label>
-              <select class="form-select" aria-label="Default select example" name="listofmeetings"  id="listofmeetings" >
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="browser" class="form-label">
+                    Choose your meeting from the list:
+                  </label>
+                  <select class="form-select" aria-label="Default select example" name="listofmeetings" id="listofmeetings">
                 <option v-for="meeting in meetingsIds" v-bind:value="meeting">{{meeting}}</option>
               </select> 
-              <label for="listoflanguages" class="form-label"><strong>Choose your language from the list:</strong></label>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="listoflanguages" class="form-label">
+                    Choose your language from the list:
+                  </label>
               <select class="form-select" aria-label="Default select example" name="listoflanguages" id="listoflanguages">
-                <option value="FR">French</option>
-                <option value="EN" selected="selected">English</option>
-                <option value="ES">Spanish</option>
-                <!-- <option value="RU">Russian</option>
-                <option value="AR">Arabic</option>
-                <option value="ZH">Chinese</option> -->
+                    <option value="FR">🇫🇷 French</option>
+                    <option value="EN" selected="selected">🇺🇸 English</option>
+                    <option value="ES">🇪🇸 Spanish</option>
               </select>
-                <!-- <button type="button" class="btn btn-warning mt-2" @click="displayRecordFromQuery=false;createRecordFromQuery=true;initPage=false;AddOutcomeEmpty();"><i class="fas fa-plus"></i> Create a  new record</button>   -->
-                <button type="button" class="btn btn-success mt-2" @click="displayData('listofmeetings','listoflanguages')"><i class="fas fa-pencil-alt"></i> Update the table</button>
-                <button type="button" class="btn btn-primary mt-2" @click="renderData('listofmeetings','listoflanguages')"><i class="fas fa-list-ul"></i> Display table</button> 
-                <button type="button" class="btn btn-dark mt-2" @click="showMyModal()"><i class="fas fa-sync" ></i>  Refresh Tables</button>
-                <button type="button" class="btn btn-secondary mt-2" @click="renderDataJSON('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Partial JSON (language selected) </button> 
-                <button type="button" class="btn btn-info mt-2" @click="exportDataToJson('listofmeetings','listoflanguages')"><i class="fas fa-file-export"></i> Display Full JSON (all languages) </button> 
-                <!--<button type="button" class="btn btn-warning mt-2" @click="openFTP()">Upload HTML file to the server</button>  -->
             </div>
-            <div v-if="displayRecordFromQuery">
-              <button type="button" class="btn btn-success" @click="exportExcel('myTable')">Extract to Excel</button>
-              <button type="button" class="btn btn-secondary" @click="exportHTML()">Extract to HTML</button>
-              <button type="button" class="btn btn-primary" @click="document.location.reload(true);">Go Back</button>
             </div>
-            <div v-if="displayFTP">
-              <button type="button" class="btn btn-primary" @click="document.location.reload(true);">Go Back</button>
+              
+              <div class="row mt-4">
+                <div class="col">
+                  <button type="button" class="btn btn-primary me-2" @click="displayData('listofmeetings','listoflanguages')">
+                    Update the table
+                  </button>
+                  <button type="button" class="btn btn-secondary me-2" @click="renderData('listofmeetings','listoflanguages')">
+                    Display
+                  </button> 
+                  <button type="button" class="btn btn-warning me-2" @click="showMyModal()">
+                    Refresh
+                  </button>
+                  <button type="button" class="btn btn-info me-2" @click="renderDataJSON('listofmeetings','listoflanguages')">
+                    Display Partial JSON
+                  </button>
+                  <button type="button" class="btn btn-secondary me-2" @click="exportDataToJson('listofmeetings','listoflanguages')">
+                    Full JSON
+                  </button> 
             </div>
         </div>
-        <hr>
-        <div class="shadow" v-if="displayRecordFromQuery" style="width:1200px;">
-          <table style="width:1000px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='EN'" id="myTable"  class="tablefont table-condensed" summary="">
+            </div>
+            <div v-if="displayRecordFromQuery" class="row mt-3">
+              <div class="col">
+                <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
+                  Extract to Excel
+                </button>
+                <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
+                  Extract to HTML
+                </button>
+                <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
+                  Go Back
+                </button>
+              </div>
+            </div>
+            <div v-if="displayFTP" class="row mt-3">
+              <div class="col">
+                <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
+                  Go Back
+                </button>
+              </div>
+            </div>
+        </div>
+        
+        <div v-if="displayRecordFromQuery" class="mt-4">
+          <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped" summary="">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Resolution No</th>
@@ -541,13 +574,13 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
              
 
               <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="refresh">
+                <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
                 <label class="form-check-label" for="flexCheckDefault">
                   Allow Refresh
                 </label>
               </div>
               <hr>
-              <!-- <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button> -->
+              <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button>
               <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
               </form>
         </div>
@@ -636,7 +669,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
             </form>
         </div>
 
-        <div :class="modalClasses" class="fade" id="reject" role="dialog">
+        <div class="modal" id="reject" role="dialog" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1055; background: rgba(0,0,0,0.5);">
             <div class="modal-dialog">
                   <div class="modal-content">
                         <div class="modal-header">
@@ -776,7 +809,8 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                               </label>
                             </div>  
                           <hr>
-                          <button class="btn btn-primary" @click="refresh_data_ga()">Refresh</button>
+                          <button class="btn btn-primary me-2" @click="refresh_data_ga()">Refresh</button>
+                          <button class="btn btn-secondary" @click="showMyModal()">Close</button>
                         </div>
                     </div>
             </div>
@@ -787,7 +821,6 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
     data: function () {
       return {
-        outcomes: [],
         initPage: true,
         displayFTP: false,
         meetingsIds: [],
@@ -800,8 +833,18 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         listOfRecords: [],
         my_id: "",
         listing_id: "",
-        modalClasses: ['modal', 'fade'],
         refresh: false,
+        
+        // Additional fields for create/update forms
+        meeting_recorden: "",
+        meeting_recordfr: "",
+        meeting_recordes: "",
+        meetinglinken: "",
+        meetinglinkfr: "",
+        meetinglinkes: "",
+        record_link: "",
+        date: "",
+        topic: "",
 
         // ENGLISH FIELDS
         Plenary_en: "",
@@ -869,25 +912,17 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       
       showMyModal() {
         
-        document.body.className += ' modal-open'
-        let modalClasses = this.modalClasses
+        let modalElement = document.getElementById('reject')
     
-        if (modalClasses.indexOf('d-block') > -1) {
-            modalClasses.pop()
-            modalClasses.pop()
-    
-            //hide backdrop
-            let backdrop = document.querySelector('.modal-backdrop')
-            document.body.removeChild(backdrop)
+        if (modalElement && modalElement.style.display === 'block') {
+            // Hide modal
+            modalElement.style.display = 'none'
         }
         else {
-            modalClasses.push('d-block')
-            modalClasses.push('show')
-    
-            //show backdrop
-            let backdrop = document.createElement('div')
-            backdrop.classList = "modal-backdrop fade show"
-            document.body.appendChild(backdrop)
+            // Show modal
+            if (modalElement) {
+                modalElement.style.display = 'block'
+            }
         }
 
         const date = new Date();
@@ -953,9 +988,17 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
+      if (!myMeeting) {
+        showError('Meeting selector not found. Please refresh the page.');
+        return;
+      }
       const myMeetingValue = myMeeting.value;       
 
       const myLanguage = document.getElementById(listoflanguages);
+      if (!myLanguage) {
+        showError('Language selector not found. Please refresh the page.');
+        return;
+      }
       const myLanguageValue = myLanguage.value;  
 
       // assign the languages
@@ -963,16 +1006,30 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
+      try {
       const my_response = await fetch("./getgalistings/" + myMeetingValue)
+        
+        if (!my_response.ok) {
+          throw new Error(`HTTP error! status: ${my_response.status}`);
+        }
+        
       const my_data = await my_response.json();
+        
+        // Clear previous records
+        this.listOfRecords = [];
+        
       my_data.forEach(element => {
         // We find the meeting
         if (element["listing_id"]===myMeetingValue){
             this.listOfRecords.push(element)
           }
         })
+        
       this.initPage=false
       this.displayRecordFromQuery=true
+      } catch (error) {
+        showError('Error loading data: ' + error.message);
+      }
       
       },
 
@@ -988,38 +1045,81 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         });
       },
       async createRecord(){
-        let dataset = new FormData()
         
-        // meeting record management
-        dataset.append('meeting_record',this.record)
-        dataset.append('meeting_record_en',this.meeting_recorden)
-        dataset.append('meeting_record_fr',this.meeting_recordfr)
-        dataset.append('meeting_record_es',this.meeting_recordes)
-        dataset.append('meeting_record_link',this.record_link)
-        dataset.append('topic',this.topic)
-        dataset.append('date',this.date)
-       
-        // meeting link management
-        dataset.append('meeting_record_link',this.meetinglinken)
-        dataset.append('meeting_record_link_es',this.meetinglinkes)
-        dataset.append('meeting_record_link_fr',this.meetinglinkfr)
-        const my_outcomes=JSON.stringify(this.outcomes)
-        dataset.append('outcomes',my_outcomes)
-        dataset.append('refresh',this.refresh)
-        dataset.append('listing_id',this.listing_id)
-        dataset.append('languageSelected',"EN")
-        const my_response = await fetch("./create_sc_listing",{
-          "method":"POST",
-          "body":dataset
+        let dataset = new FormData();
+        dataset.append('listing_id', this.listing_id);
+        dataset.append('refresh', this.outcomes[0].refresh);
+        dataset.append('languageSelected', this.languageSelected);
+
+        // English fields
+        if (this.languageSelected === 'EN') {
+          dataset.append('Resolution_prefix_en', this.outcomes[0].Resolution_prefix_en);
+          dataset.append('Resolution_en', this.outcomes[0].Resolution_en);
+          dataset.append('Resolution_sufix_en', this.outcomes[0].Resolution_sufix_en);
+          dataset.append('Plenary_en', this.outcomes[0].Plenary_en);
+          dataset.append('Agenda_numbers_en', this.outcomes[0].Agenda_numbers_en);
+          dataset.append('Meeting_prefix_en', this.outcomes[0].Meeting_prefix_en);
+          dataset.append('Meeting_en', this.outcomes[0].Meeting_en);
+          dataset.append('Meeting_sufix_en', this.outcomes[0].Meeting_sufix_en);
+          dataset.append('Draft_Resolution_prefix_en', this.outcomes[0].Draft_Resolution_prefix_en);
+          dataset.append('Draft_Resolution_en', this.outcomes[0].Draft_Resolution_en);
+          dataset.append('Draft_Resolution_sufix_en', this.outcomes[0].Draft_Resolution_sufix_en);
+          dataset.append('Title_prefix_en', this.outcomes[0].Title_prefix_en);
+          dataset.append('Title_en', this.outcomes[0].Title_en);
+          dataset.append('Title_sufix_en', this.outcomes[0].Title_sufix_en);
+          dataset.append('date_en', this.outcomes[0].date_en);
+        }
+        // French fields
+        else if (this.languageSelected === 'FR') {
+          dataset.append('Resolution_prefix_fr', this.outcomes[0].Resolution_prefix_fr);
+          dataset.append('Resolution_fr', this.outcomes[0].Resolution_fr);
+          dataset.append('Resolution_sufix_fr', this.outcomes[0].Resolution_sufix_fr);
+          dataset.append('Plenary_fr', this.outcomes[0].Plenary_fr);
+          dataset.append('Agenda_numbers_fr', this.outcomes[0].Agenda_numbers_fr);
+          dataset.append('Meeting_prefix_fr', this.outcomes[0].Meeting_prefix_fr);
+          dataset.append('Meeting_fr', this.outcomes[0].Meeting_fr);
+          dataset.append('Meeting_sufix_fr', this.outcomes[0].Meeting_sufix_fr);
+          dataset.append('Draft_Resolution_prefix_fr', this.outcomes[0].Draft_Resolution_prefix_fr);
+          dataset.append('Draft_Resolution_fr', this.outcomes[0].Draft_Resolution_fr);
+          dataset.append('Draft_Resolution_sufix_fr', this.outcomes[0].Draft_Resolution_sufix_fr);
+          dataset.append('Title_prefix_fr', this.outcomes[0].Title_prefix_fr);
+          dataset.append('Title_fr', this.outcomes[0].Title_fr);
+          dataset.append('Title_sufix_fr', this.outcomes[0].Title_sufix_fr);
+          dataset.append('date_fr', this.outcomes[0].date_fr);
+        }
+        // Spanish fields
+        else if (this.languageSelected === 'ES') {
+          dataset.append('Resolution_prefix_es', this.outcomes[0].Resolution_prefix_es);
+          dataset.append('Resolution_es', this.outcomes[0].Resolution_es);
+          dataset.append('Resolution_sufix_es', this.outcomes[0].Resolution_sufix_es);
+          dataset.append('Plenary_es', this.outcomes[0].Plenary_es);
+          dataset.append('Agenda_numbers_es', this.outcomes[0].Agenda_numbers_es);
+          dataset.append('Meeting_prefix_es', this.outcomes[0].Meeting_prefix_es);
+          dataset.append('Meeting_es', this.outcomes[0].Meeting_es);
+          dataset.append('Meeting_sufix_es', this.outcomes[0].Meeting_sufix_es);
+          dataset.append('Draft_Resolution_prefix_es', this.outcomes[0].Draft_Resolution_prefix_es);
+          dataset.append('Draft_Resolution_es', this.outcomes[0].Draft_Resolution_es);
+          dataset.append('Draft_Resolution_sufix_es', this.outcomes[0].Draft_Resolution_sufix_es);
+          dataset.append('Title_prefix_es', this.outcomes[0].Title_prefix_es);
+          dataset.append('Title_es', this.outcomes[0].Title_es);
+          dataset.append('Title_sufix_es', this.outcomes[0].Title_sufix_es);
+          dataset.append('date_es', this.outcomes[0].date_es);
+        }
+
+        const my_response = await fetch("./create_ga_listing", {
+          method: "POST",
+          body: dataset
           });
         const my_data = await my_response.json();
-        this.displayRecordFromQuery=true
-        alert("Record created!!!")
-        location.reload()
+        this.displayRecordFromQuery = true;
+        showSuccess("Record created!!!");
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       },
       async updateRecord() {
         if (!this.my_id || this.my_id === "") {
-          alert("Error: No record selected for update. Please select a record first.");
+          showError("Error: No record selected for update. Please select a record first.");
           return;
         }
         let dataset = new FormData();
@@ -1094,8 +1194,10 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         });
         const my_data = await my_response.json();
         this.displayRecordFromQuery = true;
-        alert("Record updated!!!");
-        location.reload();
+        showSuccess("Record updated!!!");
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       },
 
       displayUpdateRecordFromQuery(){
@@ -1169,9 +1271,18 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           });
           const my_data = await my_response.json();
           this.deleteRecordFromQuery = false;
-          alert("Record deleted!!!");
-          location.reload();
+          showSuccess("Record deleted!!!");
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
         }
+      },
+      testNotification() {
+        console.log('Test notification button clicked');
+        showSuccess('Test notification is working!', 'Success', 3000);
+        showError('This is an error notification', 'Error', 3000);
+        showWarning('This is a warning notification', 'Warning', 3000);
+        showInfo('This is an info notification', 'Info', 3000);
       },
       async refresh_data(){
         let myYear=document.getElementById("year").value
@@ -1192,14 +1303,13 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         let dataset = new FormData()
         dataset.append('year',myYear)
         dataset.append('month',myMonth)
-        alert("The process has started the data will be updated in few seconds!!!")
+        showInfo("The process has started the data will be updated in few seconds!!!")
         const my_response = await fetch("./refresh_data_ga",{
           "method":"POST",
           "body":dataset
           }); 
           const my_data = await my_response.json();  
-        alert(my_data["message"])
-        this.showMyModal()
+        showInfo(my_data["message"])
       },
        async refresh_data_ga(){
         let mySession=document.getElementById("session").value
@@ -1222,14 +1332,13 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         dataset.append('session',mySession)
         dataset.append('year',myYear)
         dataset.append('month',myMonth)
-        alert("The process has started the data will be updated in few seconds!!!")
+        showInfo("The process has started the data will be updated in few seconds!!!")
         const my_response = await fetch("./refresh_data_ga",{
           "method":"POST",
           "body":dataset
           }); 
           const my_data = await my_response.json();  
-        alert(my_data["message"])
-        this.showMyModal()
+        showInfo(my_data["message"])
       },
       async exportDataToJson(listofmeetings,listoflanguages){
 
@@ -1273,7 +1382,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                     }
               }
               let myDataHTML=myData.outerHTML
-              alert("Your data has been exported with HTML format!!!")
+              showSuccess("Your data has been exported with HTML format!!!")
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
               <h4 style="text-align: center;">&nbsp;</h4>
@@ -1291,7 +1400,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },    
       downloadJsonFile(data, filename) {

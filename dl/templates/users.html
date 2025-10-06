@@ -1,7 +1,24 @@
 {% extends "base.html" %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Users</li>
+{% endblock %}
+
 {% block content %}
-<div id="dlusers">    
-    <displaylistuserscomponent title=" Users "></displaylistuserscomponent>
+<!-- Modern Users Page -->
+<div class="modern-card fade-in">
+    <!-- Description -->
+    <div class="description-section mb-4">
+        <h1 class="card-title">
+            <i class="fas fa-users me-3"></i>
+            Users Management
+        </h1>
+        <p class="card-subtitle">Manage system users and their permissions.</p>
+    </div>
+
+    <!-- Vue Component -->
+    <div id="dlusers">    
+        <displaylistuserscomponent title=" Users "></displaylistuserscomponent>
+    </div>
 </div>
 {% endblock %}
 

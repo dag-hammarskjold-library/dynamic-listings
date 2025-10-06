@@ -96,6 +96,139 @@ def login():
                     if session['username']!="":
                         return redirect('index')
                     else:
+                        return render_template("login.html",error="Invalid user data")
+                    
+            if find_record==False:
+                
+                # user not found
+                error="User not found in the database!!!"
+                return render_template("login.html",error=error)
+
+@main.route("/login_classic", methods=["GET","POST"])
+def login_classic():
+    
+    error=None
+    
+    # check the method called
+    if request.method=="GET":
+
+        # just render the classic login
+        return render_template("login_classic.html")
+     
+    if request.method=="POST":
+        
+        # check if it's the special user
+        if request.form.get("email") == os.getenv("DEFAULT_USER"):
+
+            #if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            if request.form.get("password") == os.getenv("DEFAULT_USER_PWD"):
+                
+                # special user
+                #add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),os.getenv("DEFAULT_USER_NAME"),"Connected to the system!!!")
+                
+                # add the username to the session
+                #session['username'] = config["DEFAULT_USER_NAME"]
+                session['username'] = os.getenv("DEFAULT_USER_NAME")
+                
+                #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
+                return redirect('index_classic')
+
+        
+        # check if the user exists in the database with the good password
+        
+        my_database = my_client["DynamicListings"]  
+        my_collection = my_database["dl_users_collection"]
+
+
+        user = {
+            "email": request.form.get("email"),
+        }
+
+        results= list(my_collection.find(user))
+        find_record=False
+
+        if (len(results)==0):
+            # user not found
+            error="User not found in the database!!!"
+            return render_template("login_classic.html",error=error)
+        else :
+                    
+            for result in results:
+                if check_password_hash(result["password"],request.form.get("password")):
+            
+                    # user found
+                    add_log(datetime.datetime.now(tz=datetime.timezone.utc),request.form.get("email"),"Connected to the system!!!")
+                    
+                    # add the username to the session
+                    session['username'] = result["name"]
+                    
+                    find_record=True
+
+                    if session['username']!="":
+                        return redirect('index_classic')
+                    else:
+                        return render_template("login_classic.html",error="Invalid user data")
+                    
+            if find_record==False:
+                
+                # user not found
+                error="User not found in the database!!!"
+                return render_template("login_classic.html",error=error)
+     
+    if request.method=="POST":
+        
+        # check if it's the special user
+        if request.form.get("email") == os.getenv("DEFAULT_USER"):
+
+            #if request.form.get("password")==config["DEFAULT_USER_PWD"]:
+            if request.form.get("password") == os.getenv("DEFAULT_USER_PWD"):
+                
+                # special user
+                #add_log(datetime.datetime.now(tz=datetime.timezone.utc),config["DEFAULT_USER_NAME"],"Connected to the system!!!")
+                add_log(datetime.datetime.now(tz=datetime.timezone.utc),os.getenv("DEFAULT_USER_NAME"),"Connected to the system!!!")
+                
+                # add the username to the session
+                #session['username'] = config["DEFAULT_USER_NAME"]
+                session['username'] = os.getenv("DEFAULT_USER_NAME")
+                
+                #return render_template('index.html',user_connected=config("DEFAULT_USER_NAME"))
+                return redirect('index')
+
+        
+        # check if the user exists in the database with the good password
+        
+        my_database = my_client["DynamicListings"]  
+        my_collection = my_database["dl_users_collection"]
+
+
+        user = {
+            "email": request.form.get("email"),
+        }
+
+        results= list(my_collection.find(user))
+        find_record=False
+
+        if (len(results)==0):
+            # user not found
+            error="User not found in the database!!!"
+            return render_template("login.html",error=error)
+        else :
+                    
+            for result in results:
+                if check_password_hash(result["password"],request.form.get("password")):
+            
+                    # user found
+                    add_log(datetime.datetime.now(tz=datetime.timezone.utc),request.form.get("email"),"Connected to the system!!!")
+                    
+                    # add the username to the session
+                    session['username'] = result["name"]
+                    
+                    find_record=True
+
+                    if session['username']!="":
+                        return redirect('index')
+                    else:
                         return redirect("login.html")
                     
             if find_record==False:
@@ -128,11 +261,47 @@ def test():
 
 @main.route("/index")
 def index():
-    if session['username']!="":
+    if session and session.get('username') and session['username']!="":
         #return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
         return render_template('index.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
     else:
-        return redirect("login.html")
+        return redirect("login")
+
+@main.route("/index_classic")
+def index_classic():
+    if session and session.get('username') and session['username']!="":
+        #return render_template('index.html',version=config["ACTUAL_VERSION"],session_username=session['username'])
+        return render_template('index_classic.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login_classic")
+
+@main.route("/users_classic")
+def users_classic():
+    if session and session.get('username') and session['username']!="":
+        return render_template('users_classic.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login_classic")
+
+@main.route("/logs_classic")
+def logs_classic():
+    if session and session.get('username') and session['username']!="":
+        return render_template('logs_classic.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login_classic")
+
+@main.route("/datasetSecurityCounsel_classic")
+def datasetSecurityCounsel_classic():
+    if session and session.get('username') and session['username']!="":
+        return render_template('datasetsecuritycounsel_classic.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login_classic")
+
+@main.route("/datasetGAResolutions_classic")
+def datasetGAResolutions_classic():
+    if session and session.get('username') and session['username']!="":
+        return render_template('datasetgaresolutions_classic.html',version=os.getenv("ACTUAL_VERSION"),session_username=session['username'])
+    else:
+        return redirect("login_classic")
 
 ####################################################################################################################
 ####################################################################################################################
@@ -730,9 +899,8 @@ def delete_ga_listing():
 @main.route("/datasetGAResolutions")
 def datasetGAResolutions():
     
-    if session:
-        if session['username']!="":
-            return render_template('datasetgaresolutions.html',session_username=session['username'])
+    if session and session.get('username') and session['username']!="":
+        return render_template('datasetgaresolutions.html',session_username=session['username'])
     else:
         return redirect("login")
 
@@ -921,9 +1089,8 @@ def render_meeting_json_ga(codemeeting,language):
 @main.route("/datasetSecurityCounsel")
 def datasetSecurityCounsel():
     
-    if session:
-        if session['username']!="":
-            return render_template('datasetsecuritycounsel.html',session_username=session['username'])
+    if session and session.get('username') and session['username']!="":
+        return render_template('datasetsecuritycounsel.html',session_username=session['username'])
     else:
         return redirect("login")
 
