@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-bs-theme="light" id="login-html">
+<html lang="en" data-bs-theme="dark" id="login-html">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -23,7 +23,7 @@
     <script>
         // Initialize theme from localStorage before page loads
         (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
         })();
     </script>
@@ -208,7 +208,7 @@
     <script>
       // Theme management functions
       function getLoginTheme() {
-        return localStorage.getItem('theme') || 'light';
+        return localStorage.getItem('theme') || 'dark';
       }
       
       function setLoginTheme(theme) {
