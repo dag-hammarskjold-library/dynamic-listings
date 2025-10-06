@@ -15,7 +15,6 @@ Vue.component('displaylistuserscomponent',{
             <div class="col-md-6">
               <button type="button" class="btn btn-success" @click="exportToExcel" v-if="showList"><i class="far fa-file-excel"></i> Extract to Excel</button>
               <button type="button" class="btn btn-primary" @click="showList=false;ShowCreateUser=true;" v-if="showList"><i class="fas fa-plus"></i> Create a new User</button>
-              <button type="button" class="btn btn-warning" @click="testDeleteConfirmation()" v-if="showList"><i class="fas fa-test-tube"></i> Test Delete Modal</button>
             </div>
           </div>
         </div>
@@ -298,10 +297,6 @@ Vue.component('displaylistuserscomponent',{
             modal.remove();
           }
         };
-      },
-      testDeleteConfirmation() {
-        console.log('Test delete confirmation called');
-        this.showDeleteConfirmation('TEST_USER_ID', 'Test User');
       },
       async confirmDeleteUser(userID, userName) {
         try {
