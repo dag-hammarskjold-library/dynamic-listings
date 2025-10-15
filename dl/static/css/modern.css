@@ -1,6 +1,112 @@
 /* Modern Design System for Dynamic Listings */
 
 /* Notification System */
+/* Login Page Styles and Variables */
+:root {
+  /* Login Theme Variables */
+  --login-bg-light: #42a5f5;
+  --login-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --login-card-bg-light: rgba(255, 255, 255, 0.95);
+  --login-card-bg-dark: rgba(26, 26, 46, 0.95);
+  --login-card-shadow-light: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --login-card-shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.3);
+  --login-card-border-light: rgba(255, 255, 255, 0.2);
+  --login-card-border-dark: rgba(255, 255, 255, 0.1);
+  --login-text-color-light: #2d3748;
+  --login-text-color-dark: #e2e8f0;
+  --login-icon-color-light: #667eea;
+  --login-icon-color-dark: #81c784;
+}
+
+[data-bs-theme="dark"] {
+  --login-bg: var(--login-bg-dark);
+  --login-card-bg: var(--login-card-bg-dark);
+  --login-card-shadow: var(--login-card-shadow-dark);
+  --login-card-border: var(--login-card-border-dark);
+  --login-text-color: var(--login-text-color-dark);
+  --login-icon-color: var(--login-icon-color-dark);
+}
+
+[data-bs-theme="light"] {
+  --login-bg: var(--login-bg-light);
+  --login-card-bg: var(--login-card-bg-light);
+  --login-card-shadow: var(--login-card-shadow-light);
+  --login-card-border: var(--login-card-border-light);
+  --login-text-color: var(--login-text-color-light);
+  --login-icon-color: var(--login-icon-color-light);
+}
+
+.login-container {
+  min-height: 100vh;
+  background: var(--login-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+.login-card {
+  background: var(--login-card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: var(--login-card-shadow);
+  border: 1px solid var(--login-card-border);
+  transition: all 0.3s ease;
+}
+
+.login-title {
+  color: var(--login-text-color) !important;
+  transition: color 0.3s ease;
+}
+
+.login-icon {
+  color: var(--login-icon-color) !important;
+  transition: color 0.3s ease;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--login-card-bg);
+  border: 1px solid var(--login-card-border);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.theme-toggle i {
+  color: var(--login-text-color);
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+
+  .theme-toggle {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+  }
+}
 .notification-container {
   position: fixed;
   bottom: 20px;
@@ -1339,6 +1445,21 @@ body {
 .shadow-md { box-shadow: var(--shadow-md); }
 .shadow-lg { box-shadow: var(--shadow-lg); }
 .shadow-xl { box-shadow: var(--shadow-xl); }
+
+/* Additional Utility Classes for Modern UI */
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fs-3rem { font-size: 3rem; }
+
+/* Animation delay utilities for staggered fade-ins */
+.fade-in-delay-1 { animation-delay: 0.1s; }
+.fade-in-delay-2 { animation-delay: 0.2s; }
+.fade-in-delay-3 { animation-delay: 0.3s; }
+.fade-in-delay-4 { animation-delay: 0.4s; }
+
+/* Larger padding variant for prominent buttons */
+.btn-modern-lg { padding: 12px 16px; }
 
 /* Animation Classes */
 .fade-in {

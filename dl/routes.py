@@ -1046,6 +1046,7 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Vote"]=data["Vote_prefix_en"]+data["Vote_en"]+data["Vote_sufix_en"]
                 recup_data["Draft"]=data["Draft_Resolution_prefix_en"]+data["Draft_Resolution_en"]+data["Draft_Resolution_sufix_en"]
                 recup_data["Topic"]=data["Title_en"]
+                
                
             # Select the language
             if language=="FR":
@@ -1056,7 +1057,8 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Date"]=data["date_fr"]
                 recup_data["Vote"]=data["Vote_prefix_fr"]+data["Vote_fr"]+data["Vote_sufix_fr"]
                 recup_data["Projet"]=data["Draft_Resolution_prefix_fr"]+data["Draft_Resolution_fr"]+data["Draft_Resolution_sufix_fr"]
-                recup_data["Sujet"]=data["Title_fr"]    
+                recup_data["Sujet"]=data["Title_fr"]   
+               
 
             # Select the language
             if language=="ES":
@@ -1067,7 +1069,8 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Fecha"]=data["date_es"]
                 recup_data["Voto"]=data["Vote_prefix_es"]+data["Vote_es"]+data["Vote_sufix_es"]
                 recup_data["Borrador"]=data["Draft_Resolution_prefix_es"]+data["Draft_Resolution_es"]+data["Draft_Resolution_sufix_es"]
-                recup_data["Tema"]=data["Title_es"]    
+                recup_data["Tema"]=data["Title_es"]   
+              
 
             # loading the values in the
             final[my_index]=recup_data
@@ -1172,6 +1175,9 @@ def update_sc_listing():
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
     my_languague_selected=request.form.get("languageSelected")
+    
+    # press release
+    my_press_release=request.form.get("press_release")
 
     if (request.form.get("refresh")=="false"):
         my_refresh=False
@@ -1191,7 +1197,8 @@ def update_sc_listing():
                         'date.0.value': request.form.get("date"),
                         'topic.0.value':request.form.get("topic"),
                         'outcomes':recup,                    
-                        "refresh": my_refresh
+                        "refresh": my_refresh,
+                        'press_release': my_press_release
                     }
                 }
             )
@@ -1206,7 +1213,8 @@ def update_sc_listing():
                         'date.1.value': request.form.get("date"),
                         'topic.1.value':request.form.get("topic"),
                         'outcomes':recup,                          
-                        "refresh": my_refresh
+                        "refresh": my_refresh,
+                        'press_release': my_press_release
                     }
                 }
             )
@@ -1221,7 +1229,8 @@ def update_sc_listing():
                         'date.2.value': request.form.get("date"),
                         'topic.2.value':request.form.get("topic"),
                         'outcomes':recup,                           
-                        "refresh":my_refresh
+                        "refresh":my_refresh,
+                        'press_release': my_press_release
                     }
                 }
             )                    
@@ -1248,6 +1257,9 @@ def create_sc_listing():
 
     my_database=my_client["DynamicListings"]
     my_collection = my_database["dl_cd_data_collection"]
+    
+    # press release
+    my_press_release=request.form.get("press_release")
     
     # language selected
     my_languague_selected=request.form.get("languageSelected")
@@ -1304,7 +1316,8 @@ def create_sc_listing():
                         'date':my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
-                        "refresh": my_refresh
+                        "refresh": my_refresh,
+                        'press_release': my_press_release
                 }
         
     if my_languague_selected=="FR":
@@ -1319,7 +1332,8 @@ def create_sc_listing():
                         'date': my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
-                        "refresh": my_refresh
+                        "refresh": my_refresh,
+                        'press_release': my_press_release
                 }
         
     if my_languague_selected=="ES":
@@ -1334,7 +1348,8 @@ def create_sc_listing():
                         'date': my_date,
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
-                        "refresh": my_refresh
+                        "refresh": my_refresh,
+                        'press_release': my_press_release   
                 }
     
     # save the log in the database
@@ -1399,9 +1414,9 @@ def render_meeting(codemeeting, language):
 
     # titles
     titles = {
-        "EN": ["Meeting Record","Date","Topic","Security Council Outcome/ Vote","Outcome","Vote"],
-        "FR": ["Comptes rendus de séance","Date","Sujet","Issue des délibérations/Vote","Résultat","Vote"],
-        "ES": ["Acta de Sesión","Fecha","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
+        "EN": ["Meeting Record","Date","Press Release","Topic","Security Council Outcome/ Vote","Outcome","Vote"],
+        "FR": ["Comptes rendus de séance","Date","Communiqué de Presse","Sujet","Issue des délibérations/Vote","Résultat","Vote"],
+        "ES": ["Acta de Sesión","Fecha","Comunicado de Prensa","Tema","Consejo de Seguridad Resultado/ Votación","Resultado","Votar"]
     }
     title = titles.get(language, titles["EN"])
 
@@ -1428,7 +1443,7 @@ def render_meeting(codemeeting, language):
     year = unique_records[0]["listing_id"][-4:] if unique_records else ""
 
     # debug
-    # print(unique_records)
+    print(my_fields)
 
     return render_template("render.html", language=language, data=my_fields, title=title, year=year)
 # def render_meeting(codemeeting,language):
@@ -1588,6 +1603,11 @@ def render_meeting_json(codemeeting,language):
             if language=="ES":
                 if data["meeting_record_es"]:
                     recup_data["meeting_record_es"]=data["meeting_record_es"]
+                    
+            
+            # adding press release
+            # if data["press_release"]:
+            recup_data["press_release"]=data["press_release"]
             
             # loading the values in the
             final[my_index]=recup_data

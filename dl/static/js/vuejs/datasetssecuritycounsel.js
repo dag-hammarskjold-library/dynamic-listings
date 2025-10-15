@@ -86,12 +86,13 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               taken with links provided to the actual document in PDF format if a presidential statement has been issued or a resolution adopted.">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
-                          <th class="tbltitle" colspan="5" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
+                          <th class="tbltitle" colspan="6" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
                           (in reverse chronological order)</th>
                       </tr>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Meeting<br />Record</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Date</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Press Release</th>
                           <th width="30%" style="border: 1px solid black;border-collapse: collapse;">Topic</th>
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council / Vote </th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
@@ -100,7 +101,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
                       </tr>
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
-                          
+                         
                           <td style="border: 1px solid black;border-collapse: collapse;">
                               <a :href="record.meeting_record_link"  target="_blank">{{record.meeting_record_en}}</a>
                           </td>
@@ -109,6 +110,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                             <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
                           </td>
                           
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                            <span v-if="languageSelected==='EN'"> {{record.press_release}}</span>
+                          </td>
+
                           <td style="border: 1px solid black;border-collapse: collapse;">
                           <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
                           </td>
@@ -137,12 +142,13 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
           <tbody>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <th class="tbltitle" colspan="5" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
+                        <th class="tbltitle" colspan="6" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
                         (en orden cronológico inverso)</th>
                     </tr>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Reunión<br /></th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Fecha</th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Comunicado de prensa</th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Tema</th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad / Votar</th>
                        
@@ -162,6 +168,15 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                           <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
                           <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                        </td>
+                        
+                        <td style="border: 1px solid black;border-collapse: collapse;">
+                          <span v-if="languageSelected==='EN'"> {{record.press_release}}</span>
+                          <span v-if="languageSelected==='FR'"> {{record.press_release}}</span>
+                          <span v-if="languageSelected==='ES'"> {{record.press_release}}</span>
+                          <span v-if="languageSelected==='RU'"> {{record.press_release}}</span>
+                          <span v-if="languageSelected==='AR'"> {{record.press_release}}</span>
+                          <span v-if="languageSelected==='ZH'"> {{record.press_release}}</span>
                         </td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
@@ -197,12 +212,13 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
           <tbody>
               <tr style="border: 1px solid black;border-collapse: collapse;">
-                  <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
+                  <th class="tbltitle" colspan="6" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
                   (Dans l'ordre chronologique inverse)</th>
               </tr>
               <tr style="border: 1px solid black;border-collapse: collapse;">
                   <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Réunion<br /></th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Date</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Communiqué de presse</th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Sujet</th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité / Vote </th>
     
@@ -222,6 +238,15 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
                     <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
                     <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                  </td>
+                  
+                  <td style="border: 1px solid black;border-collapse: collapse;">
+                    <span v-if="languageSelected==='EN'"> {{record.press_release}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.press_release}}</span>
+                    <span v-if="languageSelected==='ES'"> {{record.press_release}}</span>
+                    <span v-if="languageSelected==='RU'"> {{record.press_release}}</span>
+                    <span v-if="languageSelected==='AR'"> {{record.press_release}}</span>
+                    <span v-if="languageSelected==='ZH'"> {{record.press_release}}</span>
                   </td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
@@ -321,6 +346,13 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <label for="inputName" class="form-label">Date</label>
                         <input type="text" class="form-control" id="date" name="date" v-model="date">
                     </div>   
+
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Press Release</label>
+                        <input type="text" class="form-control" id="press_release" name="press_release" v-model="press_release">
+                    </div>  
+
+
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Topic</label>
                         <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
@@ -588,6 +620,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             <div class="mb-3">
                 <label for="inputName" class="form-label">Date</label>
                 <input type="text" class="form-control" id="date" name="date" v-model="date" disabled>
+            </div>  
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Press Release</label>
+                <input type="text" class="form-control" id="press_release" name="press_release" v-model="press_release" disabled>
             </div>     
             <div class="mb-3">
                 <label for="inputName" class="form-label">Topic</label>
@@ -767,6 +803,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         my_id:"",
         listing_id:"",
         record_link:"",
+        press_release:"",
       }
     },
     
@@ -823,7 +860,54 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         ]
         }
         this.outcomes.push(myRecord)
-        console.log(this.outcomes)
+       
+      },
+      // Ensure record has expected array structures to avoid undefined index access in templates
+      normalizeRecord(record) {
+        record = record || {}
+
+        // normalize press_release to simple string
+        // server may provide: undefined/null, string, object {value:...}, or array [{value:...}]
+        if (record.press_release === undefined || record.press_release === null) {
+          record.press_release = ''
+        } else if (typeof record.press_release === 'string') {
+          // keep as-is
+        } else if (Array.isArray(record.press_release) && record.press_release.length > 0) {
+          record.press_release = (record.press_release[0] && record.press_release[0].value) ? record.press_release[0].value : '(no press release)'
+        } else if (typeof record.press_release === 'object' && record.press_release.value) {
+          record.press_release = record.press_release.value
+        } else {
+          record.press_release = ''
+        }
+
+        return record
+      },
+
+      getArrayValue(record, fieldName, lang) {
+        try {
+          const langIndex = { EN: 0, FR: 1, ES: 2, RU: 3, AR: 4, ZH: 5 }[lang] || 0
+          if (!record || !record[fieldName]) return ''
+          const entry = record[fieldName][langIndex]
+          return (entry && entry.value) ? entry.value : ''
+        } catch (e) {
+          return ''
+        }
+      },
+      getOutcomeField(my_record, langIndex, field) {
+        try {
+          if (!my_record || !my_record.outcome) return ''
+          const entry = my_record.outcome[langIndex]
+          return (entry && entry[field]) ? entry[field] : ''
+        } catch (e) {
+          return ''
+        }
+      },
+      normalizePressRelease(value) {
+        if (value === undefined || value === null) return '(no press release)'
+        if (typeof value === 'string') return value
+        if (Array.isArray(value) && value.length > 0) return (value[0] && value[0].value) ? value[0].value : '(no press release)'
+        if (typeof value === 'object' && value.value) return value.value
+        return '(no press release)'
       },
       showMyModal() {
         
@@ -900,7 +984,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
          // open the url generated
          window.open(url, '_blank').focus();
        },
-      async displayData(listofmeetings,listoflanguages){
+  async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
       const myMeetingValue = myMeeting.value;       
@@ -918,7 +1002,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       my_data.forEach(element => {
         // We find the meeting
         if (element["listing_id"]===myMeetingValue){
-            this.listOfRecords.push(element)
+            this.listOfRecords.push(this.normalizeRecord(element))
           }
         })
       this.initPage=false
@@ -1034,6 +1118,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             this.refresh=element.refresh
             
             this.outcomes=element.outcomes
+
+            // adding press release (safe normalized string)
+            this.press_release = this.normalizePressRelease(element.press_release)
  
           }
         });
@@ -1059,6 +1146,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('refresh',this.refresh)
         dataset.append('listing_id',this.listing_id)
         dataset.append('languageSelected',"EN")
+        // adding press release
+        dataset.append('press_release',this.press_release)
         const my_response = await fetch("./create_sc_listing",{
           "method":"POST",
           "body":dataset
@@ -1088,6 +1177,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)
+        // adding press release
+        dataset.append('press_release',this.press_release)
         const my_response = await fetch("./update_sc_listing",{
           "method":"PUT",
           "body":dataset
@@ -1171,7 +1262,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           my_data.forEach(element => {
             // We find the meeting
             if (element["listing_id"]===myMeetingValue){
-                this.listOfRecords.push(element)
+                this.listOfRecords.push(this.normalizeRecord(element))
               }
             })
           let myFileName="extract_security_counsel_table"+Date.now()+".json"

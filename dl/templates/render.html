@@ -43,10 +43,11 @@
                 {% endif %}                
 
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="14%";>{{title[0]}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[0]}} <br/></th>
                     <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[1]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="29%">{{title[2]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[3]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[2]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="29%">{{title[3]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[4]}} </th>
                 </tr>
                 <tr style="border: 1px solid black;border-collapse: collapse;">
                     {% if language == "EN" %}
@@ -65,9 +66,15 @@
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
                                 {%  if record['meeting_record_link'] %}      
-                                    <a href="{{record['meeting_record_link']}}"  target="_blank">{{record["meeting_record_en"]}}</a></td>
+                                    <a href="{{record['meeting_record_link']}}"  target="_blank">{{record["meeting_record_en"]}}</a>
                                 {% endif %}  
+                            </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
+                            {% if record["press_release"] %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" >{{record["press_release"]["value"]}}</td>
+                            {% else %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" ></td>
+                            {% endif %}
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
@@ -90,10 +97,16 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                            {%  if (record['meeting_record_link_fr']) %}      
-                                <a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record["meeting_record_fr"]}}</a></td>
-                            {% endif %}
+                                {%  if (record['meeting_record_link_fr']) %}      
+                                    <a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record["meeting_record_fr"]}}</a>
+                                {% endif %}
+                            </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
+                            {% if record["press_release"] %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" >{{record["press_release"]["value"]}}</td>
+                            {% else %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" ></td>
+                            {% endif %}
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
                                 {% for my_record in record.outcomes %}                                    
@@ -116,10 +129,16 @@
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                        {%  if (record['meeting_record_link_es']) %}      
-                            <a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record["meeting_record_es"]}}</a></td>
-                        {% endif %}
+                            {%  if (record['meeting_record_link_es']) %}      
+                                <a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record["meeting_record_es"]}}</a>
+                            {% endif %}
+                        </td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
+                        {% if record["press_release"] %}
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["press_release"]["value"]}}</td>
+                        {% else %}
+                            <td style="border: 1px solid black;border-collapse: collapse;" ></td>
+                        {% endif %}
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;" >
                             {% for my_record in record.outcomes %}                                    
