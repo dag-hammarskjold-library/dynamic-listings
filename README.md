@@ -30,18 +30,23 @@ A modern, responsive web application for managing dynamic listings with a beauti
 - **Modern Card Layout** - Beautiful dashboard with informative cards
 - **Quick Stats** - Visual representation of data with modern styling
 - **Responsive Grid** - Adaptive layout that works on all screen sizes
+- **Smooth Animations** - Fade-in animations with staggered delays
 
 ### **Data Management**
 - **GA Resolutions** - Manage General Assembly resolutions with modern interface
 - **Security Council** - Handle Security Council resolutions with consistent UI
 - **User Management** - Complete user CRUD operations with beautiful confirmations
 - **Activity Logs** - View system logs with modern table design
+- **Name Filtering** - Search and filter functionality for users and logs
+- **Excel Export** - Clean data export without HTML formatting
 
 ### **CRUD Operations**
 - **Create** - Add new records with modern forms
 - **Read** - View data in beautiful, responsive tables
 - **Update** - Edit records with intuitive forms and validation
 - **Delete** - Secure deletion with beautiful confirmation modals
+- **JSON Export** - Partial and full JSON export functionality
+- **Data Validation** - Comprehensive safety checks for all data access
 
 ## 🎯 Notification System
 
@@ -65,11 +70,13 @@ A modern, responsive web application for managing dynamic listings with a beauti
 - **Bootstrap 5** - Responsive CSS framework with custom styling
 - **Custom CSS** - Modern design system with CSS variables
 - **JavaScript ES6+** - Modern JavaScript with async/await patterns
+- **Safety Checks** - Comprehensive null/undefined checks for all data access
 
 ### **Backend Technologies**
 - **Flask** - Python web framework for API endpoints
 - **MongoDB** - NoSQL database for flexible data storage
 - **PyMongo** - Python MongoDB driver for database operations
+- **Error Handling** - Robust error handling with detailed logging
 
 ### **File Structure**
 ```
@@ -133,9 +140,10 @@ dl/
 
 ### **Installation**
 1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Configure MongoDB connection
-4. Run the application: `python app.py`
+2. Activate virtual environment: `venv\Scripts\activate` (Windows) or `source venv/bin/activate` (Linux/Mac)
+3. Install dependencies: `pip install -r requirements.txt`
+4. Configure MongoDB connection
+5. Run the application: `python -m dl.wsgi` or `flask --app dl run --debug`
 
 ### **Configuration**
 - Update database connection settings
@@ -174,6 +182,30 @@ dl/
 - **Efficient Rendering** - Smooth animations and transitions
 - **Minimal Dependencies** - Lightweight and fast
 - **Caching** - Smart caching for better performance
+
+## 🔧 Recent Improvements & Fixes
+
+### **Data Safety & Error Handling**
+- **Comprehensive Safety Checks** - Added null/undefined checks for all field access in Vue components
+- **Graceful Error Handling** - Improved error handling in Flask routes with detailed logging
+- **Safe Field Access** - All template expressions now use fallback values (`|| ''`, `|| '#'`)
+- **Console Error Prevention** - Eliminated ReferenceError exceptions from undefined fields
+- **Data Validation** - Robust validation for nested objects and arrays
+
+### **UI/UX Enhancements**
+- **Modern Login Page** - Dark mode by default with theme persistence
+- **Beautiful Confirmations** - Custom deletion confirmation modals
+- **Enhanced Filtering** - Name-based filtering for users and logs
+- **Clean Data Export** - Excel export without HTML formatting or action columns
+- **Responsive Modals** - Fixed modal positioning and sizing issues
+- **Smooth Animations** - Added fade-in delays for dashboard cards
+
+### **Technical Improvements**
+- **Display Partial JSON** - Fixed Security Council JSON export functionality
+- **Error Logging** - Detailed error messages for debugging
+- **Code Organization** - Consolidated all UI styles in `modern.css`
+- **Performance** - Optimized data processing and rendering
+- **Cross-Browser** - Improved compatibility across different browsers
 
 ## 🔮 Future Enhancements
 

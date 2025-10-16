@@ -1046,7 +1046,7 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Vote"]=data["Vote_prefix_en"]+data["Vote_en"]+data["Vote_sufix_en"]
                 recup_data["Draft"]=data["Draft_Resolution_prefix_en"]+data["Draft_Resolution_en"]+data["Draft_Resolution_sufix_en"]
                 recup_data["Topic"]=data["Title_en"]
-                
+                recup_data["Listing_id"]=data["listing_id"]
                
             # Select the language
             if language=="FR":
@@ -1058,7 +1058,7 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Vote"]=data["Vote_prefix_fr"]+data["Vote_fr"]+data["Vote_sufix_fr"]
                 recup_data["Projet"]=data["Draft_Resolution_prefix_fr"]+data["Draft_Resolution_fr"]+data["Draft_Resolution_sufix_fr"]
                 recup_data["Sujet"]=data["Title_fr"]   
-               
+                recup_data["Listing_id"]=data["listing_id"]
 
             # Select the language
             if language=="ES":
@@ -1070,6 +1070,7 @@ def render_meeting_json_ga(codemeeting,language):
                 recup_data["Voto"]=data["Vote_prefix_es"]+data["Vote_es"]+data["Vote_sufix_es"]
                 recup_data["Borrador"]=data["Draft_Resolution_prefix_es"]+data["Draft_Resolution_es"]+data["Draft_Resolution_sufix_es"]
                 recup_data["Tema"]=data["Title_es"]   
+                recup_data["Listing_id"]=data["listing_id"]
               
 
             # loading the values in the
@@ -1177,7 +1178,18 @@ def update_sc_listing():
     my_languague_selected=request.form.get("languageSelected")
     
     # press release
-    my_press_release=request.form.get("press_release")
+    my_press_release_link_en=request.form.get("press_release_link_en")
+    my_press_release_link_fr=request.form.get("press_release_link_fr")
+    my_press_release_link_es=request.form.get("press_release_link_es")
+    my_press_release_text_en=request.form.get("press_release_text_en")
+    my_press_release_text_fr=request.form.get("press_release_text_fr")
+    my_press_release_text_es=request.form.get("press_release_text_es")
+    my_press_release_text_prefix_en=request.form.get("press_release_text_prefix_en")
+    my_press_release_text_prefix_fr=request.form.get("press_release_text_prefix_fr")
+    my_press_release_text_prefix_es=request.form.get("press_release_text_prefix_es")
+    my_press_release_text_sufix_en=request.form.get("press_release_text_sufix_en")
+    my_press_release_text_sufix_fr=request.form.get("press_release_text_sufix_fr")
+    my_press_release_text_sufix_es=request.form.get("press_release_text_sufix_es")
 
     if (request.form.get("refresh")=="false"):
         my_refresh=False
@@ -1198,7 +1210,10 @@ def update_sc_listing():
                         'topic.0.value':request.form.get("topic"),
                         'outcomes':recup,                    
                         "refresh": my_refresh,
-                        'press_release': my_press_release
+                        'press_release_link_en': my_press_release_link_en,
+                        'press_release_text_en': my_press_release_text_en,
+                        'press_release_text_sufix_en': my_press_release_text_sufix_en,
+                        'press_release_text_prefix_en': my_press_release_text_prefix_en
                     }
                 }
             )
@@ -1214,7 +1229,10 @@ def update_sc_listing():
                         'topic.1.value':request.form.get("topic"),
                         'outcomes':recup,                          
                         "refresh": my_refresh,
-                        'press_release': my_press_release
+                        'press_release_link_fr': my_press_release_link_fr,
+                        'press_release_text_fr': my_press_release_text_fr,
+                        'press_release_text_sufix_fr': my_press_release_text_sufix_fr,
+                        'press_release_text_prefix_fr': my_press_release_text_prefix_fr
                     }
                 }
             )
@@ -1230,7 +1248,10 @@ def update_sc_listing():
                         'topic.2.value':request.form.get("topic"),
                         'outcomes':recup,                           
                         "refresh":my_refresh,
-                        'press_release': my_press_release
+                        'press_release_link_es': my_press_release_link_es,
+                        'press_release_text_es': my_press_release_text_es,
+                        'press_release_text_sufix_es': my_press_release_text_sufix_es,
+                        'press_release_text_prefix_es': my_press_release_text_prefix_es
                     }
                 }
             )                    
@@ -1259,7 +1280,18 @@ def create_sc_listing():
     my_collection = my_database["dl_cd_data_collection"]
     
     # press release
-    my_press_release=request.form.get("press_release")
+    my_press_release_link_en=request.form.get("press_release_link_en")
+    my_press_release_link_fr=request.form.get("press_release_link_fr")
+    my_press_release_link_es=request.form.get("press_release_link_es")
+    my_press_release_text_en=request.form.get("press_release_text_en")
+    my_press_release_text_fr=request.form.get("press_release_text_fr")
+    my_press_release_text_es=request.form.get("press_release_text_es")
+    my_press_release_text_prefix_en=request.form.get("press_release_text_prefix_en")
+    my_press_release_text_prefix_fr=request.form.get("press_release_text_prefix_fr")
+    my_press_release_text_prefix_es=request.form.get("press_release_text_prefix_es")
+    my_press_release_text_sufix_en=request.form.get("press_release_text_sufix_en")
+    my_press_release_text_sufix_fr=request.form.get("press_release_text_sufix_fr")
+    my_press_release_text_sufix_es=request.form.get("press_release_text_sufix_es")
     
     # language selected
     my_languague_selected=request.form.get("languageSelected")
@@ -1317,7 +1349,10 @@ def create_sc_listing():
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
                         "refresh": my_refresh,
-                        'press_release': my_press_release
+                        'press_release_link_en': my_press_release_link_en,
+                        'press_release_text_en': my_press_release_text_en,
+                        'press_release_text_sufix_en': my_press_release_text_sufix_en,
+                        'press_release_text_prefix_en': my_press_release_text_prefix_en
                 }
         
     if my_languague_selected=="FR":
@@ -1333,7 +1368,10 @@ def create_sc_listing():
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
                         "refresh": my_refresh,
-                        'press_release': my_press_release
+                        'press_release_link_fr': my_press_release_link_fr,
+                        'press_release_text_fr': my_press_release_text_fr,
+                        'press_release_text_sufix_fr': my_press_release_text_sufix_fr,
+                        'press_release_text_prefix_fr': my_press_release_text_prefix_fr
                 }
         
     if my_languague_selected=="ES":
@@ -1349,7 +1387,10 @@ def create_sc_listing():
                         'topic':my_topic,
                         'outcomes':my_outcomes,                    
                         "refresh": my_refresh,
-                        'press_release': my_press_release   
+                        'press_release_link_es': my_press_release_link_es,
+                        'press_release_text_es': my_press_release_text_es,
+                        'press_release_text_sufix_es': my_press_release_text_sufix_es,
+                        'press_release_text_prefix_es': my_press_release_text_prefix_es 
                 }
     
     # save the log in the database
@@ -1494,128 +1535,127 @@ def render_meeting_json(codemeeting,language):
     my_records=my_collection.find({"listing_id":f"{codemeeting}"}).sort('meeting_record',-1)
    
     # Init our storage structures
+    print(f"Processing meeting: {codemeeting}, language: {language}")
+    print(f"Found {my_collection.count_documents({'listing_id': f'{codemeeting}'})} records")
     
     final={}
     my_index=0
     
     try:
-
         # Loop to feed our storage structure
         for data in my_records:
-            
-            recup_data={}# the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
+            try:
+                recup_data={}# the display will take care of the selected language and check the availibity of the data before insert it to avoid error           
 
-            #increment the index
-            my_index+=1
-            
-            # Id management
-            # recup_data["_id"]=data["_id"]
+                #increment the index
+                my_index+=1
+                
+                # Id management
+                # recup_data["_id"]=data["_id"]
 
-            # Meeting record management
-            recup_data["meeting_record"]=data["meeting_record"]
-            # if language=="EN":
-            #     if "meeting_record" in data.keys():
-            #         recup_data["meeting_record"]=data["meeting_record_en"]
-            # if language=="FR":
-            #     if "meeting_record_fr" in data.keys():
-            #         recup_data["meeting_record"]=data["meeting_record_fr"]
-            # if language=="ES":
-            #     if "meeting_record_es" in data.keys():
-            #         recup_data["meeting_record"]=data["meeting_record_es"]      
+                # Meeting record management
+                recup_data["meeting_record"]=data.get("meeting_record", "")
                         
-            # Date management
-            if language=="EN":
-                if data["date"][0]:
-                    print(data["date"][0])
-                    recup_data["date"]=data["date"][0]["value"]
-            if language=="FR":
-                if data["date"][1]:
-                    print(data["date"][1])
-                    recup_data["date"]=data["date"][1]["value"]
-            if language=="ES":
-                if data["date"][2]:
-                    recup_data["date"]=data["date"][2]["value"]
-            
-            # Meeting Record Link management
-            if language=="EN":
-                if "meeting_record_link" in data.keys():
-                    recup_data["meeting_record_link"]=data["meeting_record_link"]
-            if language=="FR":
-                if "meeting_record_link_fr" in data.keys():
-                    recup_data["meeting_record_link"]=data["meeting_record_link_fr"]
-            if language=="ES":
-                if "meeting_record_link_es" in data.keys():
-                    recup_data["meeting_record_link"]=data["meeting_record_link_es"]        
+                # Date management
+                if "date" in data and data["date"] and len(data["date"]) > 0:
+                    if language=="EN":
+                        if data["date"][0]:
+                            print(data["date"][0])
+                            recup_data["date"]=data["date"][0]["value"]
+                    if language=="FR":
+                        if data["date"][1]:
+                            print(data["date"][1])
+                            recup_data["date"]=data["date"][1]["value"]
+                    if language=="ES":
+                        if data["date"][2]:
+                            recup_data["date"]=data["date"][2]["value"]
                 
-            # listing Id management    
-            if data["listing_id"]:   
-                recup_data["listing_id"]=data["listing_id"]    
+                # Meeting Record Link management
+                if language=="EN":
+                    if "meeting_record_link" in data.keys():
+                        recup_data["meeting_record_link"]=data["meeting_record_link"]
+                if language=="FR":
+                    if "meeting_record_link_fr" in data.keys():
+                        recup_data["meeting_record_link"]=data["meeting_record_link_fr"]
+                if language=="ES":
+                    if "meeting_record_link_es" in data.keys():
+                        recup_data["meeting_record_link"]=data["meeting_record_link_es"]        
+                    
+                # listing Id management    
+                if data.get("listing_id"):   
+                    recup_data["listing_id"]=data["listing_id"]    
+                    
+                # Outcomes Vote Management
+                if "outcomes" in data and data["outcomes"] and len(data["outcomes"]) > 0:
+                    if data["outcomes"][0].get("outcome_vote"):
+                        recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
                 
-            # Outcomes Vote Management
-            if data["outcomes"][0]["outcome_vote"]:
-                recup_data["outcome_vote"]=data["outcomes"][0]["outcome_vote"]  
-            
-            # Outcome Text Management
-           
-            if language=="EN":
-                # if data["outcomes"][0]["outcome"][0]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0]["outcome_text"]
-            if language=="FR":
-                # if data["outcomes"][0]["outcome"][1]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1]["outcome_text"]
-            if language=="ES":
-                # if data["outcomes"][0]["outcome"][2]["outcome_text"]:
-                recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2]["outcome_text"]        
-            
-            # Outcome Text Link Management
-
-            if language=="EN":
-                # if data["outcomes"][0]["outcome"][0]["outcome_text_link"]:
-                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][0]["outcome_text_link"]
-            if language=="FR":
-                # if data["outcomes"][0]["outcome"][1]["outcome_text_link"]:
-                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][1]["outcome_text_link"]
-            if language=="ES":
-                # if data["outcomes"][0]["outcome"][2]["outcome_text_link"]:
-                recup_data["outcome_link"]=data["outcomes"][0]["outcome"][2]["outcome_text_link"]       
-            
-            # Topic Management
-            if language=="EN":
-                if data["topic"][0]["value"]:
-                    recup_data["topic"]=data["topic"][0]["value"]
-            if language=="FR":
-                if data["topic"][1]["value"]:
-                    recup_data["topic"]=data["topic"][1]["value"]
-            if language=="ES":
-                if data["topic"][2]["value"]:
-                    recup_data["topic"]=data["topic"][2]["value"]                     
-                    
-                    
-            # meeting record per language
-            if language=="EN":
-                if data["meeting_record_en"]:
-                    recup_data["meeting_record_en"]=data["meeting_record_en"]
-            
-            if language=="FR":
-                if data["meeting_record_fr"]:
-                    recup_data["meeting_record_fr"]=data["meeting_record_fr"]
-            
-            if language=="ES":
-                if data["meeting_record_es"]:
-                    recup_data["meeting_record_es"]=data["meeting_record_es"]
-                    
-            
-            # adding press release
-            # if data["press_release"]:
-            recup_data["press_release"]=data["press_release"]
-            
-            # loading the values in the
-            final[my_index]=recup_data
-    except :
-        print(data["meeting_record"])
-        print("An exception occurred")
+                # Outcome Text Management
+                if "outcomes" in data and data["outcomes"] and len(data["outcomes"]) > 0:
+                    if language=="EN":
+                        # if data["outcomes"][0]["outcome"][0]["outcome_text"]:
+                        recup_data["outcome_text"]=data["outcomes"][0]["outcome"][0].get("outcome_text", "")
+                    if language=="FR":
+                        # if data["outcomes"][0]["outcome"][1]["outcome_text"]:
+                        recup_data["outcome_text"]=data["outcomes"][0]["outcome"][1].get("outcome_text", "")
+                    if language=="ES":
+                        # if data["outcomes"][0]["outcome"][2]["outcome_text"]:
+                        recup_data["outcome_text"]=data["outcomes"][0]["outcome"][2].get("outcome_text", "")        
+                
+                # Outcome Text Link Management
+                if "outcomes" in data and data["outcomes"] and len(data["outcomes"]) > 0:
+                    if language=="EN":
+                        # if data["outcomes"][0]["outcome"][0]["outcome_text_link"]:
+                        recup_data["outcome_link"]=data["outcomes"][0]["outcome"][0].get("outcome_text_link", "")
+                    if language=="FR":
+                        # if data["outcomes"][0]["outcome"][1]["outcome_text_link"]:
+                        recup_data["outcome_link"]=data["outcomes"][0]["outcome"][1].get("outcome_text_link", "")
+                    if language=="ES":
+                        # if data["outcomes"][0]["outcome"][2]["outcome_text_link"]:
+                        recup_data["outcome_link"]=data["outcomes"][0]["outcome"][2].get("outcome_text_link", "")       
+                
+                # Topic Management
+                if "topic" in data and data["topic"] and len(data["topic"]) > 0:
+                    if language=="EN":
+                        if data["topic"][0].get("value"):
+                            recup_data["topic"]=data["topic"][0]["value"]
+                    if language=="FR":
+                        if data["topic"][1].get("value"):
+                            recup_data["topic"]=data["topic"][1]["value"]
+                    if language=="ES":
+                        if data["topic"][2].get("value"):
+                            recup_data["topic"]=data["topic"][2]["value"]                     
+                        
+                        
+                # meeting record per language
+                if language=="EN":
+                    if data.get("meeting_record_en"):
+                        recup_data["meeting_record_en"]=data["meeting_record_en"]
+                
+                if language=="FR":
+                    if data.get("meeting_record_fr"):
+                        recup_data["meeting_record_fr"]=data["meeting_record_fr"]
+                
+                if language=="ES":
+                    if data.get("meeting_record_es"):
+                        recup_data["meeting_record_es"]=data["meeting_record_es"]
+                        
+                
+                # adding press release
+                # if data["press_release"]:
+                recup_data["press_release"]=data.get("press_release", "")
+                
+                # loading the values in the
+                final[my_index]=recup_data
+            except Exception as e:
+                print(f"Error processing record {data.get('meeting_record', 'unknown')}: {str(e)}")
+                continue
+    except Exception as e:
+        print(f"Error in render_meeting_json: {str(e)}")
+        return jsonify({"error": "Failed to process data", "details": str(e)})
 
     # just return the listings
+    print(f"Returning {len(final)} processed records")
     return jsonify(final)
 
 # route to display the user page

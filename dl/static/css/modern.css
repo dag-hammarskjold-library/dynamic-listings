@@ -1,5 +1,484 @@
 /* Modern Design System for Dynamic Listings */
 
+/* Apple Liquid Effect */
+.liquid-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.liquid-effect:hover::before {
+  left: 100%;
+}
+
+/* Liquid Morphing Animation */
+@keyframes liquidMorph {
+  0% {
+    border-radius: 20px;
+    transform: scale(1);
+  }
+  25% {
+    border-radius: 30px 20px 25px 35px;
+    transform: scale(1.02);
+  }
+  50% {
+    border-radius: 25px 35px 20px 30px;
+    transform: scale(1.05);
+  }
+  75% {
+    border-radius: 35px 25px 30px 20px;
+    transform: scale(1.02);
+  }
+  100% {
+    border-radius: 20px;
+    transform: scale(1);
+  }
+}
+
+.liquid-morph {
+  animation: liquidMorph 3s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-morph:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+  border-radius: 25px;
+}
+
+/* Liquid Button Effect */
+.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.liquid-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Liquid Card Effect */
+.liquid-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: liquidRotate 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.liquid-card:hover::after {
+  opacity: 1;
+}
+
+.liquid-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes liquidRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Liquid Form Effect */
+.liquid-form {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-form .form-control {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+
+.liquid-form .form-control:focus {
+  transform: scale(1.02);
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.liquid-form .form-control::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.liquid-form .form-control:focus::before {
+  left: 100%;
+}
+
+/* Liquid Table Effect */
+.liquid-table {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.liquid-table tbody tr {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+}
+
+.liquid-table tbody tr:hover {
+  transform: scale(1.01);
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 15px;
+}
+
+/* Liquid Modal Effect */
+.liquid-modal .modal-content {
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+}
+
+.liquid-modal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.liquid-modal.show .modal-content::before {
+  opacity: 1;
+}
+
+/* Liquid Sidebar Effect */
+.liquid-sidebar {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  animation: liquidFlow 6s ease-in-out infinite;
+}
+
+@keyframes liquidFlow {
+  0%, 100% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+}
+
+/* Dark Mode Liquid Effects */
+[data-bs-theme="dark"] .liquid-effect::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+[data-bs-theme="dark"] .liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .liquid-card::after {
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .liquid-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+[data-bs-theme="dark"] .liquid-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .liquid-modal .modal-content::before {
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+/* Login Page Liquid Effects */
+.login-container.liquid-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container.liquid-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: liquidRotate 8s linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-card.liquid-morph {
+  position: relative;
+  z-index: 2;
+  animation: liquidMorph 4s ease-in-out infinite;
+}
+
+.login-card.liquid-morph:hover {
+  animation-play-state: paused;
+  transform: scale(1.02);
+}
+
+/* Login Form Liquid Effects */
+.login-container .liquid-form .form-control {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+
+.login-container .liquid-form .form-control:focus {
+  transform: scale(1.02);
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.login-container .liquid-form .form-control::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-container .liquid-form .form-control:focus::before {
+  left: 100%;
+}
+
+/* Login Button Liquid Effect */
+.login-container .liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.login-container .liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-container .liquid-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.login-container .liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Theme Toggle Liquid Effect */
+.theme-toggle.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle.liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.theme-toggle.liquid-btn:hover::before {
+  width: 100px;
+  height: 100px;
+}
+
+.theme-toggle.liquid-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode Login Liquid Effects */
+[data-bs-theme="dark"] .login-container.liquid-card::before {
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-form .form-control::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .theme-toggle.liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Floating Action Buttons */
+.floating-action-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--white, #ffffff) !important;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid var(--border-color, #dee2e6) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  display: block !important;
+}
+
+/* Legacy sticky buttons support */
+.sticky-action-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--white, #ffffff) !important;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid var(--border-color, #dee2e6) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  display: block !important;
+}
+
+[data-bs-theme="dark"] .floating-action-buttons,
+[data-bs-theme="dark"] .sticky-action-buttons {
+  background: var(--dark, #212529) !important;
+  border-bottom-color: var(--border-color-dark, #495057) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.floating-action-buttons .btn,
+.sticky-action-buttons .btn {
+  min-width: 140px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.floating-action-buttons .btn:hover,
+.sticky-action-buttons .btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive floating buttons */
+@media (max-width: 768px) {
+  .floating-action-buttons,
+  .sticky-action-buttons {
+    padding: 10px 0 !important;
+  }
+  
+  .floating-action-buttons .btn,
+  .sticky-action-buttons .btn {
+    min-width: 120px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .floating-action-buttons .d-flex,
+  .sticky-action-buttons .d-flex {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .floating-action-buttons .btn,
+  .sticky-action-buttons .btn {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+}
+
 /* Notification System */
 /* Login Page Styles and Variables */
 :root {
@@ -1451,6 +1930,18 @@ body {
 .fw-600 { font-weight: 600; }
 .fw-700 { font-weight: 700; }
 .fs-3rem { font-size: 3rem; }
+
+/* Outcome labels styling for Security Council */
+.outcome-label {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+/* Outcome cards alignment */
+.cell.card.bg-light {
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
 
 /* Animation delay utilities for staggered fade-ins */
 .fade-in-delay-1 { animation-delay: 0.1s; }
