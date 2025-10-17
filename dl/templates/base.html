@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light" id="app-html">
+<html lang="en" data-bs-theme="dark" id="app-html">
 <head>
     {% block head %}
     <title>{% block title %} Dynamic Listings {% endblock %}</title>
@@ -34,7 +34,7 @@
     <script>
         // Initialize theme from localStorage before page loads
         (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
         })();
     </script>
@@ -77,8 +77,8 @@
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </a>
-                </li>
-            </ul>
+            </li>
+          </ul>
         </div>
     </nav>
 

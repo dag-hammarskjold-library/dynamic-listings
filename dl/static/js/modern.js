@@ -157,6 +157,7 @@ function setTheme(theme) {
     // Update theme toggle icon
     const themeIcon = document.querySelector('#theme-icon');
     const sidebarThemeIcon = document.querySelector('#sidebar-theme-icon');
+    const navbarThemeIcon = document.querySelector('#navbar-theme-icon');
     
     if (themeIcon) {
         if (theme === 'dark') {
@@ -171,6 +172,14 @@ function setTheme(theme) {
             sidebarThemeIcon.className = 'fas fa-sun';
         } else {
             sidebarThemeIcon.className = 'fas fa-moon';
+        }
+    }
+    
+    if (navbarThemeIcon) {
+        if (theme === 'dark') {
+            navbarThemeIcon.className = 'fas fa-sun';
+        } else {
+            navbarThemeIcon.className = 'fas fa-moon';
         }
     }
     

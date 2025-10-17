@@ -50,20 +50,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
             </div>
         </div>
         
-        <div v-if="displayRecordFromQuery" class="row mt-3">
-              <div class="col">
-                <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
-                  Extract to Excel
-                </button>
-                <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
-                  Extract to HTML
-                </button>
-                <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
-                  Go Back
-                </button>
-              </div>
-            </div>
-            <div v-if="displayFTP" class="row mt-3">
+        <div v-if="displayFTP" class="row mt-3">
               <div class="col">
                 <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
                   Go Back
@@ -73,6 +60,19 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         </div>
         
         <div v-if="displayRecordFromQuery" class="mt-4">
+          <div class="row mb-3">
+            <div class="col">
+              <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
+                Extract to Excel
+              </button>
+              <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
+                Extract to HTML
+              </button>
+              <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
+                Go Back
+              </button>
+            </div>
+          </div>
           <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped" summary="">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
@@ -1472,19 +1472,29 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
       },
       async exportHTML(){
         try {
-              
               let myData=document.getElementById("myTable")
-              for(const row of myData.rows){
+              if (!myData) {
+                showError("Table not found. Please make sure the table is displayed first.");
+                return;
+              }
+              
+              // Create a copy of the table to avoid modifying the original
+              let tableCopy = myData.cloneNode(true);
+              
+              // Remove the Actions column from all rows except header
+              for(const row of tableCopy.rows){
                   if (row.rowIndex!==0) 
                     {
                       row.deleteCell(-1);
                     }
               }
-              let myDataHTML=myData.outerHTML
+              
+              let myDataHTML=tableCopy.outerHTML
               showSuccess("Your data has been exported with HTML format!!!")
+              
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
-              <h4 style="text-align: center;">&nbsp;</h4>
+              <h4 style="text-align: center;">GA Resolutions Export</h4>
               <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">     
               <p style="text-align: justify;">&nbsp;</p>     
               `
@@ -1492,14 +1502,14 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               </div>
               `
               let element = document.createElement('a');
-              element.setAttribute('href', 'data:text/html;charset=utf-8,' + start + myDataHTML + end);
-              element.setAttribute('download', `extract_security_counsel_table`);
+              element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(start + myDataHTML + end));
+              element.setAttribute('download', `extract_ga_resolutions_table_${Date.now()}.html`);
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          showError(error.message)
+          showError("Error exporting HTML: " + error.message)
         }
       },    
       downloadJsonFile(data, filename) {
@@ -1513,31 +1523,30 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         a.click();
         a.remove();
      },
-      exportExcel(tableName) {
-        const uri = 'data:application/vnd.ms-excel;base64,';
-        const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
-        const base64 = function(s) {
-          return window.btoa(unescape(encodeURIComponent(s)));
-        };
-        const format = function(s, c) {
-          return s.replace(/{(\w+)}/g, function(m, p) {
-          return c[p];
-          });
-        };
-        
-        var toExcel = document.getElementById(tableName).innerHTML;
-        var ctx = {
-        worksheet: 'GA Resolutions',
-        table: toExcel
-        };
-        var link = document.createElement("a");
-        link.download = "ga_resolutions_export.xls";
-        link.href = uri + base64(format(template, ctx));
-        link.click();
-      }
-    },
-    components: {}
-  });
+     exportExcel(tableName) {
+       const uri = 'data:application/vnd.ms-excel;base64,';
+       const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+       const base64 = function(s) {
+         return window.btoa(unescape(encodeURIComponent(s)));
+       };
+       const format = function(s, c) {
+         return s.replace(/{(\w+)}/g, function(m, p) {
+           return c[p];
+         });
+       };
+       
+       var toExcel = document.getElementById(tableName).innerHTML;
+       var ctx = {
+         worksheet: 'GA Resolutions',
+         table: toExcel
+       };
+       var link = document.createElement("a");
+       link.download = "ga_resolutions_export.xls";
+       link.href = uri + base64(format(template, ctx));
+       link.click();
+     },
+     components: {}
+  })
 
 let app_datasetgaresolutions = new Vue({
     el: '#dldatasetgaresolutions'

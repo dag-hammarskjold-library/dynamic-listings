@@ -515,23 +515,32 @@
   --login-icon-color: var(--login-icon-color-light);
 }
 
+/* Login page specific styles */
+#login-html, #login-html body {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 .login-container {
-  min-height: 100vh;
+  height: 100vh;
   background: var(--login-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   transition: background 0.3s ease;
+  overflow: hidden;
 }
 
 .login-card {
   background: var(--login-card-bg);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 40px;
+  padding: 25px;
   width: 100%;
-  max-width: 450px;
+  max-width: 380px;
   box-shadow: var(--login-card-shadow);
   border: 1px solid var(--login-card-border);
   transition: all 0.3s ease;
@@ -548,11 +557,11 @@
 }
 
 .theme-toggle {
-  position: absolute;
+  position: fixed;
   top: 20px;
-  right: 20px;
+  right: 60px;
   background: var(--login-card-bg);
-  border: 1px solid var(--login-card-border);
+  border: 2px solid var(--login-card-border);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -562,10 +571,17 @@
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .theme-toggle:hover {
   transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 .theme-toggle i {
@@ -573,17 +589,55 @@
   font-size: 1.2rem;
 }
 
+/* Navbar Theme Toggle Button */
+.theme-toggle-btn {
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color, #dee2e6) !important;
+  background: var(--white, #ffffff) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1000 !important;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-btn i {
+  font-size: 1rem;
+  color: var(--text-color, #333);
+}
+
+/* Dark mode for navbar theme toggle */
+[data-bs-theme="dark"] .theme-toggle-btn {
+  background: var(--dark-bg, #2d3748);
+  border-color: var(--dark-border, #4a5568);
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn i {
+  color: var(--dark-text, #e2e8f0);
+}
+
 @media (max-width: 768px) {
   .login-card {
-    padding: 30px 20px;
-    margin: 10px;
+    padding: 20px 15px;
+    margin: 5px;
   }
 
   .theme-toggle {
     top: 15px;
-    right: 15px;
+    right: 50px;
     width: 45px;
     height: 45px;
+    z-index: 9999;
   }
 }
 .notification-container {
