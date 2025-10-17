@@ -72,9 +72,9 @@
                                 {% endif %}  
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("date", [{}])[0].get("value", "") if record.get("date") and record["date"]|length > 0 else ""}}</td>
-                            {% if record.get("press_release") %}
+                            {% if record.get("press_release_link_en") %}
                                 <td style="border: 1px solid black;border-collapse: collapse;" >
-                                    <a href="{{record.get("press_release_link_en", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                                    <a href="{{record.get("press_release_link_en", "#")}}" target="_blank">{{record.get("press_release_text_prefix_en", "")}} {{record.get("press_release_text_en", {}).get("value", "")}} {{record.get("press_release_text_sufix_en", "")}}</a>
                                 </td>
                             {% else %}
                                 <td style="border: 1px solid black;border-collapse: collapse;" ></td>
@@ -112,9 +112,9 @@
                                 {% endif %}
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("date", [{}])[1].get("value", "") if record.get("date") and record["date"]|length > 1 else ""}}</td>
-                            {% if record.get("press_release") %}
+                            {% if record.get("press_release_text_fr") %}
                                 <td style="border: 1px solid black;border-collapse: collapse;" >
-                                    <a href="{{record.get("press_release_link_fr", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                                    <a href="{{record.get("press_release_link_fr", "#")}}" target="_blank">{{record.get("press_release_text_prefix_fr", "")}} {{record.get("press_release_text_fr", {}).get("value", "")}} {{record.get("press_release_text_sufix_fr", "")}}</a>
                                 </td>
                             {% else %}
                                 <td style="border: 1px solid black;border-collapse: collapse;" ></td>
@@ -152,9 +152,9 @@
                             {% endif %}
                         </td>
                         <td style="border: 1px solid black;border-collapse: collapse;">{{record.get("date", [{}])[2].get("value", "") if record.get("date") and record["date"]|length > 2 else ""}}</td>
-                        {% if record.get("press_release") %}
+                        {% if record.get("press_release_text_es") %}
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                <a href="{{record.get("press_release_link_es", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                                <a href="{{record.get("press_release_link_es", "#")}}" target="_blank">{{record.get("press_release_text_prefix_es", "")}} {{record.get("press_release_text_es", {}).get("value", "")}} {{record.get("press_release_text_sufix_es", "")}}</a>
                             </td>
                         {% else %}
                             <td style="border: 1px solid black;border-collapse: collapse;" ></td>
