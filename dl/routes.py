@@ -1462,8 +1462,57 @@ def render_meeting(codemeeting, language):
     title = titles.get(language, titles["EN"])
 
     # fetch records
-    my_fields = list(my_collection.find({"listing_id": codemeeting}))
+    raw_data = list(my_collection.find({"listing_id": codemeeting}))
     
+    # Process the data to match template expectations
+    my_fields = []
+    for data in raw_data:
+        processed_record = {}
+        
+        # Copy basic fields
+        processed_record["meeting_record"] = data.get("meeting_record", "")
+        processed_record["meeting_record_en"] = data.get("meeting_record_en", "")
+        processed_record["meeting_record_fr"] = data.get("meeting_record_fr", "")
+        processed_record["meeting_record_es"] = data.get("meeting_record_es", "")
+        processed_record["listing_id"] = data.get("listing_id", "")
+        processed_record["press_release"] = data.get("press_release", "")
+        
+        # Process press release text fields to match template expectations
+        if data.get("press_release_text_en"):
+            processed_record["press_release_text_en"] = {"value": data["press_release_text_en"]}
+        if data.get("press_release_text_fr"):
+            processed_record["press_release_text_fr"] = {"value": data["press_release_text_fr"]}
+        if data.get("press_release_text_es"):
+            processed_record["press_release_text_es"] = {"value": data["press_release_text_es"]}
+            
+        # Process press release prefix and suffix fields
+        processed_record["press_release_text_prefix_en"] = data.get("press_release_text_prefix_en", "")
+        processed_record["press_release_text_prefix_fr"] = data.get("press_release_text_prefix_fr", "")
+        processed_record["press_release_text_prefix_es"] = data.get("press_release_text_prefix_es", "")
+        processed_record["press_release_text_sufix_en"] = data.get("press_release_text_sufix_en", "")
+        processed_record["press_release_text_sufix_fr"] = data.get("press_release_text_sufix_fr", "")
+        processed_record["press_release_text_sufix_es"] = data.get("press_release_text_sufix_es", "")
+            
+        # Process meeting record links
+        processed_record["meeting_record_link"] = data.get("meeting_record_link", "#")
+        processed_record["meeting_record_link_fr"] = data.get("meeting_record_link_fr", "#")
+        processed_record["meeting_record_link_es"] = data.get("meeting_record_link_es", "#")
+        
+        # Process press release links
+        processed_record["press_release_link_en"] = data.get("press_release_link_en", "#")
+        processed_record["press_release_link_fr"] = data.get("press_release_link_fr", "#")
+        processed_record["press_release_link_es"] = data.get("press_release_link_es", "#")
+        
+        # Process date fields
+        processed_record["date"] = data.get("date", [])
+        
+        # Process topic fields
+        processed_record["topic"] = data.get("topic", [])
+        
+        # Process outcomes
+        processed_record["outcomes"] = data.get("outcomes", [])
+        
+        my_fields.append(processed_record)
 
     # sort by meeting number then resumption
     my_fields.sort(
@@ -1554,7 +1603,15 @@ def render_meeting_json(codemeeting,language):
                 # recup_data["_id"]=data["_id"]
 
                 # Meeting record management
-                recup_data["meeting_record"]=data.get("meeting_record", "")
+                if language=="EN":
+                    if data.get("meeting_record_en"):
+                        recup_data["meeting_record_en"]=data["meeting_record_en"]
+                if language=="FR":
+                    if data.get("meeting_record_fr"):
+                        recup_data["meeting_record_fr"]=data["meeting_record_fr"]
+                if language=="ES":
+                    if data.get("meeting_record_es"):
+                        recup_data["meeting_record_es"]=data["meeting_record_es"]
                         
                 # Date management
                 if "date" in data and data["date"] and len(data["date"]) > 0:
@@ -1573,13 +1630,14 @@ def render_meeting_json(codemeeting,language):
                 # Meeting Record Link management
                 if language=="EN":
                     if "meeting_record_link" in data.keys():
+                        print(data["meeting_record_link"])
                         recup_data["meeting_record_link"]=data["meeting_record_link"]
                 if language=="FR":
                     if "meeting_record_link_fr" in data.keys():
-                        recup_data["meeting_record_link"]=data["meeting_record_link_fr"]
+                        recup_data["meeting_record_link_fr"]=data["meeting_record_link_fr"]
                 if language=="ES":
                     if "meeting_record_link_es" in data.keys():
-                        recup_data["meeting_record_link"]=data["meeting_record_link_es"]        
+                        recup_data["meeting_record_link_es  "]=data["meeting_record_link_es"]        
                     
                 # listing Id management    
                 if data.get("listing_id"):   
@@ -1641,12 +1699,61 @@ def render_meeting_json(codemeeting,language):
                         recup_data["meeting_record_es"]=data["meeting_record_es"]
                         
                 
-                # adding press release
-                # if data["press_release"]:
-                recup_data["press_release"]=data.get("press_release", "")
+                # adding press release link
+                if language=="EN":
+                    if data.get("press_release_link_en"):
+                        recup_data["press_release_link_en"]=data["press_release_link_en"]
                 
+                if language=="FR":
+                    if data.get("press_release_link_fr"):
+                        recup_data["press_release_link_fr"]=data["press_release_link_fr"]
+                
+                if language=="ES":
+                    if data.get("press_release_link_es"):
+                        recup_data["press_release_link_es"]=data["press_release_link_es"]
+
+                # adding press release text
+                if language=="EN":
+                    if data.get("press_release_text_en"):
+                        recup_data["press_release_text_en"]=data["press_release_text_en"]
+                
+                if language=="FR":
+                    if data.get("press_release_text_fr"):
+                        recup_data["press_release_text_fr"]=data["press_release_text_fr"]
+                
+                if language=="ES":
+                    if data.get("press_release_text_es"):
+                        recup_data["press_release_text_es"]=data["press_release_text_es"]
+
+                # adding press release prefix
+                if language=="EN":
+                    if data.get("press_release_text_prefix_en"):
+                        recup_data["press_release_text_prefix_en"]=data["press_release_text_prefix_en"]
+                
+                if language=="FR":
+                    if data.get("press_release_text_prefix_fr"):
+                        recup_data["press_release_text_prefix_fr"]=data["press_release_text_prefix_fr"]
+                
+                if language=="ES":
+                    if data.get("press_release_text_prefix_es"):
+                        recup_data["press_release_text_prefix_es"]=data["press_release_text_prefix_es"]
+
+                # adding press release sufix
+                if language=="EN":
+                    if data.get("press_release_text_sufix_en"):
+                        recup_data["press_release_text_sufix_en"]=data["press_release_text_sufix_en"]
+                
+                if language=="FR":
+                    if data.get("press_release_text_sufix_fr"):
+                        recup_data["press_release_text_sufix_fr"]=data["press_release_text_sufix_fr"]
+                
+                if language=="ES":
+                    if data.get("press_release_text_sufix_es"):
+                        recup_data["press_release_text_sufix_es"]=data["press_release_text_sufix_es"]
+
                 # loading the values in the
                 final[my_index]=recup_data
+
             except Exception as e:
                 print(f"Error processing record {data.get('meeting_record', 'unknown')}: {str(e)}")
                 continue
