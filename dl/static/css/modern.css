@@ -1,6 +1,803 @@
 /* Modern Design System for Dynamic Listings */
 
+/* Apple Liquid Effect */
+.liquid-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.liquid-effect:hover::before {
+  left: 100%;
+}
+
+/* Liquid Morphing Animation */
+@keyframes liquidMorph {
+  0% {
+    border-radius: 20px;
+    transform: scale(1);
+  }
+  25% {
+    border-radius: 30px 20px 25px 35px;
+    transform: scale(1.02);
+  }
+  50% {
+    border-radius: 25px 35px 20px 30px;
+    transform: scale(1.05);
+  }
+  75% {
+    border-radius: 35px 25px 30px 20px;
+    transform: scale(1.02);
+  }
+  100% {
+    border-radius: 20px;
+    transform: scale(1);
+  }
+}
+
+.liquid-morph {
+  animation: liquidMorph 3s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-morph:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+  border-radius: 25px;
+}
+
+/* Liquid Button Effect */
+.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.liquid-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Liquid Card Effect */
+.liquid-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: liquidRotate 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.liquid-card:hover::after {
+  opacity: 1;
+}
+
+.liquid-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes liquidRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Liquid Form Effect */
+.liquid-form {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-form .form-control {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+
+.liquid-form .form-control:focus {
+  transform: scale(1.02);
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.liquid-form .form-control::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.liquid-form .form-control:focus::before {
+  left: 100%;
+}
+
+/* Liquid Table Effect */
+.liquid-table {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.liquid-table tbody tr {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+}
+
+.liquid-table tbody tr:hover {
+  transform: scale(1.01);
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 15px;
+}
+
+/* Liquid Modal Effect */
+.liquid-modal .modal-content {
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+}
+
+.liquid-modal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.liquid-modal.show .modal-content::before {
+  opacity: 1;
+}
+
+/* Liquid Sidebar Effect */
+.liquid-sidebar {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  animation: liquidFlow 6s ease-in-out infinite;
+}
+
+@keyframes liquidFlow {
+  0%, 100% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+}
+
+/* Dark Mode Liquid Effects */
+[data-bs-theme="dark"] .liquid-effect::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+[data-bs-theme="dark"] .liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .liquid-card::after {
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .liquid-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+[data-bs-theme="dark"] .liquid-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .liquid-modal .modal-content::before {
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+/* Login Page Liquid Effects */
+.login-container.liquid-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container.liquid-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: liquidRotate 8s linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-card.liquid-morph {
+  position: relative;
+  z-index: 2;
+  animation: liquidMorph 4s ease-in-out infinite;
+}
+
+.login-card.liquid-morph:hover {
+  animation-play-state: paused;
+  transform: scale(1.02);
+}
+
+/* Login Form Liquid Effects */
+.login-container .liquid-form .form-control {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+
+.login-container .liquid-form .form-control:focus {
+  transform: scale(1.02);
+  border-radius: 20px;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.login-container .liquid-form .form-control::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-container .liquid-form .form-control:focus::before {
+  left: 100%;
+}
+
+/* Login Button Liquid Effect */
+.login-container .liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.login-container .liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-container .liquid-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.login-container .liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Theme Toggle Liquid Effect */
+.theme-toggle.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle.liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.theme-toggle.liquid-btn:hover::before {
+  width: 100px;
+  height: 100px;
+}
+
+.theme-toggle.liquid-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode Login Liquid Effects */
+[data-bs-theme="dark"] .login-container.liquid-card::before {
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-form .form-control::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme="dark"] .login-container .liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .theme-toggle.liquid-btn::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Floating Action Buttons */
+.floating-action-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--white, #ffffff) !important;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid var(--border-color, #dee2e6) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  display: block !important;
+}
+
+/* Legacy sticky buttons support */
+.sticky-action-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--white, #ffffff) !important;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid var(--border-color, #dee2e6) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  display: block !important;
+}
+
+[data-bs-theme="dark"] .floating-action-buttons,
+[data-bs-theme="dark"] .sticky-action-buttons {
+  background: var(--dark, #212529) !important;
+  border-bottom-color: var(--border-color-dark, #495057) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.floating-action-buttons .btn,
+.sticky-action-buttons .btn {
+  min-width: 140px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.floating-action-buttons .btn:hover,
+.sticky-action-buttons .btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive floating buttons */
+@media (max-width: 768px) {
+  .floating-action-buttons,
+  .sticky-action-buttons {
+    padding: 10px 0 !important;
+  }
+  
+  .floating-action-buttons .btn,
+  .sticky-action-buttons .btn {
+    min-width: 120px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .floating-action-buttons .d-flex,
+  .sticky-action-buttons .d-flex {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .floating-action-buttons .btn,
+  .sticky-action-buttons .btn {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+}
+
 /* Notification System */
+/* Login Page Styles and Variables */
+:root {
+  /* Login Theme Variables */
+  --login-bg-light: #42a5f5;
+  --login-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --login-card-bg-light: rgba(255, 255, 255, 0.95);
+  --login-card-bg-dark: rgba(26, 26, 46, 0.95);
+  --login-card-shadow-light: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --login-card-shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.3);
+  --login-card-border-light: rgba(255, 255, 255, 0.2);
+  --login-card-border-dark: rgba(255, 255, 255, 0.1);
+  --login-text-color-light: #2d3748;
+  --login-text-color-dark: #e2e8f0;
+  --login-icon-color-light: #667eea;
+  --login-icon-color-dark: #81c784;
+}
+
+[data-bs-theme="dark"] {
+  --login-bg: var(--login-bg-dark);
+  --login-card-bg: var(--login-card-bg-dark);
+  --login-card-shadow: var(--login-card-shadow-dark);
+  --login-card-border: var(--login-card-border-dark);
+  --login-text-color: var(--login-text-color-dark);
+  --login-icon-color: var(--login-icon-color-dark);
+}
+
+[data-bs-theme="light"] {
+  --login-bg: var(--login-bg-light);
+  --login-card-bg: var(--login-card-bg-light);
+  --login-card-shadow: var(--login-card-shadow-light);
+  --login-card-border: var(--login-card-border-light);
+  --login-text-color: var(--login-text-color-light);
+  --login-icon-color: var(--login-icon-color-light);
+}
+
+/* Login page specific styles */
+#login-html, #login-html body {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.login-container {
+  height: 100vh;
+  background: var(--login-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  transition: background 0.3s ease;
+  overflow: hidden;
+}
+
+.login-card {
+  background: var(--login-card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--login-card-shadow);
+  border: 1px solid var(--login-card-border);
+  transition: all 0.3s ease;
+}
+
+.login-title {
+  color: var(--login-text-color) !important;
+  transition: color 0.3s ease;
+}
+
+.login-icon {
+  color: var(--login-icon-color) !important;
+  transition: color 0.3s ease;
+}
+
+.theme-toggle {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: #42a5f5 !important;
+  color: white !important;
+  width: 50px !important;
+  height: 50px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  font-size: 18px !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.theme-toggle:active {
+  transform: scale(0.95) !important;
+}
+
+.theme-toggle i {
+  color: white !important;
+  font-size: 1.2rem;
+}
+
+/* Dark mode theme toggle */
+[data-bs-theme="dark"] .theme-toggle {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
+/* Navbar Theme Toggle Button */
+.theme-toggle-btn {
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color, #dee2e6) !important;
+  background: var(--white, #ffffff) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1000 !important;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-btn i {
+  font-size: 1rem;
+  color: var(--text-color, #333);
+}
+
+/* Dark mode for navbar theme toggle */
+[data-bs-theme="dark"] .theme-toggle-btn {
+  background: var(--dark-bg, #2d3748);
+  border-color: var(--dark-border, #4a5568);
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn i {
+  color: var(--dark-text, #e2e8f0);
+}
+
+/* Form Controls */
+.form-control-modern {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  color: var(--login-text-color);
+}
+
+.form-control-modern:focus {
+  border-color: var(--login-icon-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: var(--login-card-bg);
+  color: var(--login-text-color);
+}
+
+.form-control-modern::placeholder {
+  color: rgba(45, 55, 72, 0.6);
+}
+
+[data-bs-theme="dark"] .form-control-modern::placeholder {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+/* Input Group */
+.input-group-text {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-right: none;
+  color: var(--login-icon-color);
+  border-radius: 12px 0 0 12px;
+}
+
+.input-group .form-control-modern {
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+}
+
+/* Buttons */
+.btn-modern {
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-modern-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.btn-primary-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary-modern:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Alerts */
+.alert-modern {
+  border-radius: 12px;
+  border: none;
+  padding: 12px 16px;
+  margin-top: 16px;
+}
+
+.alert-danger-modern {
+  background: rgba(245, 101, 101, 0.1);
+  color: #e53e3e;
+  border-left: 4px solid #e53e3e;
+}
+
+/* Login Page Animations */
+.login-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.login-card.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Input Focus Effects */
+.input-group:focus-within {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Password Toggle Button */
+.btn-outline-secondary {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-left: none;
+  color: var(--login-icon-color);
+  border-radius: 0 12px 12px 0;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background: var(--login-icon-color);
+  color: white;
+  border-color: var(--login-icon-color);
+}
+
+/* Loading State */
+.btn-modern:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Form Labels */
+.form-label {
+  color: var(--login-text-color);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Text Muted */
+.text-muted {
+  color: rgba(45, 55, 72, 0.7) !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+  color: rgba(226, 232, 240, 0.7) !important;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 20px 15px;
+    margin: 5px;
+  }
+
+  .theme-toggle {
+    top: 15px !important;
+    right: 15px !important;
+    width: 45px !important;
+    height: 45px !important;
+    z-index: 99999 !important;
+  }
+  
+  .form-control-modern {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  
+  .btn-modern-lg {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+}
 .notification-container {
   position: fixed;
   bottom: 20px;
@@ -1340,6 +2137,33 @@ body {
 .shadow-lg { box-shadow: var(--shadow-lg); }
 .shadow-xl { box-shadow: var(--shadow-xl); }
 
+/* Additional Utility Classes for Modern UI */
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fs-3rem { font-size: 3rem; }
+
+/* Outcome labels styling for Security Council */
+.outcome-label {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+/* Outcome cards alignment */
+.cell.card.bg-light {
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
+/* Animation delay utilities for staggered fade-ins */
+.fade-in-delay-1 { animation-delay: 0.1s; }
+.fade-in-delay-2 { animation-delay: 0.2s; }
+.fade-in-delay-3 { animation-delay: 0.3s; }
+.fade-in-delay-4 { animation-delay: 0.4s; }
+
+/* Larger padding variant for prominent buttons */
+.btn-modern-lg { padding: 12px 16px; }
+
 /* Animation Classes */
 .fade-in {
   animation: fadeIn 0.3s ease-in-out;
@@ -1761,5 +2585,35 @@ body {
   
   .card-header {
     padding: var(--space-6);
+  }
+}
+
+/* Outcome input styling - reduced width */
+.outcome-input {
+  max-width: 400px !important;
+  width: 100% !important;
+}
+
+/* Outcome button styling - match input width */
+.outcome-button {
+  max-width: 400px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .outcome-input {
+    max-width: 350px !important;
+  }
+  .outcome-button {
+    max-width: 350px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .outcome-input {
+    max-width: 280px !important;
+  }
+  .outcome-button {
+    max-width: 280px !important;
   }
 }

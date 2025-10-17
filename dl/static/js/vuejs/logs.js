@@ -65,33 +65,49 @@ Vue.component('displaylistcomponent',{
   },
   methods:{
     exportToExcel() {
-        // Variable to store the final csv data
-        let csv_data = [];
-     
-        // Get each row data
-        let rows = document.getElementsByTagName('tr');
-        for (let i = 0; i < rows.length; i++) {
-     
-            // Get each column data
-            let cols = rows[i].querySelectorAll('td,th');
-     
-            // Stores each csv row data
-            let csvrow = [];
-            for (let j = 0; j < cols.length; j++) {
-     
-                // Get the text data of each cell of
-                // a row and push it to csvrow
-                csvrow.push(cols[j].innerHTML);
-            }
-     
-            // Combine each column value with comma
-            csv_data.push(csvrow.join(","));
+        try {
+          // Variable to store the final csv data
+          let csv_data = [];
+       
+          // Get each row data from the logs table
+          let table = document.getElementById('listlogs');
+          if (!table) {
+            showError("Table not found. Please make sure the table is displayed first.");
+            return;
+          }
+          
+          let rows = table.querySelectorAll('tr');
+          for (let i = 0; i < rows.length; i++) {
+       
+              // Get each column data
+              let cols = rows[i].querySelectorAll('td,th');
+       
+              // Stores each csv row data
+              let csvrow = [];
+              for (let j = 0; j < cols.length; j++) {
+       
+                  // Get the text data of each cell, clean HTML and handle multiline
+                  let cellText = cols[j].textContent || cols[j].innerText || '';
+                  // Replace <br> tags with spaces and remove HTML tags
+                  cellText = cellText.replace(/<br\s*\/?>/gi, ' ');
+                  cellText = cellText.replace(/<[^>]*>/g, '');
+                  // Clean up any extra whitespace
+                  cellText = cellText.trim().replace(/\s+/g, ' ');
+                  csvrow.push(cellText);
+              }
+       
+              // Combine each column value with comma
+              csv_data.push(csvrow.join(","));
+          }
+          // combine each row data with new line character
+          csv_data = csv_data.join('\n');
+       
+          // Call this function to download csv file 
+          this.downloadCSVFile(csv_data);
+          showSuccess("Logs data exported to Excel successfully!");
+        } catch (error) {
+          showError("Error exporting logs to Excel: " + error.message);
         }
-        // combine each row data with new line character
-        csv_data = csv_data.join('\n');
-     
-        // Call this function to download csv file 
-        this.downloadCSVFile(csv_data);
     },
     downloadCSVFile(csv_data) {
  
@@ -106,7 +122,7 @@ Vue.component('displaylistcomponent',{
       let temp_link = document.createElement('a');
     
       // Download csv file
-      temp_link.download = "results_upload.csv";
+      temp_link.download = `logs_export_${Date.now()}.csv`;
       let url = window.URL.createObjectURL(CSVFile);
       temp_link.href = url;
     

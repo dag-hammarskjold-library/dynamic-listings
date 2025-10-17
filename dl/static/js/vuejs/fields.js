@@ -48,7 +48,7 @@ Vue.component('displaylistfieldscomponent',{
                 <td> {{myfield.field}}</td>
                 <td> {{myfield.subfield}}</td>
                 <td> {{myfield.defaultvalue}}</td>
-                <td><span class="badge rounded-pill bg-success mr-2"  @click="showList=false;field=myfield.field;defaultvalue=myfield.defaultvalue;fieldToUpdate=myfield._id.$oid;name=myfield.name;origin=myfield.origin;recordid=myfield.recordid;subfield=myfield.subfield;ShowUpdateField=true;">Update</span><span class="badge rounded-pill bg-danger" @click="deleteField(field._id.$oid)">Delete</span></td>
+                <td><span class="badge rounded-pill bg-success mr-2"  @click="showList=false;field=myfield.field;defaultvalue=myfield.defaultvalue;fieldToUpdate=myfield._id.$oid;name=myfield.name;origin=myfield.origin;recordid=myfield.recordid;subfield=myfield.subfield;ShowUpdateField=true;">Update</span><span class="badge rounded-pill bg-danger" @click="showDeleteConfirmation(myfield._id.$oid)">Delete</span></td>
               </tr>
             </tbody>
             </table> 
@@ -153,7 +153,7 @@ Vue.component('displaylistfieldscomponent',{
           this.listOfFields.push(element)
         });
       } catch (error) {
-        alert(error.message)
+        showError(error.message)
       }
     } 
     ,
@@ -172,10 +172,10 @@ Vue.component('displaylistfieldscomponent',{
               "body":field
             });
             const my_data = await my_response.json();
-            alert("New Field Created!!!")
+            showSuccess("New Field Created!!!")
           
           } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },
       async updateField(){
@@ -191,16 +191,105 @@ Vue.component('displaylistfieldscomponent',{
               "method":"PUT",
               "body":field
             });
-          alert(`User ${this.fieldToUpdate} updated!!!`)
+          showSuccess(`User ${this.fieldToUpdate} updated!!!`)
           location.reload()
           } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },
-      async deleteField(fieldID){
+      showDeleteConfirmation(fieldID) {
+        console.log('showDeleteConfirmation called for field:', fieldID);
+        
+        // Create a simple, robust modal
+        const modal = document.createElement('div');
+        modal.id = 'deleteConfirmationModal';
+        modal.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          background: rgba(0, 0, 0, 0.5) !important;
+          z-index: 99999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+          background: var(--white, #ffffff) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          padding: 15px !important;
+          border-left: 4px solid var(--warning-color, #ffc107) !important;
+          max-width: 280px !important;
+          width: 90% !important;
+          text-align: center !important;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 10px !important;
+        `;
+        
+        modalContent.innerHTML = `
+          <div class="notification-icon" style="color: var(--warning-color, #ffc107); font-size: 24px;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="notification-content" style="text-align: center;">
+            <div class="notification-title" style="font-weight: 600; margin-bottom: 5px; color: var(--dark, #333); font-size: 14px;">Confirm Deletion</div>
+            <div class="notification-message" style="color: var(--text-color, #666); margin-bottom: 10px; font-size: 12px;">
+              Delete field with ID: <strong>${fieldID}</strong>?
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 0px;">
+            <button id="confirmDeleteBtn" style="
+              background: var(--danger-color, #dc3545) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Delete</button>
+            <button id="cancelDeleteBtn" style="
+              background: var(--secondary-color, #6c757d) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Cancel</button>
+          </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+          this.confirmDeleteField(fieldID);
+          document.body.removeChild(modal);
+        };
+        
+        document.getElementById('cancelDeleteBtn').onclick = () => {
+          document.body.removeChild(modal);
+        };
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      },
+      
+      async confirmDeleteField(fieldID){
           try {
-              let that=this
-              if (confirm(`Do you really want to delete the record with the _id : ${fieldID} ? `) == true) {
               let field = new FormData()
               field.append('_id',fieldID)
               const my_response = await fetch("/fieldsVue/DeleteField", {
@@ -208,11 +297,10 @@ Vue.component('displaylistfieldscomponent',{
                 "body":field
               });
               const my_data = await my_response.json();              
-              alert(`Field with the _id : ${fieldID} has been deleted!!!`)
+              showSuccess(`Field with the _id : ${fieldID} has been deleted!!!`)
               location.reload()
-              }
             } catch (error) {
-            alert(error.message)
+            showError(error.message)
           }
       },      
       exportToExcel() {

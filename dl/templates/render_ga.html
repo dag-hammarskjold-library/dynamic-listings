@@ -26,12 +26,12 @@
               
 
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0]}} <br/></th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="13%">{{title[1]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="13%">{{title[2]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="22%">{{title[3]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="19%">{{title[4]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="18%">{{title[5]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="15%">{{title[0] if title and title[0] else ''}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="13%">{{title[1] if title and title[1] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="13%">{{title[2] if title and title[2] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="22%">{{title[3] if title and title[3] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="19%">{{title[4] if title and title[4] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="18%">{{title[5] if title and title[5] else ''}} </th>
                 </tr>
 
                 
@@ -39,32 +39,35 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                            {%  if record['Resolution_link_en'] %}  
-                                <a href="{{record['Resolution_link_en']}}"  target="_blank">{{record['Resolution_en']}}</a></td>
+                            {%  if record.get('Resolution_link_en') %}  
+                                <a href="{{record['Resolution_link_en']}}"  target="_blank">{{record.get('Resolution_en', '')}}</a>
+                            {% else %}
+                                {{record.get('Resolution_en', '')}}
                             {% endif %}
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_en"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_en"]}}</td>
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Plenary_en", "")}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Agenda_numbers_en", "")}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Meeting_prefix_en"]}}
-                                {%  if record['Meeting_link_en'] %}  
-                                    <a href="{{record['Meeting_link_en']}}"  target="_blank">{{record["Meeting_en"]}}</a><br>
+                                {{record.get("Meeting_prefix_en", "")}}
+                                {%  if record.get('Meeting_link_en') %}  
+                                    <a href="{{record['Meeting_link_en']}}"  target="_blank">{{record.get("Meeting_en", "")}}</a><br>
                                 {% endif %}
                                     <!-- {{record["Meeting_en"]}}<br> -->
-                                    {% if record["Meeting_sufix_en"] %}{{ record["Meeting_sufix_en"] }}<br>{% endif %}
-                                    {% if record["date_en"] %}{{ record["date_en"] }}<br>{% endif %}
-                                    {% if record["Vote_prefix_en"] %}{{ record["Vote_prefix_en"] }}<br>{% endif %}
-                                    {% if record["Vote_en"] %}{{ record["Vote_en"] }}<br>{% endif %}
-                                    {% if record["Vote_sufix_en"] %}{{ record["Vote_sufix_en"] }}<br>{% endif %}
+                                    {% if record.get("Meeting_sufix_en") %}{{ record.get("Meeting_sufix_en", "") }}<br>{% endif %}
+                                    {% if record.get("date_en") %}{{ record.get("date_en", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_prefix_en") %}{{ record.get("Vote_prefix_en", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_en") %}{{ record.get("Vote_en", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_sufix_en") %}{{ record.get("Vote_sufix_en", "") }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Draft_Resolution_prefix_en"]}}
-                                {% if record['Draft_Resolution_link_en'] %}
-                                    <a href="{{record['Draft_Resolution_link_en']}}"  target="_blank">{{record["Draft_Resolution_en"]}}</a>
+                                {{record.get("Draft_Resolution_prefix_en", "")}}
+                                {% if record.get('Draft_Resolution_link_en') %}
+                                    <a href="{{record['Draft_Resolution_link_en']}}"  target="_blank">{{record.get("Draft_Resolution_en", "")}}</a>
                                 {% endif %}
-                                {{record["Draft_Resolution_sufix_en"]}}
+                                {{record.get("Draft_Resolution_sufix_en", "")}}
                             </td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_en"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Title_en", "")}}</td>
                         </tr>
                         {% endfor %}      
                     {% endif %}  
@@ -73,31 +76,34 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                            {%  if record['Resolution_link_fr'] %}  
-                                <a href="{{record['Resolution_link_fr']}}"  target="_blank">{{record['Resolution_fr']}}</a></td>
+                            {%  if record.get('Resolution_link_fr') %}  
+                                <a href="{{record['Resolution_link_fr']}}"  target="_blank">{{record.get('Resolution_fr', '')}}</a>
+                            {% else %}
+                                {{record.get('Resolution_fr', '')}}
                             {% endif %}
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_fr"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_fr"]}}</td>
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Plenary_fr", "")}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Agenda_numbers_fr", "")}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Meeting_prefix_fr"]}}
-                                {%  if record['Meeting_link_fr'] %}  
-                                    <a href="{{record['Meeting_link_fr']}}"  target="_blank">{{record["Meeting_fr"]}}</a><br>
+                                {{record.get("Meeting_prefix_fr", "")}}
+                                {%  if record.get('Meeting_link_fr') %}  
+                                    <a href="{{record['Meeting_link_fr']}}"  target="_blank">{{record.get("Meeting_fr", "")}}</a><br>
                                 {% endif %}
-                                {% if record["Meeting_sufix_fr"] %}{{ record["Meeting_sufix_fr"] }}<br>{% endif %}
-                                    {% if record["date_fr"] %}{{ record["date_fr"] }}<br>{% endif %}
-                                    {% if record["Vote_prefix_fr"] %}{{ record["Vote_prefix_fr"] }}<br>{% endif %}
-                                    {% if record["Vote_fr"] %}{{ record["Vote_fr"] }}<br>{% endif %}
-                                    {% if record["Vote_sufix_fr"] %}{{ record["Vote_sufix_fr"] }}<br>{% endif %}
+                                {% if record.get("Meeting_sufix_fr") %}{{ record.get("Meeting_sufix_fr", "") }}<br>{% endif %}
+                                    {% if record.get("date_fr") %}{{ record.get("date_fr", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_prefix_fr") %}{{ record.get("Vote_prefix_fr", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_fr") %}{{ record.get("Vote_fr", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_sufix_fr") %}{{ record.get("Vote_sufix_fr", "") }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Draft_Resolution_prefix_fr"]}}
-                                {% if record['Draft_Resolution_link_fr'] %}
-                                    <a href="{{record['Draft_Resolution_link_fr']}}"  target="_blank">{{record["Draft_Resolution_fr"]}}</a>
+                                {{record.get("Draft_Resolution_prefix_fr", "")}}
+                                {% if record.get('Draft_Resolution_link_fr') %}
+                                    <a href="{{record['Draft_Resolution_link_fr']}}"  target="_blank">{{record.get("Draft_Resolution_fr", "")}}</a>
                                 {% endif %}
-                                {{record["Draft_Resolution_sufix_fr"]}}
+                                {{record.get("Draft_Resolution_sufix_fr", "")}}
                             </td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_fr"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Title_fr", "")}}</td>
                         </tr>
                         {% endfor %}      
                     {% endif %}  
@@ -106,31 +112,34 @@
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                            {%  if record['Resolution_link_es'] %}      
-                                <a href="{{record['Resolution_link_es']}}"  target="_blank">{{record['Resolution_es']}}</a></td>
+                            {%  if record.get('Resolution_link_es') %}      
+                                <a href="{{record['Resolution_link_es']}}"  target="_blank">{{record.get('Resolution_es', '')}}</a>
+                            {% else %}
+                                {{record.get('Resolution_es', '')}}
                             {% endif %}
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Plenary_es"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Agenda_numbers_es"]}}</td>
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Plenary_es", "")}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Agenda_numbers_es", "")}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Meeting_prefix_es"]}}
-                                {%  if record['Meeting_link_es'] %}  
-                                    <a href="{{record['Meeting_link_es']}}"  target="_blank">{{record["Meeting_es"]}}</a><br>
+                                {{record.get("Meeting_prefix_es", "")}}
+                                {%  if record.get('Meeting_link_es') %}  
+                                    <a href="{{record['Meeting_link_es']}}"  target="_blank">{{record.get("Meeting_es", "")}}</a><br>
                                 {% endif %}
-                                {% if record["Meeting_sufix_es"] %}{{ record["Meeting_sufix_es"] }}<br>{% endif %}
-                                    {% if record["date_es"] %}{{ record["date_es"] }}<br>{% endif %}
-                                    {% if record["Vote_prefix_es"] %}{{ record["Vote_prefix_es"] }}<br>{% endif %}
-                                    {% if record["Vote_es"] %}{{ record["Vote_es"] }}<br>{% endif %}
-                                    {% if record["Vote_sufix_es"] %}{{ record["Vote_sufix_es"] }}<br>{% endif %}
+                                {% if record.get("Meeting_sufix_es") %}{{ record.get("Meeting_sufix_es", "") }}<br>{% endif %}
+                                    {% if record.get("date_es") %}{{ record.get("date_es", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_prefix_es") %}{{ record.get("Vote_prefix_es", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_es") %}{{ record.get("Vote_es", "") }}<br>{% endif %}
+                                    {% if record.get("Vote_sufix_es") %}{{ record.get("Vote_sufix_es", "") }}<br>{% endif %}
 
                             </td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {{record["Draft_Resolution_prefix_es"]}}
-                                {% if record['Draft_Resolution_link_es'] %}
-                                    <a href="{{record['Draft_Resolution_link_es']}}"  target="_blank">{{record["Draft_Resolution_es"]}}</a>
+                                {{record.get("Draft_Resolution_prefix_es", "")}}
+                                {% if record.get('Draft_Resolution_link_es') %}
+                                    <a href="{{record['Draft_Resolution_link_es']}}"  target="_blank">{{record.get("Draft_Resolution_es", "")}}</a>
                                 {% endif %}    
-                                {{record["Draft_Resolution_sufix_es"]}}
+                                {{record.get("Draft_Resolution_sufix_es", "")}}
                             </td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["Title_es"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("Title_es", "")}}</td>
                     </tr>
                     {% endfor %}      
                 {% endif %}  

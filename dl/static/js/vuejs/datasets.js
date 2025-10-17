@@ -40,7 +40,7 @@ Vue.component('displaylistdatasetscomponent',{
                     <ul>
                         <li v-for="field in field.results" class="text-primary" > {{field}} </li>
                     </ul>
-                    <strong>  Actions : <span class="badge rounded-pill bg-danger" @click="deleteDataset(field._id.$oid)">Delete</span><span class="badge rounded-pill bg-warning" @click="executeDataset(field._id.$oid)">Execute</span><span class="badge rounded-pill bg-dark" @click="extract(field,1)">HTML View</span></span><span class="badge rounded-pill bg-info" @click="extract(field,2)">JSON View</span>                
+                    <strong>  Actions : <span class="badge rounded-pill bg-danger" @click="showDeleteConfirmation(field._id.$oid)">Delete</span><span class="badge rounded-pill bg-warning" @click="executeDataset(field._id.$oid)">Execute</span><span class="badge rounded-pill bg-dark" @click="extract(field,1)">HTML View</span></span><span class="badge rounded-pill bg-info" @click="extract(field,2)">JSON View</span>                
                   </div>
                 </div>
               </div>            
@@ -131,7 +131,7 @@ Vue.component('displaylistdatasetscomponent',{
         });
         this.importDataModels()
       } catch (error) {
-        alert(error.message)
+        showError(error.message)
       }
     } 
     ,
@@ -160,9 +160,9 @@ Vue.component('displaylistdatasetscomponent',{
         addHeader(){
             if (this.listOfHeaders.length < this.getNumberOfHeaders(this.actualDataModel)){
             let field = document.getElementById("header").value;
-            (this.listOfHeaders.includes(field)==false)? this.listOfHeaders.push(field) : alert(`This header value ${field} is already selected`)
+            (this.listOfHeaders.includes(field)==false)? this.listOfHeaders.push(field) : showWarning(`This header value ${field} is already selected`)
             } else {
-              alert(`You reached the number of headers defined for this datamodel!!!!`)
+              showWarning(`You reached the number of headers defined for this datamodel!!!!`)
             }
         },
         removeHeader(myField){
@@ -178,7 +178,7 @@ Vue.component('displaylistdatasetscomponent',{
                   this.listOfDatamodelsNames.push(element)
                 });
               } catch (error) {
-                alert(error.message)
+                showError(error.message)
               }
             },  
       async createDataset(){
@@ -198,14 +198,14 @@ Vue.component('displaylistdatasetscomponent',{
                 "body":dataset
                 });
                 const my_data = await my_response.json();
-                alert("New Dataset Created!!!")
+                showSuccess("New Dataset Created!!!")
             
             } catch (error) {
-            alert(error.message)
+            showError(error.message)
             }
 
         } else {
-          alert(` ${this.getNumberOfHeaders(this.actualDataModel)- this.listOfHeaders.length} Headers should be added to the tablel!!!!`)
+          showWarning(` ${this.getNumberOfHeaders(this.actualDataModel)- this.listOfHeaders.length} Headers should be added to the tablel!!!!`)
         }
       },
       async updateDataModel(){
@@ -219,15 +219,105 @@ Vue.component('displaylistdatasetscomponent',{
               "method":"PUT",
               "body":dataModel
             });
-          alert(`DataModel ${this.dataModelToUpdate} updated!!!`)
+          showSuccess(`DataModel ${this.dataModelToUpdate} updated!!!`)
           location.reload()
           } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },
-      async deleteDataset(dataModelID){
+      showDeleteConfirmation(dataModelID) {
+        console.log('showDeleteConfirmation called for dataset:', dataModelID);
+        
+        // Create a simple, robust modal
+        const modal = document.createElement('div');
+        modal.id = 'deleteConfirmationModal';
+        modal.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          background: rgba(0, 0, 0, 0.5) !important;
+          z-index: 99999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+          background: var(--white, #ffffff) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          padding: 15px !important;
+          border-left: 4px solid var(--warning-color, #ffc107) !important;
+          max-width: 280px !important;
+          width: 90% !important;
+          text-align: center !important;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 10px !important;
+        `;
+        
+        modalContent.innerHTML = `
+          <div class="notification-icon" style="color: var(--warning-color, #ffc107); font-size: 24px;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="notification-content" style="text-align: center;">
+            <div class="notification-title" style="font-weight: 600; margin-bottom: 5px; color: var(--dark, #333); font-size: 14px;">Confirm Deletion</div>
+            <div class="notification-message" style="color: var(--text-color, #666); margin-bottom: 10px; font-size: 12px;">
+              Delete dataset with ID: <strong>${dataModelID}</strong>?
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 0px;">
+            <button id="confirmDeleteBtn" style="
+              background: var(--danger-color, #dc3545) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Delete</button>
+            <button id="cancelDeleteBtn" style="
+              background: var(--secondary-color, #6c757d) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Cancel</button>
+          </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+          this.confirmDeleteDataset(dataModelID);
+          document.body.removeChild(modal);
+        };
+        
+        document.getElementById('cancelDeleteBtn').onclick = () => {
+          document.body.removeChild(modal);
+        };
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      },
+      
+      async confirmDeleteDataset(dataModelID){
           try {
-              if (confirm(`Do you really want to delete the record with the _id : ${dataModelID} ? `) == true) {
               let dataset = new FormData()
               dataset.append('_id',dataModelID)
               const my_response = await fetch("/datasetVue/deleteDataset", {
@@ -235,11 +325,10 @@ Vue.component('displaylistdatasetscomponent',{
                 "body":dataset
               });
               const my_data = await my_response.json();              
-              alert(`Dataset with the _id : ${dataModelID} has been deleted!!!`)
+              showSuccess(`Dataset with the _id : ${dataModelID} has been deleted!!!`)
               location.reload()
-              }
             } catch (error) {
-            alert(error.message)
+            showError(error.message)
           }
       }, 
       async executeDataset(datasetID){
@@ -249,17 +338,17 @@ Vue.component('displaylistdatasetscomponent',{
             "method":"POST",
           });
           const my_data = await my_response.json();
-          alert(`Dataset ${datasetID} has been executed`)
+          showSuccess(`Dataset ${datasetID} has been executed`)
           location.reload()
         } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       }, 
       async extract(field,type){
         try {
           if (type==2) // JSON extract
           {
-            alert("Your data has been extracted with JSON format!!!")
+            showSuccess("Your data has been extracted with JSON format!!!")
             let element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + JSON.stringify(field));
             element.setAttribute('download', `extract_${field._id.$oid}.json`);
@@ -313,7 +402,7 @@ Vue.component('displaylistdatasetscomponent',{
               document.body.removeChild(element);
           }
         } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },    
       exportToExcel() {

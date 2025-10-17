@@ -29,7 +29,7 @@ Vue.component('displaylistdatamodelscomponent',{
                 <td> {{field.name}} </td>
                 <td> {{field.listoffields}} </td>
                 <td> {{field.isactive}} </td>
-                <td><span class="badge rounded-pill bg-success mr-2"  @click="reloadTable(field.listoffields);showList=false;dataModelToUpdate=field._id.$oid;name=field.name;isActive=field.isactive;showUpdateDataModel=true;">Update</span><span class="badge rounded-pill bg-danger" @click="deleteDataModel(field._id.$oid)">Delete</span></td>
+                <td><span class="badge rounded-pill bg-success mr-2"  @click="reloadTable(field.listoffields);showList=false;dataModelToUpdate=field._id.$oid;name=field.name;isActive=field.isactive;showUpdateDataModel=true;">Update</span><span class="badge rounded-pill bg-danger" @click="showDeleteConfirmation(field._id.$oid)">Delete</span></td>
               </tr>
             </tbody>
             </table>  -->
@@ -42,7 +42,7 @@ Vue.component('displaylistdatamodelscomponent',{
                     <p class="card-text"><strong> Name : </strong> {{field.name}}</p>
                     <p class="card-text"><strong> List of Fields : </strong> {{field.listoffields}}</p>
                     <p class="card-text"><strong> Is Active ? : </strong> {{field.isactive}}</p>
-                    <strong>  Actions : </strong><span class="badge rounded-pill bg-success mr-2"  @click="reloadTable(field.listoffields);showList=false;dataModelToUpdate=field._id.$oid;name=field.name;isActive=field.isactive;showUpdateDataModel=true;">Update</span><span class="badge rounded-pill bg-danger" @click="deleteDataModel(field._id.$oid)">Delete</span>                
+                    <strong>  Actions : </strong><span class="badge rounded-pill bg-success mr-2"  @click="reloadTable(field.listoffields);showList=false;dataModelToUpdate=field._id.$oid;name=field.name;isActive=field.isactive;showUpdateDataModel=true;">Update</span><span class="badge rounded-pill bg-danger" @click="showDeleteConfirmation(field._id.$oid)">Delete</span>                
                   </div>
                 </div>
               </div>            
@@ -184,7 +184,7 @@ Vue.component('displaylistdatamodelscomponent',{
         });
         this.importFields()
       } catch (error) {
-        alert(error.message)
+        showError(error.message)
       }
     } 
     ,
@@ -219,7 +219,7 @@ Vue.component('displaylistdatamodelscomponent',{
                   }
               })
             } else {
-              alert(`This field:${field} is already selected`)
+              showWarning(`This field:${field} is already selected`)
             }
         },
         removeField(myField){
@@ -247,7 +247,7 @@ Vue.component('displaylistdatamodelscomponent',{
                   this.listOfFieldsNames.push(element)
                 });
               } catch (error) {
-                alert(error.message)
+                showError(error.message)
               }
             },  
       async createDataModel(){
@@ -262,14 +262,14 @@ Vue.component('displaylistdatamodelscomponent',{
                 "body":dataModel
                 });
                 const my_data = await my_response.json();
-                alert("New DataModel Created!!!")
+                showSuccess("New DataModel Created!!!")
             
             } catch (error) {
-            alert(error.message)
+            showError(error.message)
             }
         }
         else {
-            alert("Please add some Fields!!!")
+            showWarning("Please add some Fields!!!")
         }
       },
       async updateDataModel(){
@@ -283,15 +283,105 @@ Vue.component('displaylistdatamodelscomponent',{
               "method":"PUT",
               "body":dataModel
             });
-          alert(`DataModel ${this.dataModelToUpdate} updated!!!`)
+          showSuccess(`DataModel ${this.dataModelToUpdate} updated!!!`)
           location.reload()
           } catch (error) {
-          alert(error.message)
+          showError(error.message)
         }
       },
-      async deleteDataModel(dataModelID){
+      showDeleteConfirmation(dataModelID) {
+        console.log('showDeleteConfirmation called for datamodel:', dataModelID);
+        
+        // Create a simple, robust modal
+        const modal = document.createElement('div');
+        modal.id = 'deleteConfirmationModal';
+        modal.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          background: rgba(0, 0, 0, 0.5) !important;
+          z-index: 99999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+          background: var(--white, #ffffff) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          padding: 15px !important;
+          border-left: 4px solid var(--warning-color, #ffc107) !important;
+          max-width: 280px !important;
+          width: 90% !important;
+          text-align: center !important;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 10px !important;
+        `;
+        
+        modalContent.innerHTML = `
+          <div class="notification-icon" style="color: var(--warning-color, #ffc107); font-size: 24px;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="notification-content" style="text-align: center;">
+            <div class="notification-title" style="font-weight: 600; margin-bottom: 5px; color: var(--dark, #333); font-size: 14px;">Confirm Deletion</div>
+            <div class="notification-message" style="color: var(--text-color, #666); margin-bottom: 10px; font-size: 12px;">
+              Delete datamodel with ID: <strong>${dataModelID}</strong>?
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 0px;">
+            <button id="confirmDeleteBtn" style="
+              background: var(--danger-color, #dc3545) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Delete</button>
+            <button id="cancelDeleteBtn" style="
+              background: var(--secondary-color, #6c757d) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Cancel</button>
+          </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+          this.confirmDeleteDataModel(dataModelID);
+          document.body.removeChild(modal);
+        };
+        
+        document.getElementById('cancelDeleteBtn').onclick = () => {
+          document.body.removeChild(modal);
+        };
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      },
+      
+      async confirmDeleteDataModel(dataModelID){
           try {
-              if (confirm(`Do you really want to delete the record with the _id : ${dataModelID} ? `) == true) {
               let dataModel = new FormData()
               dataModel.append('_id',dataModelID)
               const my_response = await fetch("/dataModelsVue/deleteDataModel", {
@@ -299,11 +389,10 @@ Vue.component('displaylistdatamodelscomponent',{
                 "body":dataModel
               });
               const my_data = await my_response.json();              
-              alert(`DataModel with the _id : ${dataModelID} has been deleted!!!`)
+              showSuccess(`DataModel with the _id : ${dataModelID} has been deleted!!!`)
               location.reload()
-              }
             } catch (error) {
-            alert(error.message)
+            showError(error.message)
           }
       },      
       exportToExcel() {

@@ -79,19 +79,20 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             </div>
         </div>
         <div v-if="displayRecordFromQuery" class="mt-4">
-          <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped" summary="The table has five columns and should be read per row. The first column indicate the document 
+          <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped liquid-table" summary="The table has five columns and should be read per row. The first column indicate the document 
               symbol of the meeting record, which is linked to the actual document in PDF format. 
               The second column shows the date of the meeting, the third column is the symbol of the press release issued on the meeting. 
               The fourth column provides information on the subject of the meeting. And finally the fifth column gives details of the action 
               taken with links provided to the actual document in PDF format if a presidential statement has been issued or a resolution adopted.">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
-                          <th class="tbltitle" colspan="5" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
+                          <th class="tbltitle" colspan="6" v-model="actualYear">Meetings conducted by the Security Council in {{actualYear}} <br />
                           (in reverse chronological order)</th>
                       </tr>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Meeting<br />Record</th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Date</th>
+                          <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Press Release</th>
                           <th width="30%" style="border: 1px solid black;border-collapse: collapse;">Topic</th>
                           <th width="15%" style="border: 1px solid black;border-collapse: collapse;">Security Council / Vote </th>
                           <th width="10%" style="border: 1px solid black;border-collapse: collapse;">Actions</th>
@@ -100,26 +101,30 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                           <td colspan="6"><strong>Document links</strong> will work once the document has been published in the Official Document System.</td>
                       </tr>
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
-                          
+                         
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.meeting_record_link"  target="_blank">{{record.meeting_record_en}}</a>
+                              <a :href="record.meeting_record_link || '#'"  target="_blank">{{record.meeting_record_en || ''}}</a>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                            <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
+                            <span v-if="languageSelected==='EN'"> {{record.date && record.date[0] ? record.date[0].value : ''}}</span>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                          <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
+                            <span v-if="languageSelected==='EN'"><a :href="record.press_release_link_en || '#'"  target="_blank">{{record.press_release_text_prefix_en || ''}} {{record.press_release_text_en || ''}} {{record.press_release_text_sufix_en || ''}}</a></span>
+                          </td>
+
+                          <td style="border: 1px solid black;border-collapse: collapse;">
+                          <span v-if="languageSelected==='EN'"> {{record.topic && record.topic[0] ? record.topic[0].value : ''}}</span>
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;"> 
-                            <span v-for="my_record in record.outcomes">
-                              <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][0]['outcome_text_link']" target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
-                              <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
+                            <span v-for="my_record in (record.outcomes || [])">
+                              <span> {{my_record["outcome"] && my_record["outcome"][0] ? my_record["outcome"][0]["outcome_text_prefix"] : ''}} </span>
+                              <span> <a :href="my_record['outcome'] && my_record['outcome'][0] ? my_record['outcome'][0]['outcome_text_link'] : '#'" target="_blank"> {{my_record['outcome'] && my_record['outcome'][0] ? my_record['outcome'][0]['outcome_text'] : ''}} </a> </span>
+                              <span> {{my_record["outcome"] && my_record["outcome"][0] ? my_record["outcome"][0]["outcome_text_sufix"] : ''}} </span>
                               <br>
-                              <span> {{my_record["outcome_vote"]}} </span>
+                              <span> {{my_record["outcome_vote"] || ''}} </span>
                               <span v-else>  </span>
                               <br>
                             </span>
@@ -127,22 +132,23 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-pen"></i></span>  
+                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-trash-alt"></i></span>               
                           </td>
                       </tr>
                   </tbody>
           </table>
 
-      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
+      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='ES'" id="myTable" class="tablefont table-condensed liquid-table" resumen="La tabla tiene cinco columnas y debe leerse por fila. La primera columna indica el documento símbolo del acta de la reunión, que está vinculado al documento real en formato PDF.La segunda columna muestra la fecha de la reunión, la tercera columna es el símbolo del comunicado de prensa emitido sobre la reunión.La cuarta columna proporciona información sobre el tema de la reunión. Y finalmente la quinta columna da detalles de la acción.tomado con enlaces proporcionados al documento real en formato PDF si se ha emitido una declaración presidencial o se ha adoptado una resolución.">
           <tbody>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
-                        <th class="tbltitle" colspan="5" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
+                        <th class="tbltitle" colspan="6" v-model="actualYear"> Reuniones realizadas por el Consejo de Seguridad en {{actualYear}} <br />
                         (en orden cronológico inverso)</th>
                     </tr>
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Reunión<br /></th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Fecha</th>
+                        <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Comunicado de prensa</th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Tema</th>
                         <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Consejo de Seguridad / Votar</th>
                        
@@ -153,33 +159,42 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                     </tr>
                     <tr  v-for="record in listOfRecords"  style="border: 1px solid black;border-collapse: collapse;">
                         
-                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es"  target="_blank">{{record.meeting_record_es}}</a></td>
+                        <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_es || '#'"  target="_blank">{{record.meeting_record_es || ''}}</a></td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                          <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                          <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                          <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
-                          <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
-                          <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
-                          <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                          <span v-if="languageSelected==='EN'"> {{record.date && record.date[0] ? record.date[0].value : ''}}</span>
+                          <span v-if="languageSelected==='FR'"> {{record.date && record.date[1] ? record.date[1].value : ''}}</span>
+                          <span v-if="languageSelected==='ES'"> {{record.date && record.date[2] ? record.date[2].value : ''}}</span>
+                          <span v-if="languageSelected==='RU'"> {{record.date && record.date[3] ? record.date[3].value : ''}}</span>
+                          <span v-if="languageSelected==='AR'"> {{record.date && record.date[4] ? record.date[4].value : ''}}</span>
+                          <span v-if="languageSelected==='ZH'"> {{record.date && record.date[5] ? record.date[5].value : ''}}</span>
                         </td>
                         
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                        <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                        <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
-                        <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
-                        <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
-                        <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
-                        <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
+                          <span v-if="languageSelected==='EN'"><a :href="record.press_release_link_en || '#'"  target="_blank">{{record.press_release_text_prefix_en || ''}} {{record.press_release_text_en || ''}} {{record.press_release_text_sufix_en || ''}}</a></span>
+                          <span v-if="languageSelected==='FR'"><a :href="record.press_release_link_fr || '#'"  target="_blank">{{record.press_release_text_prefix_fr || ''}} {{record.press_release_text_fr || ''}} {{record.press_release_text_sufix_fr || ''}}</a></span>
+                          <span v-if="languageSelected==='ES'"><a :href="record.press_release_link_es || '#'"  target="_blank">{{record.press_release_text_prefix_es || ''}} {{record.press_release_text_es || ''}} {{record.press_release_text_sufix_es || ''}}</a></span>
+                          <span v-if="languageSelected==='RU'"><a :href="record.press_release_link_ru || '#'"  target="_blank">{{record.press_release_text_prefix_ru || ''}} {{record.press_release_text_ru || ''}} {{record.press_release_text_sufix_ru || ''}}</a></span>
+                          <span v-if="languageSelected==='AR'"><a :href="record.press_release_link_ar || '#'"  target="_blank">{{record.press_release_text_prefix_ar || ''}} {{record.press_release_text_ar || ''}} {{record.press_release_text_sufix_ar || ''}}</a></span>
+                          <span v-if="languageSelected==='ZH'"><a :href="record.press_release_link_zh || '#'"  target="_blank">{{record.press_release_text_prefix_zh || ''}} {{record.press_release_text_zh || ''}} {{record.press_release_text_sufix_zh || ''}}</a></span>
+                        </td>
+                        
+                        <td style="border: 1px solid black;border-collapse: collapse;">
+                        <span v-if="languageSelected==='EN'"> {{record.topic && record.topic[0] ? record.topic[0].value : ''}}</span>
+                        <span v-if="languageSelected==='FR'"> {{record.topic && record.topic[1] ? record.topic[1].value : ''}}</span>
+                        <span v-if="languageSelected==='ES'"> {{record.topic && record.topic[2] ? record.topic[2].value : ''}}</span>
+                        <span v-if="languageSelected==='RU'"> {{record.topic && record.topic[3] ? record.topic[3].value : ''}}</span>
+                        <span v-if="languageSelected==='AR'"> {{record.topic && record.topic[4] ? record.topic[4].value : ''}}</span>
+                        <span v-if="languageSelected==='ZH'"> {{record.topic && record.topic[5] ? record.topic[5].value : ''}}</span>
                         </td>
                         
                           <td style="border: 1px solid black;border-collapse: collapse;"> 
-                            <span v-for="my_record in record.outcomes">
-                              <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                              <span> <a :href="my_record['outcome'][2]['outcome_text_link']" target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
-                              <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
+                            <span v-for="my_record in (record.outcomes || [])">
+                              <span> {{my_record["outcome"] && my_record["outcome"][2] ? my_record["outcome"][2]["outcome_text_prefix"] : ''}} </span>
+                              <span> <a :href="my_record['outcome'] && my_record['outcome'][2] ? my_record['outcome'][2]['outcome_text_link'] : '#'" target="_blank"> {{my_record['outcome'] && my_record['outcome'][2] ? my_record['outcome'][2]['outcome_text'] : ''}} </a> </span>
+                              <span> {{my_record["outcome"] && my_record["outcome"][2] ? my_record["outcome"][2]["outcome_text_sufix"] : ''}} </span>
                               <br>
-                              <span> {{my_record["outcome_vote"]}} </span>
+                              <span> {{my_record["outcome_vote"] || ''}} </span>
                               <span v-else>  </span>
                               <br>
                             </span>
@@ -187,22 +202,23 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
                           
-                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-pen"></i></span>  
+                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-trash-alt"></i></span>               
                         </td>
                     </tr>
                 </tbody>
         </table>
 
-      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
+      <table style="width:858px;border: 1px solid black;border-collapse: collapse;" v-if="languageSelected==='FR'" id="myTable" class="tablefont table-condensed liquid-table" resume="Le tableau comporte cinq colonnes et doit être lu par ligne. La première colonne indique le document symbole du compte rendu de la réunion, qui est lié au document lui-même au format PDF.La deuxième colonne indique la date de la réunion, la troisième colonne est le symbole du communiqué de presse publié sur la réunion.La quatrième colonne fournit des informations sur le sujet de la réunion. Et enfin la cinquième colonne détaille l'action pris avec des liens fournis vers le document lui-même au format PDF si une déclaration présidentielle a été publiée ou une résolution adoptée.">
           <tbody>
               <tr style="border: 1px solid black;border-collapse: collapse;">
-                  <th class="tbltitle" colspan="5" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
+                  <th class="tbltitle" colspan="6" v-model="actualYear">Réunions conduites par le Conseil de sécurité en {{actualYear}} <br />
                   (Dans l'ordre chronologique inverse)</th>
               </tr>
               <tr style="border: 1px solid black;border-collapse: collapse;">
                   <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Réunion<br /></th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Date</th>
+                  <th style="border: 1px solid black;border-collapse: collapse;" width="10%">Communiqué de presse</th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="30%">Sujet</th>
                   <th style="border: 1px solid black;border-collapse: collapse;" width="15%">Conseil de sécurité / Vote </th>
     
@@ -213,33 +229,42 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </tr>
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
-                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr"  target="_blank">{{record.meeting_record_fr}}</a></td>
+                  <td style="border: 1px solid black;border-collapse: collapse;"><a :href="record.meeting_record_link_fr || '#'"  target="_blank">{{record.meeting_record_fr || ''}}</a></td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
-                    <span v-if="languageSelected==='EN'"> {{record.date[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.date[1].value}}</span>
-                    <span v-if="languageSelected==='ES'"> {{record.date[2].value}}</span>
-                    <span v-if="languageSelected==='RU'"> {{record.date[3].value}}</span>
-                    <span v-if="languageSelected==='AR'"> {{record.date[4].value}}</span>
-                    <span v-if="languageSelected==='ZH'"> {{record.date[5].value}}</span>
+                    <span v-if="languageSelected==='EN'"> {{record.date && record.date[0] ? record.date[0].value : ''}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.date && record.date[1] ? record.date[1].value : ''}}</span>
+                    <span v-if="languageSelected==='ES'"> {{record.date && record.date[2] ? record.date[2].value : ''}}</span>
+                    <span v-if="languageSelected==='RU'"> {{record.date && record.date[3] ? record.date[3].value : ''}}</span>
+                    <span v-if="languageSelected==='AR'"> {{record.date && record.date[4] ? record.date[4].value : ''}}</span>
+                    <span v-if="languageSelected==='ZH'"> {{record.date && record.date[5] ? record.date[5].value : ''}}</span>
                   </td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;">
-                    <span v-if="languageSelected==='EN'"> {{record.topic[0].value}}</span>
-                    <span v-if="languageSelected==='FR'"> {{record.topic[1].value}}</span>
-                    <span v-if="languageSelected==='ES'"> {{record.topic[2].value}}</span>
-                    <span v-if="languageSelected==='RU'"> {{record.topic[3].value}}</span>
-                    <span v-if="languageSelected==='AR'"> {{record.topic[4].value}}</span>
-                    <span v-if="languageSelected==='ZH'"> {{record.topic[5].value}}</span>
+                    <span v-if="languageSelected==='EN'"><a :href="record.press_release_link_en || '#'"  target="_blank">{{record.press_release_text_prefix_en || ''}} {{record.press_release_text_en || ''}} {{record.press_release_text_sufix_en || ''}}</a></span>
+                    <span v-if="languageSelected==='FR'"><a :href="record.press_release_link_fr || '#'"  target="_blank">{{record.press_release_text_prefix_fr || ''}} {{record.press_release_text_fr || ''}} {{record.press_release_text_sufix_fr || ''}}</a></span>
+                    <span v-if="languageSelected==='ES'"><a :href="record.press_release_link_es || '#'"  target="_blank">{{record.press_release_text_prefix_es || ''}} {{record.press_release_text_es || ''}} {{record.press_release_text_sufix_es || ''}}</a></span>
+                    <span v-if="languageSelected==='RU'"><a :href="record.press_release_link_ru || '#'"  target="_blank">{{record.press_release_text_prefix_ru || ''}} {{record.press_release_text_ru || ''}} {{record.press_release_text_sufix_ru || ''}}</a></span>
+                    <span v-if="languageSelected==='AR'"><a :href="record.press_release_link_ar || '#'"  target="_blank">{{record.press_release_text_prefix_ar || ''}} {{record.press_release_text_ar || ''}} {{record.press_release_text_sufix_ar || ''}}</a></span>
+                    <span v-if="languageSelected==='ZH'"><a :href="record.press_release_link_zh || '#'"  target="_blank">{{record.press_release_text_prefix_zh || ''}} {{record.press_release_text_zh || ''}} {{record.press_release_text_sufix_zh || ''}}</a></span>
+                  </td>
+                  
+                  <td style="border: 1px solid black;border-collapse: collapse;">
+                    <span v-if="languageSelected==='EN'"> {{record.topic && record.topic[0] ? record.topic[0].value : ''}}</span>
+                    <span v-if="languageSelected==='FR'"> {{record.topic && record.topic[1] ? record.topic[1].value : ''}}</span>
+                    <span v-if="languageSelected==='ES'"> {{record.topic && record.topic[2] ? record.topic[2].value : ''}}</span>
+                    <span v-if="languageSelected==='RU'"> {{record.topic && record.topic[3] ? record.topic[3].value : ''}}</span>
+                    <span v-if="languageSelected==='AR'"> {{record.topic && record.topic[4] ? record.topic[4].value : ''}}</span>
+                    <span v-if="languageSelected==='ZH'"> {{record.topic && record.topic[5] ? record.topic[5].value : ''}}</span>
                   </td>
                   
                   <td style="border: 1px solid black;border-collapse: collapse;"> 
-                    <span v-for="my_record in record.outcomes">
-                      <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                      <span> <a :href="my_record['outcome'][1]['outcome_text_link']" target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
-                      <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
+                    <span v-for="my_record in (record.outcomes || [])">
+                      <span> {{my_record["outcome"] && my_record["outcome"][1] ? my_record["outcome"][1]["outcome_text_prefix"] : ''}} </span>
+                      <span> <a :href="my_record['outcome'] && my_record['outcome'][1] ? my_record['outcome'][1]['outcome_text_link'] : '#'" target="_blank"> {{my_record['outcome'] && my_record['outcome'][1] ? my_record['outcome'][1]['outcome_text'] : ''}} </a> </span>
+                      <span> {{my_record["outcome"] && my_record["outcome"][1] ? my_record["outcome"][1]["outcome_text_sufix"] : ''}} </span>
                       <br>
-                      <span> {{my_record["outcome_vote"]}} </span>
+                      <span> {{my_record["outcome_vote"] || ''}} </span>
                       <span v-else>  </span>
                       <br>
                     </span>
@@ -247,8 +272,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
                       
-                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-pen"></i></span>  
-                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record)"><i class="fas fa-trash-alt"></i></span>               
+                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-pen"></i></span>  
+                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.meeting_record || '')"><i class="fas fa-trash-alt"></i></span>               
                   </td>
               </tr>
           </tbody>
@@ -274,7 +299,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           <input type="submit" name="sendftp" class="btn btn-primary">
         </div>
 
-        <div v-if="updateRecordFromQuery">
+        <div v-if="updateRecordFromQuery" style="overflow: visible;">
                 <div class="mb-3">
                   <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
                   <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This update will affect the record in French </h3>
@@ -282,9 +307,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                   <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This update will affect the record in Russian</h3>
                   <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This update will affect the record in Arabic </h3>
                   <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This update will affect the record in Chinese</h3>
-                </div> 
-                <hr> 
-                <form @submit.prevent="">
+                </div>
+                <hr>
+                <form @submit.prevent="" class="liquid-form">
                     <div v-if="languageSelected==='EN'" class="mb-3">
                         <label for="inputMeeting" class="form-label">Meeting</label>
                         <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden">
@@ -321,6 +346,67 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <label for="inputName" class="form-label">Date</label>
                         <input type="text" class="form-control" id="date" name="date" v-model="date">
                     </div>   
+
+                    <div v-if="languageSelected==='EN'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Link</label>
+                        <input type="text" class="form-control" id="press_release_link_en" name="press_release_link_en" v-model="press_release_link_en">
+                    </div>  
+
+                    <div v-if="languageSelected==='EN'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Text</label>
+                        <input type="text" class="form-control" id="press_release_text_en" name="press_release_text_en" v-model="press_release_text_en">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='EN'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Prefix</label>
+                        <input type="text" class="form-control" id="press_release_text_prefix_en" name="press_release_text_prefix_en" v-model="press_release_text_prefix_en">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='EN'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Sufix</label>
+                        <input type="text" class="form-control" id="press_release_text_sufix_en" name="press_release_text_sufix_en" v-model="press_release_text_sufix_en">
+                    </div> 
+
+                    <div v-if="languageSelected==='ES'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Link</label>
+                        <input type="text" class="form-control" id="press_release_link_es" name="press_release_link_es" v-model="press_release_link_es">
+                    </div>  
+
+                    <div v-if="languageSelected==='ES'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Text</label>
+                        <input type="text" class="form-control" id="press_release_text_es" name="press_release_text_es" v-model="press_release_text_es">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='ES'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Prefix</label>
+                        <input type="text" class="form-control" id="press_release_text_prefix_es" name="press_release_text_prefix_es" v-model="press_release_text_prefix_es">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='ES'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Sufix</label>
+                        <input type="text" class="form-control" id="press_release_text_sufix_es" name="press_release_text_sufix_es" v-model="press_release_text_sufix_es">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='FR'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Link</label>
+                        <input type="text" class="form-control" id="press_release_link_fr" name="press_release_link_fr" v-model="press_release_link_fr">
+                    </div>  
+
+                    <div v-if="languageSelected==='FR'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Text</label>
+                        <input type="text" class="form-control" id="press_release_text_fr" name="press_release_text_fr" v-model="press_release_text_fr">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='FR'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Prefix</label>
+                        <input type="text" class="form-control" id="press_release_text_prefix_fr" name="press_release_text_prefix_fr" v-model="press_release_text_prefix_fr">
+                    </div> 
+                    
+                    <div v-if="languageSelected==='FR'"class="mb-3">
+                        <label for="inputName" class="form-label">Press Release Sufix</label>
+                        <input type="text" class="form-control" id="press_release_text_sufix_fr" name="press_release_text_sufix_fr" v-model="press_release_text_sufix_fr">
+                    </div> 
+
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Topic</label>
                         <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
@@ -336,31 +422,31 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <div class="cell card bg-light">
                         
                           <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <label for="outcomevote" class="form-label outcome-label">Vote</label>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                            <label for="lang" class="form-label outcome-label">Language</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['lang']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>
 
@@ -370,31 +456,31 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <div class="cell card bg-light">
                         
                           <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <label for="outcomevote" class="form-label outcome-label">Vote</label>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['lang']"/><br>
+                            <label for="lang" class="form-label outcome-label">Language</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['lang']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>
 
@@ -404,31 +490,31 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <div class="cell card bg-light">
                         
                           <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <label for="outcomevote" class="form-label outcome-label">Vote</label>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['lang']"/><br>
+                            <label for="lang" class="form-label outcome-label">Language</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['lang']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>                      
 
@@ -442,8 +528,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                       </label>
                     </div>
                     <hr>
-                    <button type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
-                    <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+                    <button type="submit" class="btn btn-primary liquid-btn" @click="updateRecord()"> Update your record </button>
+                    <button class="btn btn-primary liquid-btn" @click="location.reload()">Back to previous windows</button>
                 </form>
             </div>
         
@@ -520,31 +606,31 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         <div class="cell card bg-light">
                         
                           <div class="mb-1">
-                              <label for="outcomevote" class="form-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <label for="outcomevote" class="form-label outcome-label">Vote</label>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
-                            <label for="lang" class="form-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                            <label for="lang" class="form-label outcome-label">Language</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['lang']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
-                            <label for="outcometext" class="form-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                            <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>                                          
               </div> 
@@ -562,7 +648,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </form>
         </div>
 
-        <div v-if="deleteRecordFromQuery">
+        <div v-if="deleteRecordFromQuery" style="overflow: visible;">
             <div class="mb-3">
               <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This deletion will affect the record in English </h3>
               <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This deletion will affect the record in French </h3>
@@ -572,7 +658,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This deletion will affect the record in Chinese</h3>
             </div>
             <hr>
-            <form @submit.prevent="">
+            <form @submit.prevent="" class="liquid-form">
             <div v-if="languageSelected==='EN'" class="mb-3">
                 <label for="inputMeeting" class="form-label">Meeting</label>
                 <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden" disabled>
@@ -588,6 +674,66 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
             <div class="mb-3">
                 <label for="inputName" class="form-label">Date</label>
                 <input type="text" class="form-control" id="date" name="date" v-model="date" disabled>
+            </div>  
+
+            <div v-if="languageSelected==='EN'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Link</label>
+                <input type="text" class="form-control" id="press_release_link_en" name="press_release_link_en" v-model="press_release_link_en" disabled>
+            </div>  
+
+            <div v-if="languageSelected==='EN'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Text</label>
+                <input type="text" class="form-control" id="press_release_text_en" name="press_release_text_en" v-model="press_release_text_en" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='EN'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Prefix</label>
+                <input type="text" class="form-control" id="press_release_text_prefix_en" name="press_release_text_prefix_en" v-model="press_release_text_prefix_en" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='EN'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Sufix</label>
+                <input type="text" class="form-control" id="press_release_text_sufix_en" name="press_release_text_sufix_en" v-model="press_release_text_sufix_en" disabled>
+            </div> 
+
+            <div v-if="languageSelected==='ES'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Link</label>
+                <input type="text" class="form-control" id="press_release_link_es" name="press_release_link_es" v-model="press_release_link_es" disabled>
+            </div>  
+
+            <div v-if="languageSelected==='ES'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Text</label>
+                <input type="text" class="form-control" id="press_release_text_es" name="press_release_text_es" v-model="press_release_text_es" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='ES'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Prefix</label>
+                <input type="text" class="form-control" id="press_release_text_prefix_es" name="press_release_text_prefix_es" v-model="press_release_text_prefix_es" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='ES'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Sufix</label>
+                <input type="text" class="form-control" id="press_release_text_sufix_es" name="press_release_text_sufix_es" v-model="press_release_text_sufix_es" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='FR'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Link</label>
+                <input type="text" class="form-control" id="press_release_link_fr" name="press_release_link_fr" v-model="press_release_link_fr" disabled>
+            </div>  
+
+            <div v-if="languageSelected==='FR'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Text</label>
+                <input type="text" class="form-control" id="press_release_text_fr" name="press_release_text_fr" v-model="press_release_text_fr" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='FR'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Prefix</label>
+                <input type="text" class="form-control" id="press_release_text_prefix_fr" name="press_release_text_prefix_fr" v-model="press_release_text_prefix_fr" disabled>
+            </div> 
+            
+            <div v-if="languageSelected==='FR'"class="mb-3">
+                <label for="inputName" class="form-label">Press Release Sufix</label>
+                <input type="text" class="form-control" id="press_release_text_sufix_fr" name="press_release_text_sufix_fr" v-model="press_release_text_sufix_fr" disabled>
             </div>     
             <div class="mb-3">
                 <label for="inputName" class="form-label">Topic</label>
@@ -604,8 +750,8 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </label>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary" @click="deleteRecord()"> Delete your record </button>
-            <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
+            <button type="submit" class="btn btn-primary liquid-btn" @click="showDeleteConfirmation()"> Delete your record </button>
+            <button class="btn btn-primary liquid-btn" @click="location.reload()">Back to previous windows</button>
             </form>
         </div>
 
@@ -767,6 +913,27 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         my_id:"",
         listing_id:"",
         record_link:"",
+        
+        // Press Release text
+        press_release_text_en:"",
+        press_release_text_fr:"",
+        press_release_text_es:"",
+
+        // Press Release link
+        press_release_link_en:"",
+        press_release_link_fr:"",
+        press_release_link_es:"",
+
+        // Press Release prefix
+        press_release_text_prefix_en:"",
+        press_release_text_prefix_fr:"",
+        press_release_text_prefix_es:"",
+
+        // Press Release sufix
+        press_release_text_sufix_en:"",
+        press_release_text_sufix_fr:"",
+        press_release_text_sufix_es:"",
+
       }
     },
     
@@ -785,8 +952,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
        this.AddOutcomeEmpty()
       },
       removeRow(index) {
+        // Check if there's only 1 outcome left
+        if (this.outcomes.length <= 1) {
+          showWarning("Cannot remove the last outcome. At least one outcome must remain.");
+          return;
+        }
         // Removes a row at the specified index
         this.outcomes.splice(index, 1);
+        showSuccess("Outcome removed successfully!");
       },
       openFTP(){
         showWarning("define the ftp")
@@ -823,7 +996,101 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         ]
         }
         this.outcomes.push(myRecord)
-        console.log(this.outcomes)
+       
+      },
+      // Ensure record has expected array structures to avoid undefined index access in templates
+      normalizeRecord(record) {
+        record = record || {}
+
+        // Ensure arrays for date/topic exist and have 6 language slots (EN,FR,ES,RU,AR,ZH)
+        const langs = ['EN','FR','ES','RU','AR','ZH']
+        function ensureLangArray(arr) {
+          const out = []
+          arr = Array.isArray(arr) ? arr : []
+          for (let i = 0; i < langs.length; i++) {
+            const existing = arr[i] || {}
+            out.push({ lang: langs[i], value: (existing && existing.value) ? existing.value : '' })
+          }
+          return out
+        }
+
+        record.date = ensureLangArray(record.date)
+        record.topic = ensureLangArray(record.topic)
+
+        // Ensure meeting_record link fields
+        record.meeting_record_link = record.meeting_record_link || ''
+        record.meeting_record_link_en = record.meeting_record_link_en || record.meeting_record_link || ''
+        record.meeting_record_link_fr = record.meeting_record_link_fr || ''
+        record.meeting_record_link_es = record.meeting_record_link_es || ''
+
+        // Normalize press_release into language-specific press release fields if present elsewhere
+        // Ensure press release text/prefix/sufix and link exist for expected languages
+        const prLangs = ['en','fr','es','ru','ar','zh']
+        prLangs.forEach(l => {
+          record['press_release_text_prefix_' + l] = record['press_release_text_prefix_' + l] || ''
+          record['press_release_text_' + l] = record['press_release_text_' + l] || ''
+          record['press_release_text_sufix_' + l] = record['press_release_text_sufix_' + l] || ''
+          record['press_release_link_' + l] = record['press_release_link_' + l] || ''
+        })
+
+        // Outcomes: ensure at least one outcome exists and each outcome has 6 language slots
+        if (!Array.isArray(record.outcomes) || record.outcomes.length === 0) {
+          record.outcomes = [{ outcome_vote: '', outcome: langs.map(l => ({ lang: l, outcome_text: '', outcome_text_link: '', outcome_text_prefix: '', outcome_text_sufix: '' })) }]
+        } else {
+          record.outcomes = record.outcomes.map(oc => {
+            const out = oc || {}
+            out.outcome_vote = out.outcome_vote || ''
+            out.outcome = Array.isArray(out.outcome) ? out.outcome : []
+            const newOutcome = []
+            for (let i = 0; i < langs.length; i++) {
+              const existing = out.outcome[i] || {}
+              newOutcome.push({
+                lang: existing.lang || langs[i],
+                outcome_text: existing.outcome_text || '',
+                outcome_text_link: existing.outcome_text_link || '',
+                outcome_text_prefix: existing.outcome_text_prefix || '',
+                outcome_text_sufix: existing.outcome_text_sufix || ''
+              })
+            }
+            out.outcome = newOutcome
+            return out
+          })
+        }
+
+        // Ensure other commonly referenced fields exist
+        record.listing_id = record.listing_id || ''
+        record.meeting_record_en = record.meeting_record_en || record.meeting_record || ''
+        record.meeting_record_fr = record.meeting_record_fr || ''
+        record.meeting_record_es = record.meeting_record_es || ''
+
+        return record
+      },
+
+      getArrayValue(record, fieldName, lang) {
+        try {
+          const langIndex = { EN: 0, FR: 1, ES: 2, RU: 3, AR: 4, ZH: 5 }[lang] || 0
+          if (!record || !record[fieldName]) return ''
+          const entry = record[fieldName][langIndex]
+          return (entry && entry.value) ? entry.value : ''
+        } catch (e) {
+          return ''
+        }
+      },
+      getOutcomeField(my_record, langIndex, field) {
+        try {
+          if (!my_record || !my_record.outcome) return ''
+          const entry = my_record.outcome[langIndex]
+          return (entry && entry[field]) ? entry[field] : ''
+        } catch (e) {
+          return ''
+        }
+      },
+      normalizePressRelease(value) {
+        if (value === undefined || value === null) return '(no press release)'
+        if (typeof value === 'string') return value
+        if (Array.isArray(value) && value.length > 0) return (value[0] && value[0].value) ? value[0].value : '(no press release)'
+        if (typeof value === 'object' && value.value) return value.value
+        return '(no press release)'
       },
       showMyModal() {
         
@@ -900,7 +1167,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
          // open the url generated
          window.open(url, '_blank').focus();
        },
-      async displayData(listofmeetings,listoflanguages){
+  async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
       const myMeetingValue = myMeeting.value;       
@@ -912,13 +1179,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       this.languageSelected=myLanguageValue
 
       // loading all the data
+      this.listOfRecords = []
       const my_response = await fetch("./getsclistings/" + myMeetingValue);
       const my_data = await my_response.json();
       
       my_data.forEach(element => {
         // We find the meeting
         if (element["listing_id"]===myMeetingValue){
-            this.listOfRecords.push(element)
+            this.listOfRecords.push(this.normalizeRecord(element))
           }
         })
       this.initPage=false
@@ -1008,33 +1276,83 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               
               // Management of the outcome text depending of the language
               if (this.languageSelected==='EN') {
-                this.security_council_document=element.outcomes[0].outcome[0].outcome_text
+                if (element.outcomes[0].outcome[0].outcome_text) {
+                  this.security_council_document=element.outcomes[0].outcome[0].outcome_text
+                }
+                else {
+                  this.security_council_document=''
+                }
               }
 
             if (this.languageSelected==='FR') {
-              this.security_council_document=element.outcomes[0].outcome[1].outcome_text
+              if (element.outcomes[0].outcome[1].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[1].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
 
             if (this.languageSelected==='ES') {
-              this.security_council_document=element.outcomes[0].outcome[2].outcome_text
+              if (element.outcomes[0].outcome[2].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[2].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
             
             if (this.languageSelected==='RU') {
-              this.security_council_document=element.outcomes[0].outcome[3].outcome_text
+              if (element.outcomes[0].outcome[3].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[3].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
 
             if (this.languageSelected==='AR') {
-              this.security_council_document=element.outcomes[0].outcome[4].outcome_text
+              if (element.outcomes[0].outcome[4].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[4].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }              
 
             if (this.languageSelected==='ZH') {
-              this.security_council_document=element.outcomes[0].outcome[5].outcome_text
+              if (element.outcomes[0].outcome[5].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[5].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }  
 
             this.refresh=element.refresh
             
             this.outcomes=element.outcomes
- 
+
+            // Press Release text
+            this.press_release_text_en=element.press_release_text_en || ""
+            this.press_release_text_fr=element.press_release_text_fr || ""
+            this.press_release_text_es=element.press_release_text_es || ""
+
+            // Press Release link
+            this.press_release_link_en=element.press_release_link_en || ""
+            this.press_release_link_fr=element.press_release_link_fr || ""
+            this.press_release_link_es=element.press_release_link_es || ""
+
+            // Press Release prefix
+            this.press_release_text_prefix_en=element.press_release_text_prefix_en || ""
+            this.press_release_text_prefix_fr=element.press_release_text_prefix_fr || ""
+            this.press_release_text_prefix_es=element.press_release_text_prefix_es || ""
+
+            // Press Release sufix
+            this.press_release_text_sufix_en=element.press_release_text_sufix_en || ""
+            this.press_release_text_sufix_fr=element.press_release_text_sufix_fr || ""
+            this.press_release_text_sufix_es=element.press_release_text_sufix_es || ""
+
           }
         });
       },
@@ -1059,6 +1377,27 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('refresh',this.refresh)
         dataset.append('listing_id',this.listing_id)
         dataset.append('languageSelected',"EN")
+        // adding press release
+        // Press Release text
+        dataset.append('press_release_text_en',this.press_release_text_en)
+        dataset.append('press_release_text_fr',this.press_release_text_fr)
+        dataset.append('press_release_text_es',this.press_release_text_es)
+
+        // Press Release link
+        dataset.append('press_release_link_en',this.press_release_link_en)
+        dataset.append('press_release_link_fr',this.press_release_link_fr)
+        dataset.append('press_release_link_es',this.press_release_link_es)
+
+        // Press Release prefix
+        dataset.append('press_release_text_prefix_en',this.press_release_text_prefix_en)
+        dataset.append('press_release_text_prefix_fr',this.press_release_text_prefix_fr)
+        dataset.append('press_release_text_prefix_es',this.press_release_text_prefix_es)
+
+        // Press Release sufix
+        dataset.append('press_release_text_sufix_en',this.press_release_text_sufix_en)
+        dataset.append('press_release_text_sufix_fr',this.press_release_text_sufix_fr)
+        dataset.append('press_release_text_sufix_es',this.press_release_text_sufix_es)
+
         const my_response = await fetch("./create_sc_listing",{
           "method":"POST",
           "body":dataset
@@ -1088,6 +1427,26 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         dataset.append('outcomes',my_outcomes)
         dataset.append('refresh',this.refresh)
         dataset.append('languageSelected',this.languageSelected)
+        // adding press release
+        // Press Release text
+        dataset.append('press_release_text_en',this.press_release_text_en)
+        dataset.append('press_release_text_fr',this.press_release_text_fr)
+        dataset.append('press_release_text_es',this.press_release_text_es)
+
+        // Press Release link
+        dataset.append('press_release_link_en',this.press_release_link_en)
+        dataset.append('press_release_link_fr',this.press_release_link_fr)
+        dataset.append('press_release_link_es',this.press_release_link_es)
+
+        // Press Release prefix
+        dataset.append('press_release_text_prefix_en',this.press_release_text_prefix_en)
+        dataset.append('press_release_text_prefix_fr',this.press_release_text_prefix_fr)
+        dataset.append('press_release_text_prefix_es',this.press_release_text_prefix_es)
+
+        // Press Release sufix
+        dataset.append('press_release_text_sufix_en',this.press_release_text_sufix_en)
+        dataset.append('press_release_text_sufix_fr',this.press_release_text_sufix_fr)
+        dataset.append('press_release_text_sufix_es',this.press_release_text_sufix_es)
         const my_response = await fetch("./update_sc_listing",{
           "method":"PUT",
           "body":dataset
@@ -1104,22 +1463,111 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
-      async deleteRecord(){
-        if (confirm(`Do you really want to delete this record ? `) == true) {
-          let dataset = new FormData()
-          dataset.append('_id',this.my_id)
-          const my_response = await fetch("./delete_sc_listing",{
-            "method":"POST",
-            "body":dataset
-            });
-          const my_data = await my_response.json();
-          this.deleteRecordFromQuery=false
-          showSuccess("Record deleted!!!")
-          setTimeout(() => {
-            location.reload();
-          }, 2000);
-        }
-        },
+      showDeleteConfirmation() {
+        console.log('showDeleteConfirmation called for Security Council record');
+        
+        // Create a simple, robust modal
+        const modal = document.createElement('div');
+        modal.id = 'deleteConfirmationModal';
+        modal.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          background: rgba(0, 0, 0, 0.5) !important;
+          z-index: 99999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+          background: var(--white, #ffffff) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          padding: 15px !important;
+          border-left: 4px solid var(--warning-color, #ffc107) !important;
+          max-width: 280px !important;
+          width: 90% !important;
+          text-align: center !important;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 10px !important;
+        `;
+        
+        modalContent.innerHTML = `
+          <div class="notification-icon" style="color: var(--warning-color, #ffc107); font-size: 24px;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="notification-content" style="text-align: center;">
+            <div class="notification-title" style="font-weight: 600; margin-bottom: 5px; color: var(--dark, #333); font-size: 14px;">Confirm Deletion</div>
+            <div class="notification-message" style="color: var(--text-color, #666); margin-bottom: 10px; font-size: 12px;">
+              Delete this Security Council record?
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 0px;">
+            <button id="confirmDeleteBtn" style="
+              background: var(--danger-color, #dc3545) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Delete</button>
+            <button id="cancelDeleteBtn" style="
+              background: var(--secondary-color, #6c757d) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Cancel</button>
+          </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+          this.confirmDeleteRecord();
+          document.body.removeChild(modal);
+        };
+        
+        document.getElementById('cancelDeleteBtn').onclick = () => {
+          document.body.removeChild(modal);
+        };
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      },
+      
+      async confirmDeleteRecord(){
+        let dataset = new FormData()
+        dataset.append('_id',this.my_id)
+        const my_response = await fetch("./delete_sc_listing",{
+          "method":"POST",
+          "body":dataset
+          });
+        const my_data = await my_response.json();
+        this.deleteRecordFromQuery=false
+        showSuccess("Record deleted!!!")
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      },
       async refresh_data(){
         let myYear=document.getElementById("year").value
         let myMonth=""
@@ -1147,10 +1595,10 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           const my_data = await my_response.json();  
         showInfo(my_data["message"])
       },
-      async exportDataToJson(listofmeetings,listoflanguages){
+    async exportDataToJson(listofmeetings,listoflanguages){
 
-          // clearing the variables
-          this.listOfRecords=[]
+      // clearing the variables
+      this.listOfRecords=[]
           
           //retrieve the parameters
           const myMeeting = document.getElementById(listofmeetings);
@@ -1171,7 +1619,7 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
           my_data.forEach(element => {
             // We find the meeting
             if (element["listing_id"]===myMeetingValue){
-                this.listOfRecords.push(element)
+                this.listOfRecords.push(this.normalizeRecord(element))
               }
             })
           let myFileName="extract_security_counsel_table"+Date.now()+".json"
@@ -1180,19 +1628,25 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     ,
       async exportHTML(){
         try {
-              
               let myData=document.getElementById("myTable")
-              for(const row of myData.rows){
-                  if (row.rowIndex!==0) 
-                    {
-                      row.deleteCell(-1);
-                    }
+              if (!myData) {
+                showError("Table not found. Please make sure the table is displayed first.");
+                return;
               }
-              let myDataHTML=myData.outerHTML
+              
+              // Create a copy of the table to avoid modifying the original
+              let tableCopy = myData.cloneNode(true);
+              
+              // Remove the Actions column from all rows (including header)
+              for(const row of tableCopy.rows){
+                row.deleteCell(-1);
+              }
+              
+              let myDataHTML=tableCopy.outerHTML
               showSuccess("Your data has been exported with HTML format!!!")
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
-              <h4 style="text-align: center;">&nbsp;</h4>
+              <h4 style="text-align: center;">Security Council Export</h4>
               <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">     
               <p style="text-align: justify;">&nbsp;</p>     
               `
@@ -1200,14 +1654,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </div>
               `
               let element = document.createElement('a');
-              element.setAttribute('href', 'data:text/html;charset=utf-8,' + start + myDataHTML + end);
-              element.setAttribute('download', `extract_security_counsel_table`);
+              element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(start + myDataHTML + end));
+              element.setAttribute('download', `extract_security_council_table_${Date.now()}.html`);
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          showError(error.message)
+          showError("Error exporting HTML: " + error.message)
         }
       },    
       downloadJsonFile(data, filename) {
@@ -1222,25 +1676,58 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         a.remove();
      },
       exportExcel(tableName) {
-        const uri = 'data:application/vnd.ms-excel;base64,',
-        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
-        base64 = function(s) {
-          return window.btoa(unescape(encodeURIComponent(s)))
-        },
-        format = function(s, c) {
-          return s.replace(/{(\w+)}/g, function(m, p) {
-          return c[p];
-          })
+        try {
+          const tableElement = document.getElementById(tableName);
+          if (!tableElement) {
+            showError("Table not found. Please make sure the table is displayed first.");
+            return;
+          }
+          
+          const uri = 'data:application/vnd.ms-excel;base64,';
+          const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+          const base64 = function(s) {
+            return window.btoa(unescape(encodeURIComponent(s)));
+          };
+          const format = function(s, c) {
+            return s.replace(/{(\w+)}/g, function(m, p) {
+              return c[p];
+            });
+          };
+          
+          // Create a copy of the table to avoid modifying the original
+          let tableCopy = tableElement.cloneNode(true);
+          
+          // Remove the Actions column from all rows
+          for(const row of tableCopy.rows){
+            row.deleteCell(-1);
+          }
+          
+          // Process each cell to handle multiline content
+          for(const row of tableCopy.rows){
+            for(const cell of row.cells){
+              // Replace <br> tags with spaces and remove HTML tags
+              let cellText = cell.innerHTML;
+              cellText = cellText.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with space
+              cellText = cellText.replace(/<[^>]*>/g, ''); // Remove all HTML tags
+              cellText = cellText.replace(/\s+/g, ' ').trim(); // Clean up multiple spaces
+              cell.innerHTML = cellText;
+            }
+          }
+          
+          var toExcel = tableCopy.outerHTML;
+          var ctx = {
+            worksheet: 'Security Council',
+            table: toExcel
+          };
+          var link = document.createElement("a");
+          link.download = `security_council_export_${Date.now()}.xls`;
+          link.href = uri + base64(format(template, ctx));
+          link.click();
+          
+          showSuccess("Excel file exported successfully!");
+        } catch (error) {
+          showError("Error exporting Excel: " + error.message);
         }
-        var toExcel = document.getElementById(tableName).innerHTML;
-        var ctx = {
-        worksheet: name || '',
-        table: toExcel
-        };
-        var link = document.createElement("a");
-        link.download = "export.xls";
-        link.href = uri + base64(format(template, ctx))
-        link.click();
       },
     },
     components: {}

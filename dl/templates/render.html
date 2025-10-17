@@ -43,10 +43,11 @@
                 {% endif %}                
 
                 <tr style="border: 1px solid black;border-collapse: collapse;">
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="14%";>{{title[0]}} <br/></th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[1]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="29%">{{title[2]}} </th>
-                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[3]}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[0] if title and title[0] else ''}} <br/></th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[1] if title and title[1] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="7%";>{{title[2] if title and title[2] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="29%">{{title[3] if title and title[3] else ''}} </th>
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="20%">{{title[4] if title and title[4] else ''}} </th>
                 </tr>
                 <tr style="border: 1px solid black;border-collapse: collapse;">
                     {% if language == "EN" %}
@@ -64,22 +65,36 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                                {%  if record['meeting_record_link'] %}      
-                                    <a href="{{record['meeting_record_link']}}"  target="_blank">{{record["meeting_record_en"]}}</a></td>
+                                {%  if record.get('meeting_record_link') %}      
+                                    <a href="{{record['meeting_record_link']}}"  target="_blank">{{record.get("meeting_record_en", "")}}</a>
+                                {% else %}
+                                    {{record.get("meeting_record_en", "")}}
                                 {% endif %}  
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][0]["value"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][0]["value"]}}</td>
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("date", [{}])[0].get("value", "") if record.get("date") and record["date"]|length > 0 else ""}}</td>
+                            {% if record.get("press_release") %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" >
+                                    <a href="{{record.get("press_release_link_en", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                                </td>
+                            {% else %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" ></td>
+                            {% endif %}
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("topic", [{}])[0].get("value", "") if record.get("topic") and record["topic"]|length > 0 else ""}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {% for my_record in record.outcomes %}                                    
-                                    <span> {{my_record["outcome"][0]["outcome_text_prefix"]}} </span>
-                                    {%  if (my_record['outcome'][0]['outcome_text']) %}      
-                                        <span> <a href={{my_record['outcome'][0]['outcome_text_link']}}   target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
-                                    {% endif %}  
-                                    <span> {{my_record["outcome"][0]["outcome_text_sufix"]}} </span>
-                                    <br>
-                                    <span> {{my_record["outcome_vote"]}} </span>
-                                    <br>
-                                {% endfor %}  
+                                {% if record.get("outcomes") %}
+                                    {% for my_record in record.outcomes %}                                    
+                                        <span> {{my_record.get("outcome", [{}])[0].get("outcome_text_prefix", "") if my_record.get("outcome") and my_record["outcome"]|length > 0 else ""}} </span>
+                                        {%  if my_record.get('outcome') and my_record['outcome']|length > 0 and my_record['outcome'][0].get('outcome_text') %}      
+                                            <span> <a href="{{my_record['outcome'][0].get('outcome_text_link', '#')}}"   target="_blank"> {{my_record['outcome'][0]['outcome_text']}} </a> </span>
+                                        {% endif %}  
+                                        <span> {{my_record.get("outcome", [{}])[0].get("outcome_text_sufix", "") if my_record.get("outcome") and my_record["outcome"]|length > 0 else ""}} </span>
+                                        <br>
+                                        <span> {{my_record.get("outcome_vote", "")}} </span>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                    <span>No outcomes available</span>
+                                {% endif %}
                             </td>
                             
                         </tr>
@@ -90,22 +105,36 @@
                         {% for record in data %}
                         <tr style="border: 1px solid black;border-collapse: collapse;">
                             <td style="border: 1px solid black;border-collapse: collapse;">
-                            {%  if (record['meeting_record_link_fr']) %}      
-                                <a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record["meeting_record_fr"]}}</a></td>
+                                {%  if record.get('meeting_record_link_fr') %}      
+                                    <a href="{{record['meeting_record_link_fr']}}"  target="_blank">{{record.get("meeting_record_fr", "")}}</a>
+                                {% else %}
+                                    {{record.get("meeting_record_fr", "")}}
+                                {% endif %}
+                            </td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("date", [{}])[1].get("value", "") if record.get("date") and record["date"]|length > 1 else ""}}</td>
+                            {% if record.get("press_release") %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" >
+                                    <a href="{{record.get("press_release_link_fr", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                                </td>
+                            {% else %}
+                                <td style="border: 1px solid black;border-collapse: collapse;" ></td>
                             {% endif %}
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["date"][1]["value"]}}</td>
-                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record["topic"][1]["value"]}}</td>
+                            <td style="border: 1px solid black;border-collapse: collapse;" >{{record.get("topic", [{}])[1].get("value", "") if record.get("topic") and record["topic"]|length > 1 else ""}}</td>
                             <td style="border: 1px solid black;border-collapse: collapse;" >
-                                {% for my_record in record.outcomes %}                                    
-                                    <span> {{my_record["outcome"][1]["outcome_text_prefix"]}} </span>
-                                    {%  if (my_record['outcome'][1]['outcome_text']) %}  
-                                        <span> <a href={{my_record['outcome'][1]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
-                                    {% endif %}  
-                                        <span> {{my_record["outcome"][1]["outcome_text_sufix"]}} </span>
-                                    <br>
-                                    <span> {{my_record["outcome_vote"]}} </span>
-                                    <br>
-                                {% endfor %}  
+                                {% if record.get("outcomes") %}
+                                    {% for my_record in record.outcomes %}                                    
+                                        <span> {{my_record.get("outcome", [{}])[1].get("outcome_text_prefix", "") if my_record.get("outcome") and my_record["outcome"]|length > 1 else ""}} </span>
+                                        {%  if my_record.get('outcome') and my_record['outcome']|length > 1 and my_record['outcome'][1].get('outcome_text') %}  
+                                            <span> <a href="{{my_record['outcome'][1].get('outcome_text_link', '#')}}"  target="_blank"> {{my_record['outcome'][1]['outcome_text']}} </a> </span>
+                                        {% endif %}  
+                                            <span> {{my_record.get("outcome", [{}])[1].get("outcome_text_sufix", "") if my_record.get("outcome") and my_record["outcome"]|length > 1 else ""}} </span>
+                                        <br>
+                                        <span> {{my_record.get("outcome_vote", "")}} </span>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                    <span>Aucun résultat disponible</span>
+                                {% endif %}
                             </td>
                            
                         </tr>
@@ -116,22 +145,36 @@
                     {% for record in data %}
                     <tr style="border: 1px solid black;border-collapse: collapse;">
                         <td style="border: 1px solid black;border-collapse: collapse;">
-                        {%  if (record['meeting_record_link_es']) %}      
-                            <a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record["meeting_record_es"]}}</a></td>
+                            {%  if record.get('meeting_record_link_es') %}      
+                                <a href="{{record['meeting_record_link_es']}}"  target="_blank">{{record.get("meeting_record_es", "")}}</a>
+                            {% else %}
+                                {{record.get("meeting_record_es", "")}}
+                            {% endif %}
+                        </td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record.get("date", [{}])[2].get("value", "") if record.get("date") and record["date"]|length > 2 else ""}}</td>
+                        {% if record.get("press_release") %}
+                            <td style="border: 1px solid black;border-collapse: collapse;" >
+                                <a href="{{record.get("press_release_link_es", "#")}}" target="_blank">{{record.get("press_release", {}).get("value", "")}}</a>
+                            </td>
+                        {% else %}
+                            <td style="border: 1px solid black;border-collapse: collapse;" ></td>
                         {% endif %}
-                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["date"][2]["value"]}}</td>
-                        <td style="border: 1px solid black;border-collapse: collapse;">{{record["topic"][2]["value"]}}</td>
+                        <td style="border: 1px solid black;border-collapse: collapse;">{{record.get("topic", [{}])[2].get("value", "") if record.get("topic") and record["topic"]|length > 2 else ""}}</td>
                         <td style="border: 1px solid black;border-collapse: collapse;" >
-                            {% for my_record in record.outcomes %}                                    
-                                <span> {{my_record["outcome"][2]["outcome_text_prefix"]}} </span>
-                                {%  if (my_record['outcome'][2]['outcome_text']) %}  
-                                    <span> <a href={{my_record['outcome'][2]['outcome_text_link']}}  target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
-                                {% endif %}  
-                                    <span> {{my_record["outcome"][2]["outcome_text_sufix"]}} </span>
-                                <br>
-                                <span> {{my_record["outcome_vote"]}} </span>
-                                <br>
-                            {% endfor %}  
+                            {% if record.get("outcomes") %}
+                                {% for my_record in record.outcomes %}                                    
+                                    <span> {{my_record.get("outcome", [{}])[2].get("outcome_text_prefix", "") if my_record.get("outcome") and my_record["outcome"]|length > 2 else ""}} </span>
+                                    {%  if my_record.get('outcome') and my_record['outcome']|length > 2 and my_record['outcome'][2].get('outcome_text') %}  
+                                        <span> <a href="{{my_record['outcome'][2].get('outcome_text_link', '#')}}"  target="_blank"> {{my_record['outcome'][2]['outcome_text']}} </a> </span>
+                                    {% endif %}  
+                                        <span> {{my_record.get("outcome", [{}])[2].get("outcome_text_sufix", "") if my_record.get("outcome") and my_record["outcome"]|length > 2 else ""}} </span>
+                                    <br>
+                                    <span> {{my_record.get("outcome_vote", "")}} </span>
+                                    <br>
+                                {% endfor %}
+                            {% else %}
+                                <span>No hay resultados disponibles</span>
+                            {% endif %}
                         </td>
                  
                     </tr>

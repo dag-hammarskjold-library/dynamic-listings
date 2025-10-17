@@ -49,21 +49,8 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                   </button> 
             </div>
         </div>
-            </div>
-            <div v-if="displayRecordFromQuery" class="row mt-3">
-              <div class="col">
-                <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
-                  Extract to Excel
-                </button>
-                <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
-                  Extract to HTML
-                </button>
-                <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
-                  Go Back
-                </button>
-              </div>
-            </div>
-            <div v-if="displayFTP" class="row mt-3">
+        
+        <div v-if="displayFTP" class="row mt-3">
               <div class="col">
                 <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
                   Go Back
@@ -73,6 +60,19 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         </div>
         
         <div v-if="displayRecordFromQuery" class="mt-4">
+          <div class="row mb-3">
+            <div class="col">
+              <button type="button" class="btn btn-success me-2" @click="exportExcel('myTable')">
+                Extract to Excel
+              </button>
+              <button type="button" class="btn btn-secondary me-2" @click="exportHTML()">
+                Extract to HTML
+              </button>
+              <button type="button" class="btn btn-primary me-2" @click="document.location.reload(true);">
+                Go Back
+              </button>
+            </div>
+          </div>
           <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped" summary="">
                   <tbody>
                       <tr style="border: 1px solid black;border-collapse: collapse;">
@@ -88,37 +88,37 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                       <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Resolution_link_en"  target="_blank">  {{record.Resolution_prefix_en}} {{record.Resolution_en}}  {{record.Resolution_sufix_en}} </a>
+                              <a :href="record.Resolution_link_en || '#'"  target="_blank">  {{record.Resolution_prefix_en || ''}} {{record.Resolution_en || ''}}  {{record.Resolution_sufix_en || ''}} </a>
                           </td>
                          
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Plenary_en}}
+                               {{record.Plenary_en || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Agenda_numbers_en}}
+                               {{record.Agenda_numbers_en || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">                              
-                               {{record.Meeting_prefix_en}} {{record.Meeting_en}} {{record.Meeting_sufix_en}}<br>
-                               {{record.date_en}} <br>
-                               {{record.Vote_en}}
+                               {{record.Meeting_prefix_en || ''}} {{record.Meeting_en || ''}} {{record.Meeting_sufix_en || ''}}<br>
+                               {{record.date_en || ''}} <br>
+                               {{record.Vote_en || ''}}
 
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                 {{record.Draft_Resolution_prefix_en}} {{record.Draft_Resolution_en}} {{record.Draft_Resolution_sufix_en}}
+                                 {{record.Draft_Resolution_prefix_en || ''}} {{record.Draft_Resolution_en || ''}} {{record.Draft_Resolution_sufix_en || ''}}
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                {{record.Title_prefix_en}} {{record.Title_en}}  {{record.Title_sufix_en}}
+                                {{record.Title_prefix_en || ''}} {{record.Title_en || ''}}  {{record.Title_sufix_en || ''}}
 
                           </td>
 
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>  
-                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>               
+                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>  
+                              <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>               
                           </td>
                       </tr>
                   </tbody>
@@ -139,36 +139,36 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                         
                     
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Resolution_link_es"  target="_blank">  {{record.Resolution_prefix_es}} {{record.Resolution_es}}  {{record.Resolution_sufix_es}} </a>
+                              <a :href="record.Resolution_link_es || '#'"  target="_blank">  {{record.Resolution_prefix_es || ''}} {{record.Resolution_es || ''}}  {{record.Resolution_sufix_es || ''}} </a>
                           </td>
                          
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Plenary_es}}
+                               {{record.Plenary_es || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Agenda_numbers_es}}
+                               {{record.Agenda_numbers_es || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">                              
-                               {{record.Meeting_prefix_es}} {{record.Meeting_es}} {{record.Meeting_sufix_es}}<br>
-                               {{record.date_es}} <br>
-                               {{record.Agenda_numbers_es}}
+                               {{record.Meeting_prefix_es || ''}} {{record.Meeting_es || ''}} {{record.Meeting_sufix_es || ''}}<br>
+                               {{record.date_es || ''}} <br>
+                               {{record.Agenda_numbers_es || ''}}
 
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                 {{record.Draft_Resolution_prefix_es}} {{record.Draft_Resolution_es}} {{record.Draft_Resolution_sufix_es}}
+                                 {{record.Draft_Resolution_prefix_es || ''}} {{record.Draft_Resolution_es || ''}} {{record.Draft_Resolution_sufix_es || ''}}
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                {{record.Title_prefix_es}} {{record.Title_es}}  {{record.Title_sufix_es}}
+                                {{record.Title_prefix_es || ''}} {{record.Title_es || ''}}  {{record.Title_sufix_es || ''}}
                           </td>
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
 
-                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>
-                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>
+                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
+                            <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>
                         </td>
                     </tr>
                 </tbody>
@@ -188,36 +188,36 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               <tr  v-for="record in listOfRecords" style="border: 1px solid black;border-collapse: collapse;">
                   
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <a :href="record.Resolution_link_fr"  target="_blank">  {{record.Resolution_prefix_fr}} {{record.Resolution_fr}}  {{record.Resolution_sufix_fr}} </a>
+                              <a :href="record.Resolution_link_fr || '#'"  target="_blank">  {{record.Resolution_prefix_fr || ''}} {{record.Resolution_fr || ''}}  {{record.Resolution_sufix_fr || ''}} </a>
                           </td>
                          
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Plenary_fr}}
+                               {{record.Plenary_fr || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                               {{record.Agenda_numbers_fr}}
+                               {{record.Agenda_numbers_fr || ''}}
                           </td>
                           
                           <td style="border: 1px solid black;border-collapse: collapse;">                              
-                               {{record.Meeting_prefix_fr}} {{record.Meeting_fr}} {{record.Meeting_sufix_fr}}<br>
-                               {{record.date_fr}} <br>
-                               {{record.Agenda_numbers_fr}}
+                               {{record.Meeting_prefix_fr || ''}} {{record.Meeting_fr || ''}} {{record.Meeting_sufix_fr || ''}}<br>
+                               {{record.date_fr || ''}} <br>
+                               {{record.Agenda_numbers_fr || ''}}
 
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                 {{record.Draft_Resolution_prefix_fr}} {{record.Draft_Resolution_fr}} {{record.Draft_Resolution_sufix_fr}}
+                                 {{record.Draft_Resolution_prefix_fr || ''}} {{record.Draft_Resolution_fr || ''}} {{record.Draft_Resolution_sufix_fr || ''}}
                           </td>
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                                {{record.Title_prefix_fr}} {{record.Title_fr}}  {{record.Title_sufix_fr}}
+                                {{record.Title_prefix_fr || ''}} {{record.Title_fr || ''}}  {{record.Title_sufix_fr || ''}}
                           </td>
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
 
-                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-pen"></i></span>
-                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution)"><i class="fas fa-trash-alt"></i></span>
+                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
+                      <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>
                   </td>
               </tr>
           </tbody>
@@ -285,7 +285,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
                             <div class="mb-1">
                                 <label for="Draft_Resolution_prefix_en" class="form-label">Draft Resolution Prefix </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_en"/><br>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_prefix_en"/><br>
                             </div>
 
                             <div class="mb-1">
@@ -373,7 +373,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
                             <div class="mb-1">
                                 <label for="Draft_Resolution_prefix_es" class="form-label">Draft Resolution Prefix </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_es"/><br>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_prefix_es"/><br>
                             </div>
 
                             <div class="mb-1">
@@ -461,7 +461,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
                             <div class="mb-1">
                                 <label for="Draft_Resolution_prefix_fr" class="form-label">Draft Resolution Prefix </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_prefix_fr"/><br>
+                                <input class="form-control mt-2" v-model="outcome.Draft_Resolution_prefix_fr"/><br>
                             </div>
 
                             <div class="mb-1">
@@ -663,8 +663,8 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                   </label>
                 </div>
               </div>
-            </form>
-              <button type="submit" class="btn btn-primary" @click="deleteRecord()"> Delete your record </button>
+              <hr>
+              <button type="submit" class="btn btn-primary" @click="showDeleteConfirmation()"> Delete your record </button>
               <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
             </form>
         </div>
@@ -896,16 +896,21 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         Title_prefix_es: "",
         Title_sufix_es: "",
         date_es: "",
+        
+        // Outcomes array for GA Resolutions
+        outcomes: []
       }
     },
     
     created:async function(){
       // loading all the meetings ID
+      console.log('GA Resolutions - Component created, loading meetings...');
       const my_response = await fetch("./getgalistingsId");
       const my_data = await my_response.json();
       my_data.forEach(element => {
         this.meetingsIds.push(element)
       });
+      console.log('GA Resolutions - Meetings loaded:', this.meetingsIds.length);
     },
 
     methods:{
@@ -1027,6 +1032,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         
       this.initPage=false
       this.displayRecordFromQuery=true
+      
+      // Debug logging
+      console.log('GA Resolutions - Data loaded:', this.listOfRecords.length, 'records');
+      console.log('GA Resolutions - Language selected:', this.languageSelected);
+      console.log('GA Resolutions - Display flag:', this.displayRecordFromQuery);
       } catch (error) {
         showError('Error loading data: ' + error.message);
       }
@@ -1196,7 +1206,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         this.displayRecordFromQuery = true;
         showSuccess("Record updated!!!");
         setTimeout(() => {
-          location.reload();
+        location.reload();
         }, 2000);
       },
 
@@ -1205,8 +1215,98 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         this.displayRecordFromQuery=false
         this.updateRecordFromQuery=true
       },
-      async deleteRecord() {
-        if (confirm(`Do you really want to delete this record ?`) === true) {
+      showDeleteConfirmation() {
+        console.log('showDeleteConfirmation called for GA Resolutions record');
+        
+        // Create a simple, robust modal
+        const modal = document.createElement('div');
+        modal.id = 'deleteConfirmationModal';
+        modal.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          background: rgba(0, 0, 0, 0.5) !important;
+          z-index: 99999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+        `;
+        
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+          background: var(--white, #ffffff) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          padding: 15px !important;
+          border-left: 4px solid var(--warning-color, #ffc107) !important;
+          max-width: 280px !important;
+          width: 90% !important;
+          text-align: center !important;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 10px !important;
+        `;
+        
+        modalContent.innerHTML = `
+          <div class="notification-icon" style="color: var(--warning-color, #ffc107); font-size: 24px;">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="notification-content" style="text-align: center;">
+            <div class="notification-title" style="font-weight: 600; margin-bottom: 5px; color: var(--dark, #333); font-size: 14px;">Confirm Deletion</div>
+            <div class="notification-message" style="color: var(--text-color, #666); margin-bottom: 10px; font-size: 12px;">
+              Delete this GA Resolution record?
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 0px;">
+            <button id="confirmDeleteBtn" style="
+              background: var(--danger-color, #dc3545) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Delete</button>
+            <button id="cancelDeleteBtn" style="
+              background: var(--secondary-color, #6c757d) !important;
+              color: white !important;
+              border: none !important;
+              padding: 6px 12px !important;
+              border-radius: 6px !important;
+              font-size: 12px !important;
+              cursor: pointer !important;
+              font-weight: 500 !important;
+            ">Cancel</button>
+          </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('confirmDeleteBtn').onclick = () => {
+          this.confirmDeleteRecord();
+          document.body.removeChild(modal);
+        };
+        
+        document.getElementById('cancelDeleteBtn').onclick = () => {
+          document.body.removeChild(modal);
+        };
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      },
+      
+      async confirmDeleteRecord() {
           let dataset = new FormData();
           dataset.append('_id', this.my_id);
           dataset.append('listing_id', this.listing_id);
@@ -1273,10 +1373,10 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           this.deleteRecordFromQuery = false;
           showSuccess("Record deleted!!!");
           setTimeout(() => {
-            location.reload();
+          location.reload();
           }, 2000);
         }
-      },
+      ,
       testNotification() {
         console.log('Test notification button clicked');
         showSuccess('Test notification is working!', 'Success', 3000);
@@ -1369,23 +1469,29 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
             })
           let myFileName="extract_general_assembly_table"+Date.now()+".json"
           this.downloadJsonFile(this.listOfRecords,myFileName) 
-      }
-    ,
+      },
       async exportHTML(){
         try {
-              
               let myData=document.getElementById("myTable")
-              for(const row of myData.rows){
-                  if (row.rowIndex!==0) 
-                    {
-                      row.deleteCell(-1);
-                    }
+              if (!myData) {
+                showError("Table not found. Please make sure the table is displayed first.");
+                return;
               }
-              let myDataHTML=myData.outerHTML
+              
+              // Create a copy of the table to avoid modifying the original
+              let tableCopy = myData.cloneNode(true);
+              
+              // Remove the Actions column from all rows (including header)
+              for(const row of tableCopy.rows){
+                row.deleteCell(-1);
+              }
+              
+              let myDataHTML=tableCopy.outerHTML
               showSuccess("Your data has been exported with HTML format!!!")
+              
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
-              <h4 style="text-align: center;">&nbsp;</h4>
+              <h4 style="text-align: center;">GA Resolutions Export</h4>
               <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">     
               <p style="text-align: justify;">&nbsp;</p>     
               `
@@ -1393,14 +1499,14 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               </div>
               `
               let element = document.createElement('a');
-              element.setAttribute('href', 'data:text/html;charset=utf-8,' + start + myDataHTML + end);
-              element.setAttribute('download', `extract_security_counsel_table`);
+              element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(start + myDataHTML + end));
+              element.setAttribute('download', `extract_ga_resolutions_table_${Date.now()}.html`);
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          showError(error.message)
+          showError("Error exporting HTML: " + error.message)
         }
       },    
       downloadJsonFile(data, filename) {
@@ -1414,31 +1520,63 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         a.click();
         a.remove();
      },
-      exportExcel(tableName) {
-        const uri = 'data:application/vnd.ms-excel;base64,',
-        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
-        base64 = function(s) {
-          return window.btoa(unescape(encodeURIComponent(s)))
-        },
-        format = function(s, c) {
-          return s.replace(/{(\w+)}/g, function(m, p) {
-          return c[p];
-          })
-        }
-        var toExcel = document.getElementById(tableName).innerHTML;
-        var ctx = {
-        worksheet: name || '',
-        table: toExcel
-        };
-        var link = document.createElement("a");
-        link.download = "export.xls";
-        link.href = uri + base64(format(template, ctx))
-        link.click();
-      },
+     exportExcel(tableName) {
+       try {
+         const tableElement = document.getElementById(tableName);
+         if (!tableElement) {
+           showError("Table not found. Please make sure the table is displayed first.");
+           return;
+         }
+         
+         const uri = 'data:application/vnd.ms-excel;base64,';
+         const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+         const base64 = function(s) {
+           return window.btoa(unescape(encodeURIComponent(s)));
+         };
+         const format = function(s, c) {
+           return s.replace(/{(\w+)}/g, function(m, p) {
+             return c[p];
+           });
+         };
+         
+         // Create a copy of the table to avoid modifying the original
+         let tableCopy = tableElement.cloneNode(true);
+         
+         // Remove the Actions column from all rows
+         for(const row of tableCopy.rows){
+           row.deleteCell(-1);
+         }
+         
+         // Process each cell to handle multiline content
+         for(const row of tableCopy.rows){
+           for(const cell of row.cells){
+             // Replace <br> tags with spaces and remove HTML tags
+             let cellText = cell.innerHTML;
+             cellText = cellText.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with space
+             cellText = cellText.replace(/<[^>]*>/g, ''); // Remove all HTML tags
+             cellText = cellText.replace(/\s+/g, ' ').trim(); // Clean up multiple spaces
+             cell.innerHTML = cellText;
+           }
+         }
+         
+         var toExcel = tableCopy.outerHTML;
+         var ctx = {
+           worksheet: 'GA Resolutions',
+           table: toExcel
+         };
+         var link = document.createElement("a");
+         link.download = `ga_resolutions_export_${Date.now()}.xls`;
+         link.href = uri + base64(format(template, ctx));
+         link.click();
+         
+         showSuccess("Excel file exported successfully!");
+       } catch (error) {
+         showError("Error exporting Excel: " + error.message);
+       }
+     },
     },
     components: {}
-  }
-  )
+  })
 
 let app_datasetgaresolutions = new Vue({
     el: '#dldatasetgaresolutions'
