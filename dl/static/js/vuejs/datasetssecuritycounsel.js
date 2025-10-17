@@ -423,30 +423,30 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         
                           <div class="mb-1">
                               <label for="outcomevote" class="form-label outcome-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
                             <label for="lang" class="form-label outcome-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['lang']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>
 
@@ -457,30 +457,30 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         
                           <div class="mb-1">
                               <label for="outcomevote" class="form-label outcome-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
                             <label for="lang" class="form-label outcome-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['lang']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['lang']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[1]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>
 
@@ -491,30 +491,30 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         
                           <div class="mb-1">
                               <label for="outcomevote" class="form-label outcome-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
                             <label for="lang" class="form-label outcome-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['lang']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['lang']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[2]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>                      
 
@@ -607,30 +607,30 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                         
                           <div class="mb-1">
                               <label for="outcomevote" class="form-label outcome-label">Vote</label>
-                              <input class="form-control mt-2" v-model="outcome.outcome_vote"/><br>
+                              <input class="form-control mt-2 outcome-input" v-model="outcome.outcome_vote"/><br>
                           </div>
 
                           <div class="mb-1">
                             <label for="lang" class="form-label outcome-label">Language</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['lang']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['lang']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text link</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_link']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text prefix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_prefix']"/><br>
                           </div>
                           <div class="mb-1">
                             <label for="outcometext" class="form-label outcome-label">Outcome text sufix</label>
-                            <input class="form-control mt-2" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
+                            <input class="form-control mt-2 outcome-input" v-model="outcome.outcome[0]['outcome_text_sufix']"/><br>
                           </div>
-                          <button class="btn btn-primary ml-1 mb-1 mt-1" @click="removeRow(index)">Remove Outcome</button>
+                          <button class="btn btn-primary ml-1 mb-1 mt-1 outcome-button" @click="removeRow(index)" :disabled="outcomes.length <= 1">Remove Outcome</button>
                         </div>  
                       </div>                                          
               </div> 
@@ -952,8 +952,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
        this.AddOutcomeEmpty()
       },
       removeRow(index) {
+        // Check if there's only 1 outcome left
+        if (this.outcomes.length <= 1) {
+          showWarning("Cannot remove the last outcome. At least one outcome must remain.");
+          return;
+        }
         // Removes a row at the specified index
         this.outcomes.splice(index, 1);
+        showSuccess("Outcome removed successfully!");
       },
       openFTP(){
         showWarning("define the ftp")
@@ -1270,27 +1276,57 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               
               // Management of the outcome text depending of the language
               if (this.languageSelected==='EN') {
-                this.security_council_document=element.outcomes[0].outcome[0].outcome_text
+                if (element.outcomes[0].outcome[0].outcome_text) {
+                  this.security_council_document=element.outcomes[0].outcome[0].outcome_text
+                }
+                else {
+                  this.security_council_document=''
+                }
               }
 
             if (this.languageSelected==='FR') {
-              this.security_council_document=element.outcomes[0].outcome[1].outcome_text
+              if (element.outcomes[0].outcome[1].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[1].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
 
             if (this.languageSelected==='ES') {
-              this.security_council_document=element.outcomes[0].outcome[2].outcome_text
+              if (element.outcomes[0].outcome[2].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[2].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
             
             if (this.languageSelected==='RU') {
-              this.security_council_document=element.outcomes[0].outcome[3].outcome_text
+              if (element.outcomes[0].outcome[3].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[3].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }
 
             if (this.languageSelected==='AR') {
-              this.security_council_document=element.outcomes[0].outcome[4].outcome_text
+              if (element.outcomes[0].outcome[4].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[4].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }              
 
             if (this.languageSelected==='ZH') {
-              this.security_council_document=element.outcomes[0].outcome[5].outcome_text
+              if (element.outcomes[0].outcome[5].outcome_text) {
+                this.security_council_document=element.outcomes[0].outcome[5].outcome_text
+              }
+              else {
+                this.security_council_document=''
+              }
             }  
 
             this.refresh=element.refresh
@@ -1592,19 +1628,25 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     ,
       async exportHTML(){
         try {
-              
               let myData=document.getElementById("myTable")
-              for(const row of myData.rows){
-                  if (row.rowIndex!==0) 
-                    {
-                      row.deleteCell(-1);
-                    }
+              if (!myData) {
+                showError("Table not found. Please make sure the table is displayed first.");
+                return;
               }
-              let myDataHTML=myData.outerHTML
+              
+              // Create a copy of the table to avoid modifying the original
+              let tableCopy = myData.cloneNode(true);
+              
+              // Remove the Actions column from all rows (including header)
+              for(const row of tableCopy.rows){
+                row.deleteCell(-1);
+              }
+              
+              let myDataHTML=tableCopy.outerHTML
               showSuccess("Your data has been exported with HTML format!!!")
               let start=`
               <div id="s-lg-content-74877231" class="  clearfix">
-              <h4 style="text-align: center;">&nbsp;</h4>
+              <h4 style="text-align: center;">Security Council Export</h4>
               <link href="//www.un.org/depts/dhl/css/ga-table.css" rel="stylesheet" type="text/css">     
               <p style="text-align: justify;">&nbsp;</p>     
               `
@@ -1612,14 +1654,14 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
               </div>
               `
               let element = document.createElement('a');
-              element.setAttribute('href', 'data:text/html;charset=utf-8,' + start + myDataHTML + end);
-              element.setAttribute('download', `extract_security_counsel_table`);
+              element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(start + myDataHTML + end));
+              element.setAttribute('download', `extract_security_council_table_${Date.now()}.html`);
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
               document.body.removeChild(element);
         } catch (error) {
-          showError(error.message)
+          showError("Error exporting HTML: " + error.message)
         }
       },    
       downloadJsonFile(data, filename) {
@@ -1634,25 +1676,58 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         a.remove();
      },
       exportExcel(tableName) {
-        const uri = 'data:application/vnd.ms-excel;base64,',
-        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
-        base64 = function(s) {
-          return window.btoa(unescape(encodeURIComponent(s)))
-        },
-        format = function(s, c) {
-          return s.replace(/{(\w+)}/g, function(m, p) {
-          return c[p];
-          })
+        try {
+          const tableElement = document.getElementById(tableName);
+          if (!tableElement) {
+            showError("Table not found. Please make sure the table is displayed first.");
+            return;
+          }
+          
+          const uri = 'data:application/vnd.ms-excel;base64,';
+          const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+          const base64 = function(s) {
+            return window.btoa(unescape(encodeURIComponent(s)));
+          };
+          const format = function(s, c) {
+            return s.replace(/{(\w+)}/g, function(m, p) {
+              return c[p];
+            });
+          };
+          
+          // Create a copy of the table to avoid modifying the original
+          let tableCopy = tableElement.cloneNode(true);
+          
+          // Remove the Actions column from all rows
+          for(const row of tableCopy.rows){
+            row.deleteCell(-1);
+          }
+          
+          // Process each cell to handle multiline content
+          for(const row of tableCopy.rows){
+            for(const cell of row.cells){
+              // Replace <br> tags with spaces and remove HTML tags
+              let cellText = cell.innerHTML;
+              cellText = cellText.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with space
+              cellText = cellText.replace(/<[^>]*>/g, ''); // Remove all HTML tags
+              cellText = cellText.replace(/\s+/g, ' ').trim(); // Clean up multiple spaces
+              cell.innerHTML = cellText;
+            }
+          }
+          
+          var toExcel = tableCopy.outerHTML;
+          var ctx = {
+            worksheet: 'Security Council',
+            table: toExcel
+          };
+          var link = document.createElement("a");
+          link.download = `security_council_export_${Date.now()}.xls`;
+          link.href = uri + base64(format(template, ctx));
+          link.click();
+          
+          showSuccess("Excel file exported successfully!");
+        } catch (error) {
+          showError("Error exporting Excel: " + error.message);
         }
-        var toExcel = document.getElementById(tableName).innerHTML;
-        var ctx = {
-        worksheet: name || '',
-        table: toExcel
-        };
-        var link = document.createElement("a");
-        link.download = "export.xls";
-        link.href = uri + base64(format(template, ctx))
-        link.click();
       },
     },
     components: {}

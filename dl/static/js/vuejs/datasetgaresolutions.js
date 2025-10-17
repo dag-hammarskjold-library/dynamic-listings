@@ -1376,7 +1376,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           location.reload();
           }, 2000);
         }
-      },
+      ,
       testNotification() {
         console.log('Test notification button clicked');
         showSuccess('Test notification is working!', 'Success', 3000);
@@ -1481,12 +1481,9 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               // Create a copy of the table to avoid modifying the original
               let tableCopy = myData.cloneNode(true);
               
-              // Remove the Actions column from all rows except header
+              // Remove the Actions column from all rows (including header)
               for(const row of tableCopy.rows){
-                  if (row.rowIndex!==0) 
-                    {
-                      row.deleteCell(-1);
-                    }
+                row.deleteCell(-1);
               }
               
               let myDataHTML=tableCopy.outerHTML
@@ -1524,28 +1521,61 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         a.remove();
      },
      exportExcel(tableName) {
-       const uri = 'data:application/vnd.ms-excel;base64,';
-       const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
-       const base64 = function(s) {
-         return window.btoa(unescape(encodeURIComponent(s)));
-       };
-       const format = function(s, c) {
-         return s.replace(/{(\w+)}/g, function(m, p) {
-           return c[p];
-         });
-       };
-       
-       var toExcel = document.getElementById(tableName).innerHTML;
-       var ctx = {
-         worksheet: 'GA Resolutions',
-         table: toExcel
-       };
-       var link = document.createElement("a");
-       link.download = "ga_resolutions_export.xls";
-       link.href = uri + base64(format(template, ctx));
-       link.click();
+       try {
+         const tableElement = document.getElementById(tableName);
+         if (!tableElement) {
+           showError("Table not found. Please make sure the table is displayed first.");
+           return;
+         }
+         
+         const uri = 'data:application/vnd.ms-excel;base64,';
+         const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+         const base64 = function(s) {
+           return window.btoa(unescape(encodeURIComponent(s)));
+         };
+         const format = function(s, c) {
+           return s.replace(/{(\w+)}/g, function(m, p) {
+             return c[p];
+           });
+         };
+         
+         // Create a copy of the table to avoid modifying the original
+         let tableCopy = tableElement.cloneNode(true);
+         
+         // Remove the Actions column from all rows
+         for(const row of tableCopy.rows){
+           row.deleteCell(-1);
+         }
+         
+         // Process each cell to handle multiline content
+         for(const row of tableCopy.rows){
+           for(const cell of row.cells){
+             // Replace <br> tags with spaces and remove HTML tags
+             let cellText = cell.innerHTML;
+             cellText = cellText.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with space
+             cellText = cellText.replace(/<[^>]*>/g, ''); // Remove all HTML tags
+             cellText = cellText.replace(/\s+/g, ' ').trim(); // Clean up multiple spaces
+             cell.innerHTML = cellText;
+           }
+         }
+         
+         var toExcel = tableCopy.outerHTML;
+         var ctx = {
+           worksheet: 'GA Resolutions',
+           table: toExcel
+         };
+         var link = document.createElement("a");
+         link.download = `ga_resolutions_export_${Date.now()}.xls`;
+         link.href = uri + base64(format(template, ctx));
+         link.click();
+         
+         showSuccess("Excel file exported successfully!");
+       } catch (error) {
+         showError("Error exporting Excel: " + error.message);
+       }
      },
-     components: {}
+    },
+    components: {}
   })
 
 let app_datasetgaresolutions = new Vue({

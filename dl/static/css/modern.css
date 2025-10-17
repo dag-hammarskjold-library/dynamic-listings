@@ -557,36 +557,42 @@
 }
 
 .theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 60px;
-  background: var(--login-card-bg);
-  border: 2px solid var(--login-card-border);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  z-index: 9999;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: #42a5f5 !important;
+  color: white !important;
+  width: 50px !important;
+  height: 50px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  font-size: 18px !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
 }
 
 .theme-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 .theme-toggle:active {
-  transform: scale(0.95);
+  transform: scale(0.95) !important;
 }
 
 .theme-toggle i {
-  color: var(--login-text-color);
+  color: white !important;
   font-size: 1.2rem;
+}
+
+/* Dark mode theme toggle */
+[data-bs-theme="dark"] .theme-toggle {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
 }
 
 /* Navbar Theme Toggle Button */
@@ -626,6 +632,142 @@
   color: var(--dark-text, #e2e8f0);
 }
 
+/* Form Controls */
+.form-control-modern {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  color: var(--login-text-color);
+}
+
+.form-control-modern:focus {
+  border-color: var(--login-icon-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: var(--login-card-bg);
+  color: var(--login-text-color);
+}
+
+.form-control-modern::placeholder {
+  color: rgba(45, 55, 72, 0.6);
+}
+
+[data-bs-theme="dark"] .form-control-modern::placeholder {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+/* Input Group */
+.input-group-text {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-right: none;
+  color: var(--login-icon-color);
+  border-radius: 12px 0 0 12px;
+}
+
+.input-group .form-control-modern {
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+}
+
+/* Buttons */
+.btn-modern {
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-modern-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.btn-primary-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary-modern:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Alerts */
+.alert-modern {
+  border-radius: 12px;
+  border: none;
+  padding: 12px 16px;
+  margin-top: 16px;
+}
+
+.alert-danger-modern {
+  background: rgba(245, 101, 101, 0.1);
+  color: #e53e3e;
+  border-left: 4px solid #e53e3e;
+}
+
+/* Login Page Animations */
+.login-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.login-card.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Input Focus Effects */
+.input-group:focus-within {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Password Toggle Button */
+.btn-outline-secondary {
+  background: var(--login-card-bg);
+  border: 2px solid var(--login-card-border);
+  border-left: none;
+  color: var(--login-icon-color);
+  border-radius: 0 12px 12px 0;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background: var(--login-icon-color);
+  color: white;
+  border-color: var(--login-icon-color);
+}
+
+/* Loading State */
+.btn-modern:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Form Labels */
+.form-label {
+  color: var(--login-text-color);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Text Muted */
+.text-muted {
+  color: rgba(45, 55, 72, 0.7) !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+  color: rgba(226, 232, 240, 0.7) !important;
+}
+
 @media (max-width: 768px) {
   .login-card {
     padding: 20px 15px;
@@ -633,11 +775,27 @@
   }
 
   .theme-toggle {
-    top: 15px;
-    right: 50px;
-    width: 45px;
-    height: 45px;
-    z-index: 9999;
+    top: 15px !important;
+    right: 15px !important;
+    width: 45px !important;
+    height: 45px !important;
+    z-index: 99999 !important;
+  }
+  
+  .form-control-modern {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  
+  .btn-modern-lg {
+    padding: 12px 20px;
+    font-size: 15px;
   }
 }
 .notification-container {
@@ -2427,5 +2585,35 @@ body {
   
   .card-header {
     padding: var(--space-6);
+  }
+}
+
+/* Outcome input styling - reduced width */
+.outcome-input {
+  max-width: 400px !important;
+  width: 100% !important;
+}
+
+/* Outcome button styling - match input width */
+.outcome-button {
+  max-width: 400px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .outcome-input {
+    max-width: 350px !important;
+  }
+  .outcome-button {
+    max-width: 350px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .outcome-input {
+    max-width: 280px !important;
+  }
+  .outcome-button {
+    max-width: 280px !important;
   }
 }

@@ -330,11 +330,17 @@ Vue.component('displaylistuserscomponent',{
           }
       },      
       exportToExcel() {
+        try {
           // Variable to store the final csv data
           let csv_data = [];
        
           // Get each row data from the users table
           let table = document.getElementById('listlogs');
+          if (!table) {
+            showError("Table not found. Please make sure the table is displayed first.");
+            return;
+          }
+          
           let rows = table.querySelectorAll('tr');
           
           for (let i = 0; i < rows.length; i++) {
@@ -347,6 +353,9 @@ Vue.component('displaylistuserscomponent',{
                   if (cols[j]) {
                       // Get the text content only, stripping HTML tags
                       let cellText = cols[j].textContent || cols[j].innerText || '';
+                      // Replace <br> tags with spaces and remove HTML tags
+                      cellText = cellText.replace(/<br\s*\/?>/gi, ' ');
+                      cellText = cellText.replace(/<[^>]*>/g, '');
                       // Clean up any extra whitespace
                       cellText = cellText.trim().replace(/\s+/g, ' ');
                       csvrow.push(cellText);
@@ -362,6 +371,10 @@ Vue.component('displaylistuserscomponent',{
        
           // Call this function to download csv file 
           this.downloadCSVFile(csv_data);
+          showSuccess("Users data exported to Excel successfully!");
+        } catch (error) {
+          showError("Error exporting users to Excel: " + error.message);
+        }
       },
       downloadCSVFile(csv_data) {
    
@@ -376,7 +389,7 @@ Vue.component('displaylistuserscomponent',{
         let temp_link = document.createElement('a');
       
         // Download csv file
-        temp_link.download = "results_upload.csv";
+        temp_link.download = `users_export_${Date.now()}.csv`;
         let url = window.URL.createObjectURL(CSVFile);
         temp_link.href = url;
       
