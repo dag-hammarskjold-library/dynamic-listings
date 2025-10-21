@@ -58,7 +58,7 @@ def connect_db():
 
 def process_records(coll_agendas,query_string,year):
     documents=[]
-    #query to get metadata values for the S/PV documents
+    #query to get  metadata values for the S/PV documents
     # for the time we refresh the full table
     #query_string="191__a:/^S\/PV./ AND 269__a:/^"+str(year)+"-04"+"/"
     query = Query.from_string(query_string) # Dataset-search_query
@@ -86,9 +86,16 @@ def process_records(coll_agendas,query_string,year):
     # and formating the dictionary to match the schema in the dl5 collection for this table
 
     for bib in BibSet.from_query(query):
-
+        press_release_text_en=""
+        press_release_text_fr=""
+        press_release_text_es=""
+        press_release_link_en=""
+        press_release_link_fr=""
+        press_release_link_es=""
         outcome_vote=""
         outcome_text=""
+        outcome_obj={}
+
         document_symbol=bib.get_value('191', 'a')
         action_date=bib.get_value('992','a')
         if action_date !='':
@@ -97,18 +104,53 @@ def process_records(coll_agendas,query_string,year):
         #trim the period at the end
         agenda_subject=agenda_subject.rstrip('.')
         outcomes=[]
-        outcome_text=bib.get_value('993','a')
-        outcome_text_link="https://docs.un.org/"+outcome_text
-        print(outcome_text_link)
-        outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-        
-        if outcome_text:
-            outcomes.append(outcome_obj)
-    #else:
-        # we need second query to find a vote value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
+        outcome_text=""
+        outcome_obj={}
+        pr_o_texts=bib.get_values('993','a')   
+        for pr_o_text in pr_o_texts:    
+            if "SC/" in pr_o_text:
+                outcome_text=""
+                outcome_obj={}
+                press_release_text_en=pr_o_text
+                press_release_text_fr=pr_o_text.replace("SC/","CS/")
+                press_release_link_en="https://www.un.org/press/en/"+str(year)+"/"+press_release_text_en.replace("/","").lower()+".doc.htm"
+                press_release_link_fr="https://www.un.org/press/fr/"+str(year)+"/"+press_release_text_fr.replace("/","").lower()+".doc.htm"
+                press_release_text_es=press_release_text_en
+                press_release_link_es=press_release_link_en
+                #continue
+            else:
+                outcome_text=pr_o_text
+                outcome_text_link="https://docs.un.org/"+outcome_text
+                outcome_obj={"outcome_vote":outcome_vote,
+                            "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                # this is to create outcome text structure if we have text or if not we generate             
+                if outcome_text!="":
+                    outcomes.append(outcome_obj)
+                    outcome_obj={}
+                    outcome_text=""
+                press_release_text_en=""
+                press_release_text_fr=""
+                press_release_text_es=""
+                press_release_link_en=""
+                press_release_link_fr=""
+                press_release_link_es=""
+                outcome_text=pr_o_text
+                #outcome_text=bib.get_value('993','a')    
+                #outcome_text_link=""
+                #outcome_text=bib.get_value('993','a')    
+                #outcome_text_link=""
+                #outcome_obj={"outcome_vote":outcome_vote,
+                #                "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                #                        {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""},
+                #                        {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":outcome_text_link,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                
+                #if outcome_text:
+
+                
+        #else:
+        # we need second query to find a vote  value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
         query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
         print(query2.to_json())
         # iterate over the metadata in the bib  record to assemble outcome_vote and outcome text
@@ -117,16 +159,24 @@ def process_records(coll_agendas,query_string,year):
             if outcome_vote=="0-0-0":
                 outcome_vote=bib.get_value('996', 'a')
             #if not bib.get
-            outcome_texts=bib.get_values('791','a')
-            #print(outcome_texts)
+            outcome_texts2=bib.get_values('791','a')
+            #print(outcome_texts2)
             #outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
             
-
-            for outcome_text in outcome_texts:
-                outcome_obj={"outcome_vote":outcome_vote,
-                        "outcome":[{"lang":"EN", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"FR", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                {"lang":"ES", "outcome_text":outcome_text,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+            #outcome_text=""
+            for outcome_text2 in outcome_texts2:
+                if outcome_text2:
+                    outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                    outcome_obj={"outcome_vote":outcome_vote,
+                            "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                else:
+                    outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                    outcome_obj={"outcome_vote":outcome_vote,
+                            "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
             
             outcomes.append(outcome_obj)
     #i+=1
@@ -135,7 +185,9 @@ def process_records(coll_agendas,query_string,year):
             outcomes.append(outcome_obj)
         outcome_text=""
         outcome_vote=""         
-        data_model=(document_symbol, action_date, agenda_subject, outcomes)
+        #data_model=(document_symbol, action_date, agenda_subject, outcomes)
+        data_model=(document_symbol, action_date, agenda_subject, outcomes, press_release_text_en, press_release_text_fr, press_release_text_es, press_release_link_en, press_release_link_fr, press_release_link_es)
+
 
         lst.append(data_model)
 
@@ -149,6 +201,18 @@ def process_records(coll_agendas,query_string,year):
          "meeting_record_link":"https://docs.un.org/"+document_symbol,
         "meeting_record_link_fr":"https://docs.un.org/"+document_symbol,
         "meeting_record_link_es":"https://docs.un.org/"+document_symbol,
+        "press_release_text_en":press_release_text_en,
+        "press_release_text_fr":press_release_text_fr,
+        "press_release_text_es":press_release_text_es,
+        "press_release_link_en":press_release_link_en,
+        "press_release_link_fr":press_release_link_fr,
+        "press_release_link_es":press_release_link_es,
+        "press_release_text_prefix_en":"",
+        "press_release_text_prefix_fr":"",
+        "press_release_text_prefix_es":"",
+        "press_release_text_sufix_en":"",
+        "press_release_text_sufix_fr":"",
+        "press_release_text_sufix_es":"",
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
                 {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
@@ -163,7 +227,7 @@ def process_records(coll_agendas,query_string,year):
         "outcomes":outcomes
         }
 
-    for document_symbol, action_date, agenda_subject, outcomes in lst
+    for document_symbol, action_date, agenda_subject, outcomes, press_release_text_en,press_release_text_fr, press_release_text_es, press_release_link_en, press_release_link_fr, press_release_link_es in lst
     ]
     #print(documents)
     return documents
