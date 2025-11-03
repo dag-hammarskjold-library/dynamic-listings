@@ -169,7 +169,7 @@ def process_records(coll_agendas,query_string,year):
                     outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
                     outcome_obj={"outcome_vote":outcome_vote,
                             "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
                                     {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
                 else:
                     outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
