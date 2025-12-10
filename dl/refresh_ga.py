@@ -21,8 +21,32 @@ config_collection_GARES = db['GA_RES_config']
 
 class MyList(list):
     def list_to_string(self, sep):
+        #print ( "list_to_string")
         if isinstance(self, list):
             return sep.join(str(item) for item in self)
+    
+    def list_to_string_filtered(self, sep):
+        #print ( "filtered")
+        if isinstance(self, list):
+            return sep.join(str(item) for item in self if "[]" not in str(item))
+    
+    def list_to_string_filtered_by_chars(self, sep, filter_chars):
+        """
+        Convert list to string, filtering out values containing any of the specified characters.
+        
+        Args:
+            sep: Separator to join items
+            filter_chars: List of characters/strings to filter out
+        
+        Returns:
+            Joined string of items that don't contain any of the filter characters
+        """
+        #print ( "filtered by char")
+        if isinstance(self, list):
+            return sep.join(
+                str(item) for item in self 
+                if not any(char in str(item) for char in filter_chars)
+            )
 
 
 class ExtractText:
