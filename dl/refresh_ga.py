@@ -26,7 +26,7 @@ class MyList(list):
             return sep.join(str(item) for item in self)
     
     def list_to_string_filtered(self, sep):
-        print ( "filtered")
+        #print ( "filtered")
         if isinstance(self, list):
             return sep.join(str(item) for item in self if "[]" not in str(item))
     
@@ -41,7 +41,7 @@ class MyList(list):
         Returns:
             Joined string of items that don't contain any of the filter characters
         """
-        print ( "filtered by char")
+        #print ( "filtered by char")
         if isinstance(self, list):
             return sep.join(
                 str(item) for item in self 
