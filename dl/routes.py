@@ -1815,7 +1815,6 @@ def update_ga_listing():
     my_refresh = request.form.get("refresh") != "false"
 
     update_fields = {}
-    # English
     if my_language_selected == "EN":
         update_fields = {
             'Resolution_prefix_en': request.form.get('Resolution_prefix_en'),
@@ -1832,7 +1831,8 @@ def update_ga_listing():
             'Title_prefix_en': request.form.get('Title_prefix_en'),
             'Title_en': request.form.get('Title_en'),
             'Title_sufix_en': request.form.get('Title_sufix_en'),
-            'date_en': request.form.get('date_en'),
+            'date_en': request.form.get('date_en'),           
+            'Resolution_link_en': request.form.get('Resolution_link_en', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }
@@ -1854,6 +1854,7 @@ def update_ga_listing():
             'Title_fr': request.form.get('Title_fr'),
             'Title_sufix_fr': request.form.get('Title_sufix_fr'),
             'date_fr': request.form.get('date_fr'),
+            'Resolution_link_fr': request.form.get('Resolution_link_fr', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }
@@ -1875,6 +1876,7 @@ def update_ga_listing():
             'Title_es': request.form.get('Title_es'),
             'Title_sufix_es': request.form.get('Title_sufix_es'),
             'date_es': request.form.get('date_es'),
+            'Resolution_link_es': request.form.get('Resolution_link_es', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }
@@ -1915,6 +1917,7 @@ def update_ga_listings():
             'Title_en': request.form.get('Title_en'),
             'Title_sufix_en': request.form.get('Title_sufix_en'),
             'date_en': request.form.get('date_en'),
+            'Resolution_link_en': request.form.get('Resolution_link_en', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }
@@ -1936,6 +1939,7 @@ def update_ga_listings():
             'Title_fr': request.form.get('Title_fr'),
             'Title_sufix_fr': request.form.get('Title_sufix_fr'),
             'date_fr': request.form.get('date_fr'),
+            'Resolution_link_fr': request.form.get('Resolution_link_fr', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }
@@ -1957,6 +1961,7 @@ def update_ga_listings():
             'Title_es': request.form.get('Title_es'),
             'Title_sufix_es': request.form.get('Title_sufix_es'),
             'date_es': request.form.get('date_es'),
+            'Resolution_link_es': request.form.get('Resolution_link_es', ''),
             'refresh': my_refresh,
             'listing_id': my_listing_id
         }

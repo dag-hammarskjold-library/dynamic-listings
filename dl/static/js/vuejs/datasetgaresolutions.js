@@ -319,6 +319,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             </div>
                             
                             <div class="mb-1">
+                                <label for="Resolution_link_en" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_en"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
                               <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
                               <label class="form-check-label" for="flexCheckDefault">
                                 Allow Refresh
@@ -407,6 +412,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             </div>
                             
                             <div class="mb-1">
+                                <label for="Resolution_link_es" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_es"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
                               <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
                               <label class="form-check-label" for="flexCheckDefault">
                                 Allow Refresh
@@ -492,6 +502,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             <div class="mb-1">
                                 <label for="date_fr" class="form-label">Date </label>
                                 <input class="form-control mt-2" v-model="outcome.date_fr"/><br>
+                            </div>
+                            
+                            <div class="mb-1">
+                                <label for="Resolution_link_fr" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_fr"/><br>
                             </div>
                             
                             <div class="mb-1">
@@ -1155,6 +1170,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_en', this.outcomes[0].Title_en);
           dataset.append('Title_sufix_en', this.outcomes[0].Title_sufix_en);
           dataset.append('date_en', this.outcomes[0].date_en);
+          dataset.append('Resolution_link_en', this.outcomes[0].Resolution_link_en || '');
         }
         // French fields
         else if (this.languageSelected === 'FR') {
@@ -1173,6 +1189,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_fr', this.outcomes[0].Title_fr);
           dataset.append('Title_sufix_fr', this.outcomes[0].Title_sufix_fr);
           dataset.append('date_fr', this.outcomes[0].date_fr);
+          dataset.append('Resolution_link_fr', this.outcomes[0].Resolution_link_fr || '');
         }
         // Spanish fields
         else if (this.languageSelected === 'ES') {
@@ -1191,6 +1208,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_es', this.outcomes[0].Title_es);
           dataset.append('Title_sufix_es', this.outcomes[0].Title_sufix_es);
           dataset.append('date_es', this.outcomes[0].date_es);
+          dataset.append('Resolution_link_es', this.outcomes[0].Resolution_link_es || '');
         }
 
         // // Debug: log all FormData entries
