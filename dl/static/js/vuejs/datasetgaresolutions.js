@@ -254,6 +254,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             </div>
 
                             <div class="mb-1">
+                                <label for="Resolution_link_en" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_en"/><br>
+                            </div>
+
+                            <div class="mb-1">
                                 <label for="Resolution_sufix_en" class="form-label">Resolution Sufix </label>
                                 <input class="form-control mt-2" v-model="outcome.Resolution_sufix_en"/><br>
                             </div>
@@ -319,11 +324,6 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             </div>
                             
                             <div class="mb-1">
-                                <label for="Resolution_link_en" class="form-label">Resolution Link </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_link_en"/><br>
-                            </div>
-                            
-                            <div class="mb-1">
                               <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
                               <label class="form-check-label" for="flexCheckDefault">
                                 Allow Refresh
@@ -344,6 +344,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             <div class="mb-1">
                                 <label for="Resolution_es" class="form-label">Resolution  </label>
                                 <input class="form-control mt-2" v-model="outcome.Resolution_es"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_link_es" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_es"/><br>
                             </div>
 
                             <div class="mb-1">
@@ -412,11 +417,6 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             </div>
                             
                             <div class="mb-1">
-                                <label for="Resolution_link_es" class="form-label">Resolution Link </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_link_es"/><br>
-                            </div>
-                            
-                            <div class="mb-1">
                               <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
                               <label class="form-check-label" for="flexCheckDefault">
                                 Allow Refresh
@@ -437,6 +437,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             <div class="mb-1">
                                 <label for="Resolution_fr" class="form-label">Resolution  </label>
                                 <input class="form-control mt-2" v-model="outcome.Resolution_fr"/><br>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="Resolution_link_fr" class="form-label">Resolution Link </label>
+                                <input class="form-control mt-2" v-model="outcome.Resolution_link_fr"/><br>
                             </div>
 
                             <div class="mb-1">
@@ -502,11 +507,6 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                             <div class="mb-1">
                                 <label for="date_fr" class="form-label">Date </label>
                                 <input class="form-control mt-2" v-model="outcome.date_fr"/><br>
-                            </div>
-                            
-                            <div class="mb-1">
-                                <label for="Resolution_link_fr" class="form-label">Resolution Link </label>
-                                <input class="form-control mt-2" v-model="outcome.Resolution_link_fr"/><br>
                             </div>
                             
                             <div class="mb-1">
