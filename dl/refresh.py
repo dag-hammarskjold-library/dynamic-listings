@@ -12,14 +12,20 @@ from babel.dates import format_datetime
 
 # function that formats translated dates in French and Spanish
 def get_date_in_lang(date, locale):
-    dateStr=datetime.strptime(date, '%d %B %Y')
-    lang_format = format_datetime(dateStr, "long", locale=locale)
-    if locale=='es_ES':
-        return f"{' '.join(lang_format.split(' ')[0:5]).rstrip(',')}"
-    elif locale=='fr_FR':
-        return f"{' '.join(lang_format.split(' ')[0:3]).rstrip(',')}"
-    else:
-        pass
+    if not date or date == "":
+        return ""
+    try:
+        dateStr=datetime.strptime(date, '%d %B %Y')
+        lang_format = format_datetime(dateStr, "long", locale=locale)
+        if locale=='es_ES':
+            return f"{' '.join(lang_format.split(' ')[0:5]).rstrip(',')}"
+        elif locale=='fr_FR':
+            return f"{' '.join(lang_format.split(' ')[0:3]).rstrip(',')}"
+        else:
+            return date
+    except (ValueError, TypeError) as e:
+        print(f"WARNING: Error formatting date '{date}' for locale {locale}: {e}")
+        return date  # Return original date if formatting fails
 
 # function that returns translations of the agenda subjects based onthe english text and a query language code from the lookup table
 def query_agendas_collection(text_en, query_lang,coll_agendas):
@@ -97,9 +103,17 @@ def process_records(coll_agendas,query_string,year):
         outcome_obj={}
 
         document_symbol=bib.get_value('191', 'a')
+        if not document_symbol:
+            print(f"WARNING: Skipping record with empty document_symbol (bib.id: {getattr(bib, 'id', 'unknown')})")
+            continue
+            
         action_date=bib.get_value('992','a')
         if action_date !='':
-            action_date=datetime.strptime(action_date, '%Y-%m-%d').strftime('%d %B %Y') 
+            try:
+                action_date=datetime.strptime(action_date, '%Y-%m-%d').strftime('%d %B %Y')
+            except ValueError as e:
+                print(f"WARNING: Invalid date format '{action_date}' for record {document_symbol}: {e}")
+                action_date = ""  # Set to empty string if date parsing fails 
         agenda_subject=''.join(bib.get_values('991','c'))
         #trim the period at the end
         agenda_subject=agenda_subject.rstrip('.')
@@ -151,38 +165,44 @@ def process_records(coll_agendas,query_string,year):
                 
         #else:
         # we need second query to find a vote  value. We are searching for bib/voting records where 952 matches our current S/PV. symbol 
-        query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
-        print(query2.to_json())
-        # iterate over the metadata in the bib  record to assemble outcome_vote and outcome text
-        for bib in BibSet.from_query(query2):
-            outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-            if outcome_vote=="0-0-0":
-                outcome_vote=bib.get_value('996', 'a')
-            #if not bib.get
-            outcome_texts2=bib.get_values('791','a')
-            #print(outcome_texts2)
-            #outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-            
-            #outcome_text=""
-            for outcome_text2 in outcome_texts2:
-                if outcome_text2:
-                    outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-                    outcome_obj={"outcome_vote":outcome_vote,
-                            "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                    {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-                else:
-                    outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
-                    outcome_obj={"outcome_vote":outcome_vote,
-                            "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                    {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
-                                    {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
-            
-            outcomes.append(outcome_obj)
+        try:
+            query2 = Query.from_string("952__a:'"+document_symbol+"'") # Dataset-search_query
+            print(query2.to_json())
+            # iterate over the metadata in the bib  record to assemble outcome_vote and outcome text
+            for bib in BibSet.from_query(query2):
+                outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                if outcome_vote=="0-0-0":
+                    outcome_vote=bib.get_value('996', 'a')
+                #if not bib.get
+                outcome_texts2=bib.get_values('791','a')
+                #print(outcome_texts2)
+                #outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                
+                #outcome_text=""
+                for outcome_text2 in outcome_texts2:
+                    if outcome_text2:
+                        outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                        outcome_obj={"outcome_vote":outcome_vote,
+                                "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                        {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                        {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                    else:
+                        outcome_vote=str(int(bib.get_value('996', 'b')))+"-"+str(int(bib.get_value('996', 'c')))+"-"+str(int(bib.get_value('996', 'd')))
+                        outcome_obj={"outcome_vote":outcome_vote,
+                                "outcome":[{"lang":"EN", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                        {"lang":"FR", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""},
+                                        {"lang":"ES", "outcome_text":outcome_text2,"outcome_text_link":"https://docs.un.org/"+outcome_text2,"outcome_text_prefix":"","outcome_text_sufix":""}]}
+                
+                outcomes.append(outcome_obj)
+        except Exception as e:
+            print(f"WARNING: Error querying voting records for {document_symbol}: {e}")
+            # Continue processing even if voting query fails
     #i+=1
         #print(i,document_symbol,outcomes)
         if outcomes==[]:
-            outcomes.append(outcome_obj)
+            # Only append empty outcome_obj if it was initialized
+            if outcome_obj:
+                outcomes.append(outcome_obj)
         outcome_text=""
         outcome_vote=""         
         #data_model=(document_symbol, action_date, agenda_subject, outcomes)
@@ -215,8 +235,8 @@ def process_records(coll_agendas,query_string,year):
         "press_release_text_sufix_es":"",
         #"date":action_date,
         "date":[{"lang":"EN","value":action_date},
-                {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR')},
-                {"lang":"ES","value":get_date_in_lang(action_date,'es_ES')}],
+                {"lang":"FR","value":get_date_in_lang(action_date,'fr_FR') if action_date else ""},
+                {"lang":"ES","value":get_date_in_lang(action_date,'es_ES') if action_date else ""}],
         "topic":[{"lang":"EN","value":agenda_subject},
                 {"lang":"FR","value": query_agendas_collection(agenda_subject, "FR",coll_agendas)},
                 #{"lang":"FR","value":agenda_subject},
@@ -239,15 +259,47 @@ def refresh_scmo(year:str,month:str):
     query_string ='191__a:"S/PV." AND 992:"'+year+"-"+month+'"'
     coll_dl5,coll_agendas=connect_db()
     documents=process_records(coll_agendas,query_string,year)
+    processed_count = 0
+    skipped_count = 0
+    error_count = 0
+    
+    print(f"Processing {len(documents)} documents for year {year}, month {month}")
+    
     for doc in documents:
+        if not doc.get('meeting_record'):
+            print(f"WARNING: Skipping document with empty meeting_record: {doc}")
+            skipped_count += 1
+            continue
+            
         update_filter = {'meeting_record': doc['meeting_record']}
         new_values = {'$set': doc}
         mdb_doc = coll_dl5.find_one({"meeting_record": doc['meeting_record']})
         try:
-            if mdb_doc['refresh']==True:
+            if mdb_doc is None:
+                # Record doesn't exist, insert it
                 coll_dl5.update_one(update_filter, new_values, upsert=True)
-        except:
+                print(f"INSERTED new record: {doc['meeting_record']}")
+                processed_count += 1
+            elif mdb_doc.get('refresh') == True:
+                # Record exists and refresh is True, update it
+                coll_dl5.update_one(update_filter, new_values, upsert=True)
+                print(f"UPDATED record: {doc['meeting_record']}")
+                processed_count += 1
+            else:
+                # Record exists but refresh is False, skip it
+                print(f"SKIPPED record (refresh=False): {doc['meeting_record']}")
+                skipped_count += 1
+        except Exception as e:
             #in case there is not a match an exception will insert a new record
-            coll_dl5.update_one(update_filter, new_values, upsert=True)
+            print(f"ERROR processing {doc.get('meeting_record', 'unknown')}: {str(e)}")
+            try:
+                coll_dl5.update_one(update_filter, new_values, upsert=True)
+                print(f"INSERTED record after error: {doc['meeting_record']}")
+                processed_count += 1
+            except Exception as e2:
+                print(f"FAILED to insert record {doc.get('meeting_record', 'unknown')}: {str(e2)}")
+                error_count += 1
+    
+    print(f"Refresh complete: {processed_count} processed, {skipped_count} skipped, {error_count} errors")
    
     
