@@ -1,0 +1,46 @@
+---
+description: Keep Dynamic Listings help in sync with every user-facing feature or UI change
+alwaysApply: true
+---
+
+# Help documentation (required)
+
+When you add or change **anything operators see or do** in Dynamic Listings, update the in-app help in the **same task** (same PR / same change set). Do not ship UI, routes, or workflows without matching help text.
+
+## Source files
+
+| File | Purpose |
+|------|---------|
+| `dl/templates/_help_document.html` | All help sections and TOC links |
+| `dl/templates/help_page.html` | Signed-in shell (only if layout/actions change) |
+| `dl/templates/help_login.html` | Pre-login shell (only if layout/actions change) |
+| `dl/static/css/help.css` | Help-specific layout (bump `?v=` when changed) |
+| `dl/static/js/help.js` | Print / PDF (bump `?v=` when changed) |
+
+Content is shared via `_help_document.html`; edit sections there unless you are changing chrome only.
+
+## What triggers a help update
+
+- New dashboard module, route, or navigation item (sidebar, top bar, login footer)
+- New or renamed buttons, forms, fields, exports, or **Display** / refresh behavior
+- Role, sign-in, or permission changes
+- Data model changes that affect how users create/edit records (e.g. Veto prefix/link fields)
+- Removed or deprecated features (remove or mark obsolete in help)
+
+## How to update
+
+1. Add or revise numbered sections with stable `id` anchors (kebab-case) in `_help_document.html`.
+2. Mirror every new/changed section in the **Contents** `<ol>` at the top of that file.
+3. Use **exact UI labels** from the app (`<strong>Update the table</strong>`, etc.).
+4. Audience: **operators and admins**, not developers (no env dumps unless troubleshooting).
+5. Bump `help.css?v=` / `help.js?v=` in `help_page.html` and `help_login.html` when those assets change.
+6. Optionally bump `Document version:` month/year in the help header when content materially changes.
+
+## Checklist before finishing a feature
+
+- [ ] Help describes the new/changed workflow end-to-end
+- [ ] TOC includes links to new section ids
+- [ ] Export, refresh, and module-specific quirks documented if they changed
+- [ ] Troubleshooting updated if users might hit new failure modes
+
+Reference pattern: ISMT `WEB/help.html`; this project uses the app-themed `help_page.html` + `_help_document.html`.

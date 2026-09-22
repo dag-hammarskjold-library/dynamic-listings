@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Veto List</li>
+{% endblock %}
+
+{% block content %}
+<div class="modern-card fade-in">
+    <div class="description-section mb-4">
+        <h1 class="card-title">
+            <i class="fas fa-gavel me-3"></i>
+            Veto List
+        </h1>
+        <p class="card-subtitle">Manage the SC veto table in English, French, and Spanish. All data is entered and maintained in this application (no MARC import).</p>
+    </div>
+
+    <div id="dldatasetveto">
+        <displaylistdatasetvetocomponent title="Dataset for Veto List" prefix=""></displaylistdatasetvetocomponent>
+    </div>
+</div>
+{% endblock %}

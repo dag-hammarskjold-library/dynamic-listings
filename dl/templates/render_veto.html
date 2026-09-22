@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://d2jv02qf7xgjwx.cloudfront.net/sites/50/include/style1.css">
+        <style type="text/css">
+            a {border-bottom: dotted 0.1rem #333333;}
+            td {padding: 0.75em 0.75em 0.75em 0.75em !important;}
+            th {text-align: center;}
+            tr {font-size: 13px;}
+        </style>
+    </head>
+    <body>
+
+    <p style="text-align: justify;">&nbsp;</p>
+        <table id="myTable" class="tablefont" summary="Veto list" style="width:800px;border: 1px solid black;border-collapse: collapse;">
+            <tbody>
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <th colspan="5" style="border: 1px solid black;border-collapse: collapse;">{{ page_title|safe }}</th>
+                </tr>
+                {% if footer_note %}
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <td colspan="5" style="border: 1px solid black;border-collapse: collapse;" align="center">{{ footer_note|safe }}</td>
+                </tr>
+                {% endif %}
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    {% for col in column_headers %}
+                    <th style="border: 1px solid black;border-collapse: collapse;" width="{{ col.width }}">{{ col.label|safe }}</th>
+                    {% endfor %}
+                </tr>
+                {% for record in data %}
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <td style="border: 1px solid black;border-collapse: collapse;">{{ record.cells.date|safe }}</td>
+                    <td style="border: 1px solid black;border-collapse: collapse;">{{ record.cells.draft|safe }}</td>
+                    <td style="border: 1px solid black;border-collapse: collapse;">{{ record.cells.written_record|safe }}</td>
+                    <td style="border: 1px solid black;border-collapse: collapse;">{{ record.cells.agenda_item|safe }}</td>
+                    <td style="border: 1px solid black;border-collapse: collapse;">{{ record.cells.negative_vote|safe }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

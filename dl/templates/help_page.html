@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Help — Dynamic Listings{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/help.css') }}?v=2" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Help</li>
+{% endblock %}
+
+{% block content %}
+<div class="help-page fade-in">
+    <div class="modern-card liquid-card liquid-effect help-page-header">
+        <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 w-100">
+            <div>
+                <h1 class="card-title mb-1">
+                    <i class="fas fa-circle-question me-2 text-primary"></i>
+                    Help &amp; documentation
+                </h1>
+                <p class="card-subtitle mb-0">How to use Dynamic Listings modules, exports, and refresh.</p>
+            </div>
+            <div class="help-actions help-no-print">
+                <button type="button" id="print-help" class="btn btn-secondary-modern btn-modern" title="Print this page">
+                    <i class="fas fa-print me-1"></i> Print
+                </button>
+                <button type="button" id="download-pdf" class="btn btn-primary-modern btn-modern" title="Download help as PDF">
+                    <i class="fas fa-file-pdf me-1"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% include "_help_document.html" %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/help.js') }}?v=2"></script>
+{% if embedded %}
+<script>document.documentElement.classList.add('help-embedded');</script>
+{% endif %}
+{% endblock %}

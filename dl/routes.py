@@ -8,6 +8,16 @@ from datetime import date
 from .tools import add_log
 from .refresh import refresh_scmo
 from .refresh_ga import execute_refresh_ga
+from .veto_html_import import (
+    VETO_DEFAULT_LISTING_ID,
+    VETO_COLUMN_ORDER,
+    compose_veto_cell_html,
+    empty_veto_document as _empty_veto_document,
+    import_veto_records_from_html_contents,
+    import_veto_records_from_html_files,
+    veto_legacy_html_field_unset,
+    veto_per_lang_field_names as _veto_per_lang_field_names,
+)
 from bson.objectid import ObjectId
 import requests
 from dotenv import load_dotenv
@@ -20,9 +30,29 @@ import os
 main=Blueprint("main",__name__)
 
 # connection to the database
-#config = dotenv_values(".env") 
+#config = dotenv_values(".env")
 load_dotenv()
-my_client = MongoClient(os.getenv("DATABASE_CONN"))
+
+
+def _mongodb_client():
+    """App DB client. Local dev uses UAT SSM URI when DLX_REST_LOCAL (see .env Atlas creds)."""
+    uri = os.getenv("DATABASE_CONN") or os.getenv("MONGO_CS")
+    if os.environ.get("DLX_REST_LOCAL"):
+        try:
+            import boto3
+
+            uri = boto3.client("ssm", region_name=os.environ.get("AWS_DEFAULT_REGION", "us-east-1")).get_parameter(
+                Name="uatISSU-admin-connect-string",
+                WithDecryption=True,
+            )["Parameter"]["Value"]
+        except Exception as exc:
+            print(f"Could not load Mongo URI from SSM for local dev: {exc}")
+    if not uri:
+        raise RuntimeError("DATABASE_CONN (or MONGO_CS) is not configured")
+    return MongoClient(uri)
+
+
+my_client = _mongodb_client()
 
 
 ####################################################################################################################
@@ -258,6 +288,20 @@ def test():
 ############  INDEX ROUTES
 ####################################################################################################################
 ####################################################################################################################
+
+@main.route("/help")
+def application_help():
+    from_login = request.args.get("from") == "login"
+    embedded = request.args.get("embedded") == "1"
+    ctx = {"from_login": from_login, "embedded": embedded}
+    if session.get("username"):
+        return render_template(
+            "help_page.html",
+            session_username=session["username"],
+            **ctx,
+        )
+    return render_template("help_login.html", **ctx)
+
 
 @main.route("/index")
 def index():
@@ -1804,6 +1848,84 @@ def refresh_data_ga():
         # user not authentificated
         return redirect("login")
 
+def _ga_listing_field_names():
+    langs = ("en", "fr", "es")
+    fields = (
+        "Resolution_prefix", "Resolution", "Resolution_sufix", "Resolution_link",
+        "Plenary_prefix", "Plenary", "Plenary_sufix",
+        "Agenda_numbers_prefix", "Agenda_numbers", "Agenda_numbers_sufix",
+        "Meeting_prefix", "Meeting", "Meeting_sufix", "Meeting_link",
+        "Draft_Resolution_prefix", "Draft_Resolution", "Draft_Resolution_sufix", "Draft_Resolution_link",
+        "Title_prefix", "Title", "Title_sufix",
+        "date",
+        "Vote_prefix", "Vote", "Vote_sufix", "Vote_link",
+    )
+    names = []
+    for base in fields:
+        for lang in langs:
+            names.append(f"{base}_{lang}")
+    return names
+
+
+def _empty_ga_listing_document():
+    doc = {name: "" for name in _ga_listing_field_names()}
+    doc["Resolution"] = ""
+    doc["refresh"] = True
+    doc["listing_id"] = ""
+    return doc
+
+
+@main.route("/create_ga_listing", methods=["POST"])
+def create_ga_listing():
+    if not session or not session.get("username"):
+        return redirect("login")
+
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_ga_res_data_collection"]
+    my_language_selected = request.form.get("languageSelected")
+    my_listing_id = request.form.get("listing_id")
+    my_refresh = request.form.get("refresh") != "false"
+
+    if not my_listing_id:
+        return jsonify(message="Listing id is required."), 400
+
+    dataset = _empty_ga_listing_document()
+    dataset["listing_id"] = my_listing_id
+    dataset["refresh"] = my_refresh
+
+    lang_suffix = {"EN": "en", "FR": "fr", "ES": "es"}.get(my_language_selected)
+    if not lang_suffix:
+        return jsonify(message="Unsupported language."), 400
+
+    for name in _ga_listing_field_names():
+        if name.endswith(f"_{lang_suffix}"):
+            dataset[name] = request.form.get(name) or ""
+
+    resolution = dataset.get(f"Resolution_{lang_suffix}") or ""
+    if not resolution:
+        return jsonify(message="Resolution symbol is required."), 400
+
+    dataset["Resolution"] = resolution
+    for lang in ("en", "fr", "es"):
+        key = f"Resolution_{lang}"
+        if not dataset.get(key):
+            dataset[key] = resolution
+        link_key = f"Resolution_link_{lang}"
+        if not dataset.get(link_key) and resolution:
+            dataset[link_key] = "https://docs.un.org/" + resolution
+
+    if my_collection.find_one({"Resolution": resolution}):
+        return jsonify(message=f"Record already exists for {resolution}."), 409
+
+    my_collection.insert_one(dataset)
+    add_log(
+        datetime.datetime.now(tz=datetime.timezone.utc),
+        session.get("username", "unknown"),
+        f"GA resolution {resolution} created in {my_listing_id}",
+    )
+    return jsonify(message="Record created")
+
+
 # route to update the GA listing
 @main.route("/update_ga_listing", methods=["PUT"])
 def update_ga_listing():
@@ -1971,3 +2093,292 @@ def update_ga_listings():
     # Log
     add_log(datetime.datetime.now(tz=datetime.timezone.utc), session.get('username', 'unknown'), f"GA Listing {my_listing_id} updated!")
     return jsonify(message="GA record updated")
+####################################################################################################################
+# Security Council Veto (app-managed; collection dl_veto_data_collection)
+####################################################################################################################
+
+def _veto_sort_key(record):
+    sort_date = (record.get("sort_date") or "").strip()
+    if len(sort_date) >= 10:
+        try:
+            return datetime.datetime.strptime(sort_date[:10], "%Y-%m-%d")
+        except ValueError:
+            pass
+    return datetime.datetime.min
+
+
+@main.route("/datasetSCVeto")
+def dataset_sc_veto():
+    if session and session.get("username"):
+        return render_template("datasetscveto.html", session_username=session["username"])
+    return redirect("login")
+
+
+@main.route("/getvetolistingsId")
+def get_veto_listings_id():
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    my_fields = sorted(my_collection.distinct("listing_id"), reverse=True)
+    return json.loads(json_util.dumps(my_fields))
+
+
+@main.route("/getvetolistings/<listing>", methods=["GET"])
+def get_veto_listings(listing):
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    my_fields = list(my_collection.find({"listing_id": listing}))
+    my_fields.sort(key=_veto_sort_key, reverse=True)
+    return json.loads(json_util.dumps(my_fields))
+
+
+@main.route("/exportjsonveto/<meeting>", methods=["GET"])
+def export_json_veto(meeting):
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    rows = list(my_collection.find({"listing_id": meeting}, {"_id": 0}))
+    rows.sort(key=_veto_sort_key, reverse=True)
+    return json.loads(json_util.dumps(rows))
+
+
+@main.route("/render_meeting_veto/<codemeeting>/<language>", methods=["GET"])
+def render_meeting_veto(codemeeting, language):
+    language = language.upper()
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    records = list(my_collection.find({"listing_id": codemeeting}))
+    records.sort(key=_veto_sort_key, reverse=True)
+
+    meta = {
+        "EN": {
+            "page_title": "Veto List<br>(in reverse chronological order)",
+            "footer_note": (
+                'Prepared and maintained by the Dag Hammarskj&#246;ld Library. '
+                'Data from 1946-2004 were taken from document '
+                '<a target="_top" href="http://undocs.org/A/58/47(SUPP)">A/58/47</a>, Annex III.<br>'
+                '* source: "Peace and Security Data Hub: Security Council Data - Vetoes Since 1946"; '
+                'most are veto of paragraphs or amendments, see meeting records for details.'
+            ),
+            "columns": [
+                {"width": "15%", "label": "Date"},
+                {"width": "15%", "label": "Draft"},
+                {"width": "20%", "label": "Written<br>Record"},
+                {"width": "30%", "label": "Agenda Item"},
+                {"width": "20%", "label": "Permanent<br>Member Casting<br>Negative Vote"},
+            ],
+            "suffix": "en",
+        },
+        "FR": {
+            "page_title": "Liste des vetos<br>(ordre chronologique inverse)",
+            "footer_note": (
+                'Les donn&eacute;es de 1946-2004 sont extraites du rapport '
+                '<a target="_top" href="http://undocs.org/A/58/47(SUPP)">A/58/47</a>, annexe III.<br>'
+                '* source: "Peace and Security Data Hub: Security Council Data - Vetoes Since 1946"; '
+                'la plupart sont des veto sur des paragraphes ou des amendements, '
+                'voir les comptes rendus des r&eacute;unions pour plus de d&eacute;tails'
+            ),
+            "columns": [
+                {"width": "15%", "label": "Date"},
+                {"width": "15%", "label": "Projet de r&eacute;solution"},
+                {"width": "20%", "label": "Proc&egrave;s-verbal"},
+                {"width": "30%", "label": "Question"},
+                {"width": "20%", "label": "Membre(s) permanent(s) ayant&nbsp;vot&eacute;&nbsp;contre"},
+            ],
+            "suffix": "fr",
+        },
+        "ES": {
+            "page_title": "Lista de Veto<br>(clasificados por orden cronol&oacute;gico inverso)",
+            "footer_note": (
+                'Lista preparada y actualizada por la Biblioteca Dag Hammarskj&#246;ld. '
+                'La informaci&oacute;n que figura desde 1946 a 2004 se obtuvo del documento '
+                '<a target="_top" href="http://undocs.org/es/A/58/47(SUPP)">A/58/47</a>, Anexo III.<br>'
+                '* fuente: "Peace and Security Data Hub: Security Council Data - Vetoes desde 1946"; '
+                'la mayor&iacute;a son vetos de p&aacute;rrafos y/o enmiendas, '
+                'para informaci&oacute;n detallada, consulte las actas de las reuniones.'
+            ),
+            "columns": [
+                {"width": "15%", "label": "Fecha"},
+                {"width": "15%", "label": "Proyecto"},
+                {"width": "20%", "label": "Acta de sesi&oacute;n<br>Registro escrito"},
+                {"width": "30%", "label": "Tema"},
+                {"width": "20%", "label": "Miembros permanentes que votaron en contra"},
+            ],
+            "suffix": "es",
+        },
+    }
+    lang_meta = meta.get(language, meta["EN"])
+    suffix = lang_meta["suffix"]
+
+    display_rows = []
+    for record in records:
+        cells = {
+            col: compose_veto_cell_html(record, col, suffix) for col in VETO_COLUMN_ORDER
+        }
+        display_rows.append({"cells": cells})
+
+    return render_template(
+        "render_veto.html",
+        page_title=lang_meta["page_title"],
+        footer_note=lang_meta["footer_note"],
+        column_headers=lang_meta["columns"],
+        data=display_rows,
+    )
+
+
+@main.route("/create_veto_listing", methods=["POST"])
+def create_veto_listing():
+    if not session or not session.get("username"):
+        return redirect("login")
+
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    language_selected = request.form.get("languageSelected")
+    listing_id = request.form.get("listing_id") or VETO_DEFAULT_LISTING_ID
+
+    lang_suffix = {"EN": "en", "FR": "fr", "ES": "es"}.get(language_selected)
+    if not lang_suffix:
+        return jsonify(message="Unsupported language."), 400
+
+    dataset = _empty_veto_document()
+    dataset["listing_id"] = listing_id
+    for name in _veto_per_lang_field_names():
+        if name.endswith(f"_{lang_suffix}"):
+            dataset[name] = request.form.get(name) or ""
+
+    veto_id = (request.form.get("Veto_id") or "").strip()
+    if not veto_id:
+        return jsonify(message="Record id (Veto_id) is required."), 400
+
+    dataset["Veto_id"] = veto_id
+    dataset["sort_date"] = (request.form.get("sort_date") or "").strip()
+
+    if my_collection.find_one({"Veto_id": veto_id, "listing_id": listing_id}):
+        return jsonify(message=f"Record already exists for {veto_id}."), 409
+
+    my_collection.insert_one(dataset)
+    add_log(
+        datetime.datetime.now(tz=datetime.timezone.utc),
+        session.get("username", "unknown"),
+        f"SC Veto record {veto_id} created in {listing_id}",
+    )
+    return jsonify(message="Record created")
+
+
+@main.route("/update_veto_listing", methods=["PUT"])
+def update_veto_listing():
+    if not session or not session.get("username"):
+        return redirect("login")
+
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    language_selected = request.form.get("languageSelected")
+    record_id = request.form.get("_id")
+    listing_id = request.form.get("listing_id")
+
+    lang_suffix = {"EN": "en", "FR": "fr", "ES": "es"}.get(language_selected)
+    if not lang_suffix or not record_id:
+        return jsonify(message="Invalid update request."), 400
+
+    update_fields = {"listing_id": listing_id}
+    for name in _veto_per_lang_field_names():
+        if name.endswith(f"_{lang_suffix}"):
+            update_fields[name] = request.form.get(name) or ""
+
+    sort_date = request.form.get("sort_date")
+    if sort_date is not None:
+        update_fields["sort_date"] = sort_date.strip()
+
+    my_collection.update_one(
+        {"_id": ObjectId(record_id)},
+        {"$set": update_fields, "$unset": veto_legacy_html_field_unset()},
+    )
+    add_log(
+        datetime.datetime.now(tz=datetime.timezone.utc),
+        session.get("username", "unknown"),
+        f"SC Veto listing {listing_id} updated",
+    )
+    return jsonify(message="Veto record updated")
+
+
+@main.route("/delete_veto_listing", methods=["POST"])
+def delete_veto_listing():
+    if not session or not session.get("username"):
+        return redirect("login")
+
+    my_database = my_client["DynamicListings"]
+    my_collection = my_database["dl_veto_data_collection"]
+    record_id = request.form.get("_id")
+    if not record_id:
+        return jsonify(message="Record id required."), 400
+
+    my_collection.delete_one({"_id": ObjectId(record_id)})
+    add_log(
+        datetime.datetime.now(tz=datetime.timezone.utc),
+        session.get("username", "unknown"),
+        f"SC Veto record {record_id} deleted",
+    )
+    return jsonify(message="Record deleted")
+
+
+@main.route("/import_veto_from_html", methods=["POST"])
+def import_veto_from_html():
+    if not session or not session.get("username"):
+        return jsonify(message="Sign in required."), 401
+
+    listing_id = (request.form.get("listing_id") or VETO_DEFAULT_LISTING_ID).strip()
+    dry_run = request.form.get("dry_run") in ("1", "true", "on", "yes")
+    on_conflict = (request.form.get("on_conflict") or "skip").strip().lower()
+    if on_conflict not in ("skip", "update", "duplicate"):
+        if request.form.get("force") in ("1", "true", "on", "yes"):
+            on_conflict = "duplicate"
+        else:
+            on_conflict = "skip"
+
+    en_upload = request.files.get("en")
+    fr_upload = request.files.get("fr")
+    es_upload = request.files.get("es")
+    if not en_upload or not fr_upload or not es_upload:
+        return jsonify(message="Upload all three files: EN, FR, and ES HTML tables."), 400
+
+    try:
+        en_content = en_upload.read().decode("utf-8", errors="replace")
+        fr_content = fr_upload.read().decode("utf-8", errors="replace")
+        es_content = es_upload.read().decode("utf-8", errors="replace")
+    except Exception:
+        return jsonify(message="Could not read one or more uploaded files."), 400
+
+    if not en_content.strip() or not fr_content.strip() or not es_content.strip():
+        return jsonify(message="One or more uploaded files are empty."), 400
+
+    my_collection = my_client["DynamicListings"]["dl_veto_data_collection"]
+    stats = import_veto_records_from_html_contents(
+        my_collection,
+        en_content=en_content,
+        fr_content=fr_content,
+        es_content=es_content,
+        listing_id=listing_id,
+        dry_run=dry_run,
+        on_conflict=on_conflict,
+    )
+
+    action = "Dry run" if dry_run else "Import"
+    add_log(
+        datetime.datetime.now(tz=datetime.timezone.utc),
+        session.get("username", "unknown"),
+        (
+            f"Veto HTML {action} for {listing_id} ({on_conflict}): parsed={stats['parsed']} "
+            f"inserted={stats['inserted']} updated={stats['updated']} "
+            f"skipped={stats['skipped']} errors={stats['errors']}"
+        ),
+    )
+
+    would = "would be " if dry_run else ""
+    return jsonify(
+        message=(
+            f"{action} complete ({on_conflict}): {stats['parsed']} rows parsed, "
+            f"{stats['inserted']} {would}inserted, {stats['updated']} {would}updated, "
+            f"{stats['skipped']} skipped, {stats['errors']} errors."
+        ),
+        stats=stats,
+        dry_run=dry_run,
+        on_conflict=on_conflict,
+    )
