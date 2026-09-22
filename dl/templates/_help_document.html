@@ -1,0 +1,335 @@
+<div class="help-layout">
+    <nav class="help-toc help-no-print" aria-label="Table of contents">
+        <p class="help-toc-title">Contents</p>
+        <ol>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#getting-started">Getting started</a></li>
+            <li><a href="#navigation">Navigation</a></li>
+            <li><a href="#users">Users</a></li>
+            <li><a href="#logs">System logs</a></li>
+            <li><a href="#security-council">Security Council</a></li>
+            <li><a href="#ga-resolutions">GA Resolutions</a></li>
+            <li><a href="#veto-list">Veto List</a></li>
+            <li><a href="#veto-create-record">Creating a veto record (example)</a></li>
+            <li><a href="#exporting">Exporting data</a></li>
+            <li><a href="#refresh">Refresh from CDB</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ol>
+    </nav>
+
+    <article id="help-content" class="help-document">
+        <header>
+            <h1>Dynamic Listings — Help &amp; documentation</h1>
+            <p class="help-lead">
+                Dynamic Listings (DL) builds and maintains HTML tables of UN library data—Security Council meetings,
+                General Assembly resolutions, and the Veto List—stored in MongoDB. Operators sign in to review data,
+                edit records where needed, export tables, and open public-style display pages.
+            </p>
+            <p class="help-meta">Document version: September 2026</p>
+        </header>
+
+        <section id="overview" class="help-section">
+            <h2>1. Overview</h2>
+            <p>From the <strong>Dashboard</strong> you can open these modules:</p>
+            <ul>
+                <li><strong>Users</strong> — manage application accounts (email and password).</li>
+                <li><strong>Security Council</strong> — SC meeting listings pulled from the Central Database (CDB) with refresh and manual edits.</li>
+                <li><strong>GA Resolutions</strong> — General Assembly resolution listings with multilingual fields and refresh.</li>
+                <li><strong>Veto List</strong> — Veto table maintained entirely in the application (no CDB refresh).</li>
+                <li><strong>System Logs</strong> — audit trail of sign-ins and data changes.</li>
+            </ul>
+            <div class="help-callout">
+                Most listing data lives in MongoDB. Security Council and GA modules can be <strong>refreshed</strong> from CDB;
+                the Veto List is updated only through the app or bulk HTML import (administrative scripts).
+            </div>
+        </section>
+
+        <section id="getting-started" class="help-section">
+            <h2>2. Getting started</h2>
+            <h3>Sign in</h3>
+            <ol>
+                <li>Open the Dynamic Listings sign-in page.</li>
+                <li>Enter your <strong>Email Address</strong> and <strong>Password</strong>.</li>
+                <li>Click <strong>Sign In</strong>. You are taken to the dashboard when credentials are valid.</li>
+            </ol>
+            <p>Use <strong>Toggle Theme</strong> in the sidebar (or the icon on the sign-in page) to switch light or dark mode. The choice is saved in your browser.</p>
+            <h3>Sessions</h3>
+            <p>You must stay signed in to open data modules. Use <strong>Logout</strong> in the sidebar when you finish.</p>
+        </section>
+
+        <section id="navigation" class="help-section">
+            <h2>3. Navigation</h2>
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Control</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sidebar — Toggle Theme</strong></td>
+                        <td>Switch dark/light appearance (saved in your browser).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sidebar — Help</strong></td>
+                        <td>Open this documentation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sidebar — Logout</strong></td>
+                        <td>End your session.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Top bar — Home breadcrumb</strong></td>
+                        <td>Return to the dashboard from any module.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Top bar — Help</strong></td>
+                        <td>Same documentation page (Print / Download PDF).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dashboard cards</strong></td>
+                        <td>Quick links to Users, Security Council, GA Resolutions, Veto List, and System Logs.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="users" class="help-section">
+            <h2>4. Users</h2>
+            <p>The <strong>Users</strong> module lists accounts stored in MongoDB. Typical tasks:</p>
+            <ul>
+                <li><strong>Add user</strong> — create an account with email and password.</li>
+                <li><strong>Edit</strong> — update email or password for an existing user.</li>
+                <li><strong>Delete</strong> — remove a user after confirmation.</li>
+            </ul>
+            <div class="help-callout">
+                Protect admin credentials. Password changes take effect on the next sign-in.
+            </div>
+        </section>
+
+        <section id="logs" class="help-section">
+            <h2>5. System logs</h2>
+            <p><strong>System Logs</strong> shows a chronological list of actions (sign-ins, listing updates, record creates/deletes). Use it to audit who changed data and when.</p>
+        </section>
+
+        <section id="security-council" class="help-section">
+            <h2>6. Security Council</h2>
+            <p>Manage SC meeting listings for a selected year or listing id.</p>
+            <h3>Common actions</h3>
+            <ul>
+                <li><strong>Update the table</strong> — load records from MongoDB for the chosen listing.</li>
+                <li><strong>Display</strong> — open a public-style HTML table in a new tab.</li>
+                <li><strong>Refresh</strong> — pull newer data from CDB (when enabled for the listing).</li>
+                <li><strong>Create / Edit / Delete</strong> — adjust individual meeting rows for the active language.</li>
+                <li><strong>Full JSON</strong> — download the listing as JSON.</li>
+            </ul>
+            <p>Editing is usually scoped to one language at a time (English, French, or Spanish), matching the language selector on the module page.</p>
+        </section>
+
+        <section id="ga-resolutions" class="help-section">
+            <h2>7. GA Resolutions</h2>
+            <p>Works like Security Council for General Assembly resolution tables.</p>
+            <ul>
+                <li>Choose a <strong>listing</strong> and <strong>language</strong>, then <strong>Update the table</strong>.</li>
+                <li>Resolution cells use <strong>prefix</strong>, link text, URL, and <strong>sufix</strong> fields (plus related columns for meeting, draft, title, date).</li>
+                <li><strong>Refresh</strong> updates from CDB where configured.</li>
+                <li><strong>Display</strong>, <strong>Extract to Excel</strong>, and <strong>Extract to HTML</strong> mirror the live table.</li>
+            </ul>
+        </section>
+
+        <section id="veto-list" class="help-section">
+            <h2>8. Veto List</h2>
+            <p>The <strong>Veto List</strong> module has <em>no</em> CDB refresh. All rows are stored and edited in MongoDB.</p>
+            <h3>Working with records</h3>
+            <ol>
+                <li>Select listing (default <code>sc_veto_list</code>) and language.</li>
+                <li>Click <strong>Update the table</strong> to load rows sorted by date (newest first).</li>
+                <li>Use <strong>Create new record</strong> or the edit/delete icons on a row.</li>
+            </ol>
+            <h3 id="veto-create-record">Creating a new record (example)</h3>
+            <p>Use this walkthrough when adding a row by hand. The form title is <strong>Create record (EN)</strong>, <strong>Create record (FR)</strong>, or <strong>Create record (ES)</strong>, depending on the language selector at the top of the page.</p>
+            <ol>
+                <li>Open <strong>Veto List</strong> from the sidebar.</li>
+                <li>Set <strong>Choose listing:</strong> (usually <code>sc_veto_list</code>) and <strong>Language:</strong> to the language you are entering first (often English).</li>
+                <li>Click <strong>Create new record</strong>.</li>
+                <li>Fill the fields below, then click <strong>Create record</strong>.</li>
+                <li>For French and Spanish, change <strong>Language:</strong>, click <strong>Update the table</strong>, open the same row with the edit icon, and click <strong>Update record</strong> after filling that language’s fields. The record id field (<strong>Record id (unique key, e.g. primary draft symbol S/2026/273)</strong>) stays the same across languages.</li>
+            </ol>
+            <p class="help-callout">On create, only fields for the selected language are saved. Empty prefix, link text, URL, or sufix fields are allowed when a column has no link.</p>
+            <p>The table uses the same <strong>prefix</strong>, link text, URL, and <strong>sufix</strong> pattern as GA Resolutions (the form label is <em>sufix</em>, spelled as in the app). Text before the link goes in <strong>prefix</strong>; visible link wording in <strong>(link text)</strong>; the href in <strong>link (URL)</strong>; text after the link in <strong>sufix</strong>.</p>
+            <p><strong>Example — English (<code>EN</code>)</strong> for one veto row (illustrative values):</p>
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Form label (English)</th>
+                        <th>Example value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Listing id</td>
+                        <td><code>sc_veto_list</code></td>
+                    </tr>
+                    <tr>
+                        <td>Record id (unique key, e.g. primary draft symbol S/2026/273)</td>
+                        <td><code>S/2024/567</code></td>
+                    </tr>
+                    <tr>
+                        <td>Sort date (YYYY-MM-DD, for reverse chronological order)</td>
+                        <td><code>2024-03-15</code></td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td><code>15 March 2024</code></td>
+                    </tr>
+                    <tr>
+                        <td>Draft prefix</td>
+                        <td><em>(leave empty if the cell is only the symbol link)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Draft (link text)</td>
+                        <td><code>S/2024/567</code></td>
+                    </tr>
+                    <tr>
+                        <td>Draft link (URL)</td>
+                        <td><code>https://undocs.org/en/S/2024/567</code></td>
+                    </tr>
+                    <tr>
+                        <td>Draft sufix</td>
+                        <td><em>(empty)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Written record prefix</td>
+                        <td><em>(empty)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Written record (link text)</td>
+                        <td><code>S/PV.9580</code></td>
+                    </tr>
+                    <tr>
+                        <td>Written record link (URL)</td>
+                        <td><code>https://undocs.org/en/S/PV.9580</code></td>
+                    </tr>
+                    <tr>
+                        <td>Written record sufix</td>
+                        <td><em>(empty)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Agenda item prefix</td>
+                        <td><em>(empty)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Agenda item (link text)</td>
+                        <td>The situation in Country X</td>
+                    </tr>
+                    <tr>
+                        <td>Agenda item link (URL)</td>
+                        <td><em>(empty if the agenda line is plain text only)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Agenda item sufix</td>
+                        <td><em>(empty)</em></td>
+                    </tr>
+                    <tr>
+                        <td>Permanent member(s) casting negative vote</td>
+                        <td>United States</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>If the same cell needs both plain text and a link, put the leading text in <strong>prefix</strong>, the linked phrase in <strong>(link text)</strong>, the URL in <strong>link (URL)</strong>, and any trailing text in <strong>sufix</strong>. For a cell with multiple links, put the combined HTML-style content in the <strong>(link text)</strong> fields for that column (as after an HTML import), or split across prefix / link text / URL / sufix when a single link is enough.</p>
+            <p>If <strong>Create record</strong> fails with a message that the record already exists, choose a new <strong>Record id</strong> or edit the existing row instead. Use <strong>Sort date</strong> for table order; use <strong>Date</strong> for the text shown in the Date column.</p>
+            <h3>Import from HTML</h3>
+            <p>Click <strong>Import from HTML</strong> on the Veto List module page to upload the three table files (English, French, Spanish <code>.htm</code>). The app parses five-column rows, merges languages by row index, and inserts into MongoDB for the selected listing.</p>
+            <ul>
+                <li><strong>Dry run</strong> — parse and report counts without writing to the database.</li>
+                <li><strong>Skip</strong> — if <strong>Veto_id</strong> already exists for the listing, leave the MongoDB row unchanged (default).</li>
+                <li><strong>Update</strong> — if <strong>Veto_id</strong> exists, replace that record’s fields from the HTML row; new ids are inserted as usual.</li>
+                <li><strong>Insert duplicate</strong> — always add a new row even when <strong>Veto_id</strong> already exists (can create duplicates; use with care).</li>
+            </ul>
+            <p>The command-line script <code>scripts/import_veto_from_html.py</code> remains available for server-side file paths.</p>
+            <h3>Field model</h3>
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Column</th>
+                        <th>Stored fields (per language)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Date, Negative vote</td>
+                        <td>Single text/HTML field each (<code>date_en</code>, <code>negative_vote_en</code>, etc.).</td>
+                    </tr>
+                        <tr>
+                            <td>Draft, Written record, Agenda item</td>
+                            <td><code>prefix</code>, link text, <code>link</code> URL, and <code>sufix</code>. HTML import stores complex multi-link cells in the link text field when needed.</td>
+                        </tr>
+                </tbody>
+            </table>
+            <p><strong>Display</strong> opens the published-style veto table (title, footnotes, five columns). <strong>Extract to Excel</strong> and <strong>Extract to HTML</strong> use the grid on screen.</p>
+            <p>Each record has a unique <strong>Veto_id</strong> (usually the main draft symbol, e.g. <code>S/2026/273</code>) and a <strong>sort date</strong> (<code>YYYY-MM-DD</code>) for ordering.</p>
+        </section>
+
+        <section id="exporting" class="help-section">
+            <h2>9. Exporting data</h2>
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Export options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Security Council / GA / Veto</td>
+                        <td>Full JSON from the module toolbar; Excel and HTML from the table view after <strong>Update the table</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>Display pages</td>
+                        <td>Browser print or save from the opened HTML table.</td>
+                    </tr>
+                    <tr>
+                        <td>This help page</td>
+                        <td><strong>Download PDF</strong> or <strong>Print</strong> (Save as PDF in the browser).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="refresh" class="help-section">
+            <h2>10. Refresh from CDB</h2>
+            <p><strong>Refresh</strong> on Security Council and GA Resolutions requests updated data from the DHL Central Database and merges it into MongoDB according to each module’s rules.</p>
+            <ul>
+                <li>Allow time for the job to finish; watch notifications and system logs for errors.</li>
+                <li>Manual edits may be overwritten on fields marked for refresh—follow your team’s workflow before refreshing production listings.</li>
+                <li>Veto List records are never changed by refresh.</li>
+            </ul>
+        </section>
+
+        <section id="troubleshooting" class="help-section">
+            <h2>11. Troubleshooting</h2>
+            <h3>Cannot sign in</h3>
+            <ul>
+                <li>Confirm email and password. Ask an administrator to reset your password in <strong>Users</strong>.</li>
+                <li>Check that MongoDB is reachable from the application environment.</li>
+            </ul>
+            <h3>Table is empty after Update</h3>
+            <ul>
+                <li>Verify the correct listing id is selected.</li>
+                <li>For SC/GA, run <strong>Refresh</strong> if data should come from CDB.</li>
+                <li>For Veto List, confirm records exist for that listing in MongoDB.</li>
+            </ul>
+            <h3>Display page shows raw HTML or line breaks</h3>
+            <ul>
+                <li>Link columns use prefix, link text, URL, and sufix; plain columns store display HTML in the main field only.</li>
+                <li>Hard-refresh the browser if scripts or styles were updated recently.</li>
+            </ul>
+            <h3>PDF download fails</h3>
+            <ul>
+                <li>Ensure your network allows loading the PDF library from the CDN.</li>
+                <li>Use <strong>Print</strong> and choose “Save as PDF” in your browser instead.</li>
+            </ul>
+        </section>
+    </article>
+</div>

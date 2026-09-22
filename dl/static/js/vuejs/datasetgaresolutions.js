@@ -32,6 +32,9 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
               
               <div class="row mt-4">
                 <div class="col">
+                  <button type="button" class="btn btn-success me-2" @click="startCreateRecord()">
+                    Create new record
+                  </button>
                   <button type="button" class="btn btn-primary me-2" @click="displayData('listofmeetings','listoflanguages')">
                     Update the table
                   </button>
@@ -47,14 +50,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
                   <button type="button" class="btn btn-secondary me-2" @click="exportDataToJson('listofmeetings','listoflanguages')">
                     Full JSON
                   </button> 
-            </div>
-        </div>
-        
-        <div v-if="displayFTP" class="row mt-3">
-              <div class="col">
-                <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
-                  Go Back
-                </button>
+                </div>
               </div>
             </div>
         </div>
@@ -117,7 +113,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
 
                           <td style="border: 1px solid black;border-collapse: collapse;">
-                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>  
+                              <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;createRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>  
                               <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>               
                           </td>
                       </tr>
@@ -167,7 +163,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
                         <td style="border: 1px solid black;border-collapse: collapse;">
 
-                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
+                            <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;createRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
                             <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>
                         </td>
                     </tr>
@@ -216,7 +212,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
                   <td style="border: 1px solid black;border-collapse: collapse;">
 
-                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
+                      <span class="badge rounded-pill bg-warning" @click="displayRecordFromQuery=false;createRecordFromQuery=false;updateRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-pen"></i></span>
                       <span class="badge rounded-pill bg-danger"  @click="displayRecordFromQuery=false;deleteRecordFromQuery=true;openRecord(record.Resolution || '')"><i class="fas fa-trash-alt"></i></span>
                   </td>
               </tr>
@@ -227,17 +223,24 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
         </div>
 
-        <div v-if="updateRecordFromQuery">
+        <div v-if="updateRecordFromQuery || createRecordFromQuery">
                 <div class="mb-3">
-                  <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
-                  <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> Cette mise à jour affectera l'enregistrement </h3>
-                  <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> Esta actualización afectará el registro en español </h3>
+                  <h3 v-if="createRecordFromQuery && languageSelected==='EN'" class="text-primary font-weight-bold"> This creation will affect the record in English </h3>
+                  <h3 v-if="createRecordFromQuery && languageSelected==='FR'" class="text-primary font-weight-bold"> This creation will affect the record in French </h3>
+                  <h3 v-if="createRecordFromQuery && languageSelected==='ES'" class="text-primary font-weight-bold"> This creation will affect the record in Spanish </h3>
+                  <h3 v-if="updateRecordFromQuery && languageSelected==='EN'" class="text-primary font-weight-bold"> This update will affect the record in English </h3>
+                  <h3 v-if="updateRecordFromQuery && languageSelected==='FR'" class="text-primary font-weight-bold"> Cette mise à jour affectera l'enregistrement </h3>
+                  <h3 v-if="updateRecordFromQuery && languageSelected==='ES'" class="text-primary font-weight-bold"> Esta actualización afectará el registro en español </h3>
                   <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This update will affect the record in Russian</h3>
                   <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This update will affect the record in Arabic </h3>
                   <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This update will affect the record in Chinese</h3>
                 </div> 
                 <hr> 
                 <form @submit.prevent="">
+                  <div v-if="createRecordFromQuery" class="mb-3">
+                    <label for="listing_id_create" class="form-label">Listing id</label>
+                    <input type="text" class="form-control" id="listing_id_create" v-model="listing_id">
+                  </div>
     
                   <!-- ------------------- ENGLISH ----------------------- --> 
 
@@ -521,84 +524,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
 
                     <hr>
-                    <button type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
+                    <button v-if="updateRecordFromQuery" type="submit" class="btn btn-primary" @click="updateRecord()"> Update your record </button>
+                    <button v-if="createRecordFromQuery" type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button>
                     <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
                 </form>
             </div>
-        
-
-        <div v-if="createRecordFromQuery">
-              <div class="mb-3">
-                <h3 v-if="languageSelected==='EN'" class="text-primary font-weight-bold"> This creation will affect the record in English </h3>
-                <h3 v-if="languageSelected==='FR'" class="text-primary font-weight-bold"> This creation will affect the record in French </h3>
-                <h3 v-if="languageSelected==='ES'" class="text-primary font-weight-bold"> This creation will affect the record in Spanish </h3>
-                <h3 v-if="languageSelected==='RU'" class="text-primary font-weight-bold"> This creation will affect the record in Russian</h3>
-                <h3 v-if="languageSelected==='AR'" class="text-primary font-weight-bold"> This creation will affect the record in Arabic </h3>
-                <h3 v-if="languageSelected==='ZH'" class="text-primary font-weight-bold"> This creation will affect the record in Chinese</h3>
-              </div> 
-              <hr> 
-              <form @submit.prevent="">
-              <div v-if="languageSelected==='EN'" class="mb-3">
-                  <label for="inputMeeting" class="form-label">Meeting</label>
-                  <input type="text" class="form-control" id="meeting_recorden" name="meeting_recorden" v-model="meeting_recorden">
-              </div>   
-              
-              <div v-if="languageSelected==='FR'" class="mb-3">
-                  <label for="inputMeeting" class="form-label">Meeting</label>
-                  <input type="text" class="form-control" id="meeting_recordfr" name="meeting_recordfr" v-model="meeting_recordfr">
-              </div>
-              
-              <div v-if="languageSelected==='ES'" class="mb-3">
-                  <label for="inputMeeting" class="form-label">Meeting</label>
-                  <input type="text" class="form-control" id="meeting_recordes" name="meeting_recordes" v-model="meeting_recordes">
-              </div>
-
-
-              <div v-if="languageSelected==='EN'" class="mb-3">
-                  <label for="inputMeetingLinkEN" class="form-label">Meeting Link</label>
-                  <input type="text" class="form-control" id="meetinglinken" name="meetinglinken" v-model="meetinglinken">
-              </div> 
-              
-              <div v-if="languageSelected==='FR'" class="mb-3">
-                  <label for="inputMeetingLinkFR" class="form-label">Meeting Link</label>
-                  <input type="text" class="form-control" id="meetinglinkfr" name="meetinglinkfr" v-model="meetinglinkfr">
-              </div> 
-              
-              <div v-if="languageSelected==='ES'" class="mb-3">
-                  <label for="inputMeetingLinkES" class="form-label">Meeting Link</label>
-                  <input type="text" class="form-control" id="meetinglinkes" name="meetinglinkes" v-model="meetinglinkes">
-              </div> 
-
-              <div class="mb-3">
-                  <label for="inputMeetingLink" class="form-label">Record Link</label>
-                  <input type="text" class="form-control" id="record_link" name="record_link" v-model="record_link">
-              </div>  
-              <div class="mb-3">
-                  <label for="inputName" class="form-label">Date</label>
-                  <input type="text" class="form-control" id="date" name="date" v-model="date">
-              </div>   
-              <div class="mb-3">
-                  <label for="inputListingID" class="form-label">Listing id</label>
-                  <input type="text" class="form-control" id="listing_id" name="listing_id" v-model="listing_id" >
-              </div> 
-              <div class="mb-3">
-                  <label for="inputName" class="form-label">Topic</label>
-                  <input type="text" class="form-control" id="topic" name="topic" v-model="topic">
-              </div>   
-
-             
-
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="refresh" id="refresh" v-model="outcome.refresh">
-                <label class="form-check-label" for="flexCheckDefault">
-                  Allow Refresh
-                </label>
-              </div>
-              <hr>
-              <button type="submit" class="btn btn-primary" @click="createRecord()"> Create your record </button>
-              <button class="btn btn-primary" @click="location.reload()">Back to previous windows</button>
-              </form>
-        </div>
 
         <div v-if="deleteRecordFromQuery">
             <div class="mb-3">
@@ -837,7 +767,6 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
     data: function () {
       return {
         initPage: true,
-        displayFTP: false,
         meetingsIds: [],
         languageSelected: "",
         displayRecordFromQuery: false,
@@ -918,14 +847,21 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
     },
     
     created:async function(){
-      // loading all the meetings ID
       console.log('GA Resolutions - Component created, loading meetings...');
-      const my_response = await fetch("./getgalistingsId");
-      const my_data = await my_response.json();
-      my_data.forEach(element => {
-        this.meetingsIds.push(element)
-      });
-      console.log('GA Resolutions - Meetings loaded:', this.meetingsIds.length);
+      try {
+        const my_response = await fetch("./getgalistingsId");
+        if (!my_response.ok) {
+          showError(`Could not load meeting list (HTTP ${my_response.status}). Check server/database connection.`);
+          return;
+        }
+        const my_data = await my_response.json();
+        my_data.forEach(element => {
+          this.meetingsIds.push(element)
+        });
+        console.log('GA Resolutions - Meetings loaded:', this.meetingsIds.length);
+      } catch (error) {
+        showError('Could not load meeting list: ' + error.message);
+      }
     },
 
     methods:{
@@ -1012,7 +948,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
         showError('Meeting selector not found. Please refresh the page.');
         return;
       }
-      const myMeetingValue = myMeeting.value;       
+      const myMeetingValue = myMeeting.value;
+      if (!myMeetingValue) {
+        showError('Please select a meeting from the list.');
+        return;
+      }
 
       const myLanguage = document.getElementById(listoflanguages);
       if (!myLanguage) {
@@ -1027,7 +967,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
 
       // loading all the data
       try {
-      const my_response = await fetch("./getgalistings/" + myMeetingValue)
+      const my_response = await fetch("./getgalistings/" + encodeURIComponent(myMeetingValue))
         
         if (!my_response.ok) {
           throw new Error(`HTTP error! status: ${my_response.status}`);
@@ -1069,8 +1009,50 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           }
         });
       },
+      startCreateRecord(){
+        const myLanguage = document.getElementById('listoflanguages');
+        const myMeeting = document.getElementById('listofmeetings');
+        this.languageSelected = myLanguage ? myLanguage.value : 'EN';
+        this.listing_id = myMeeting ? myMeeting.value : '';
+        this.displayRecordFromQuery = false;
+        this.updateRecordFromQuery = false;
+        this.createRecordFromQuery = true;
+        this.initPage = false;
+        this.AddGARecordEmpty();
+      },
+      AddGARecordEmpty(){
+        this.outcomes = [{
+          refresh: false,
+          Resolution_prefix_en: '', Resolution_en: '', Resolution_sufix_en: '', Resolution_link_en: '',
+          Plenary_en: '', Agenda_numbers_en: '', Meeting_prefix_en: '', Meeting_en: '', Meeting_sufix_en: '',
+          Draft_Resolution_prefix_en: '', Draft_Resolution_en: '', Draft_Resolution_sufix_en: '',
+          Title_prefix_en: '', Title_en: '', Title_sufix_en: '', date_en: '',
+          Resolution_prefix_fr: '', Resolution_fr: '', Resolution_sufix_fr: '', Resolution_link_fr: '',
+          Plenary_fr: '', Agenda_numbers_fr: '', Meeting_prefix_fr: '', Meeting_fr: '', Meeting_sufix_fr: '',
+          Draft_Resolution_prefix_fr: '', Draft_Resolution_fr: '', Draft_Resolution_sufix_fr: '',
+          Title_prefix_fr: '', Title_fr: '', Title_sufix_fr: '', date_fr: '',
+          Resolution_prefix_es: '', Resolution_es: '', Resolution_sufix_es: '', Resolution_link_es: '',
+          Plenary_es: '', Agenda_numbers_es: '', Meeting_prefix_es: '', Meeting_es: '', Meeting_sufix_es: '',
+          Draft_Resolution_prefix_es: '', Draft_Resolution_es: '', Draft_Resolution_sufix_es: '',
+          Title_prefix_es: '', Title_es: '', Title_sufix_es: '', date_es: '',
+        }];
+      },
       async createRecord(){
-        
+        if (!this.outcomes.length) {
+          showError('No record data to create.');
+          return;
+        }
+        const resolutionKey = this.languageSelected === 'FR' ? 'Resolution_fr'
+          : this.languageSelected === 'ES' ? 'Resolution_es' : 'Resolution_en';
+        if (!this.outcomes[0][resolutionKey]) {
+          showError('Resolution symbol is required.');
+          return;
+        }
+        if (!this.listing_id) {
+          showError('Listing id is required (e.g. garesolutions_80).');
+          return;
+        }
+
         let dataset = new FormData();
         dataset.append('listing_id', this.listing_id);
         dataset.append('refresh', this.outcomes[0].refresh);
@@ -1093,6 +1075,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_en', this.outcomes[0].Title_en);
           dataset.append('Title_sufix_en', this.outcomes[0].Title_sufix_en);
           dataset.append('date_en', this.outcomes[0].date_en);
+          dataset.append('Resolution_link_en', this.outcomes[0].Resolution_link_en || '');
         }
         // French fields
         else if (this.languageSelected === 'FR') {
@@ -1111,6 +1094,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_fr', this.outcomes[0].Title_fr);
           dataset.append('Title_sufix_fr', this.outcomes[0].Title_sufix_fr);
           dataset.append('date_fr', this.outcomes[0].date_fr);
+          dataset.append('Resolution_link_fr', this.outcomes[0].Resolution_link_fr || '');
         }
         // Spanish fields
         else if (this.languageSelected === 'ES') {
@@ -1129,6 +1113,7 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           dataset.append('Title_es', this.outcomes[0].Title_es);
           dataset.append('Title_sufix_es', this.outcomes[0].Title_sufix_es);
           dataset.append('date_es', this.outcomes[0].date_es);
+          dataset.append('Resolution_link_es', this.outcomes[0].Resolution_link_es || '');
         }
 
         const my_response = await fetch("./create_ga_listing", {
@@ -1136,8 +1121,11 @@ Vue.component('displaylistdatasetgaresolutionscomponent',{
           body: dataset
           });
         const my_data = await my_response.json();
-        this.displayRecordFromQuery = true;
-        showSuccess("Record created!!!");
+        if (!my_response.ok) {
+          showError(my_data.message || 'Failed to create record.');
+          return;
+        }
+        showSuccess(my_data.message || "Record created!!!");
         setTimeout(() => {
           location.reload();
         }, 2000);

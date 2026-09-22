@@ -14,6 +14,11 @@ A modern, responsive web application for managing dynamic listings with a beauti
 - **Professional Color Scheme** - Carefully selected colors for optimal user experience
 - **Glass Morphism** - Backdrop blur effects and transparency for modern aesthetics
 
+### **Help & documentation**
+- Standalone **Help** page at `/help` (also linked from the top bar, sidebar, and sign-in screen)
+- Table of contents, **Print**, and **Download PDF** (same pattern as ISMT)
+- Source: `dl/templates/help_page.html`, `dl/templates/_help_document.html`, `dl/static/css/help.css`, `dl/static/js/help.js`
+
 ### **Navigation & Layout**
 - **Sidebar Navigation** - Clean sidebar with modern icons and smooth transitions
 - **Top Header** - Minimalist header with breadcrumb navigation

@@ -21,7 +21,7 @@ def client():
 @pytest.mark.parametrize("route", [
     '/', '/login', '/test', '/index', '/users', '/usersVue', '/logs', '/logsVue', '/fields', '/fieldsVue',
     '/dataModels', '/dataModelsVue', '/fieldsForDataModelsVue', '/datasets', '/datasetsVue', '/datamodelsForDatasetsVue',
-    '/datasetGAResolutions', '/getsclistingsId_ga', '/datasetSecurityCounsel', '/getsclistingsId', '/logout'
+    '/datasetGAResolutions', '/getsclistingsId_ga', '/datasetSecurityCounsel', '/getsclistingsId', '/datasetSCVeto', '/getvetolistingsId', '/help', '/logout'
 ])
 def test_get_routes(client, route):
     response = client.get(route)
@@ -52,7 +52,8 @@ def test_param_routes(client, route, method):
     '/usersVue/AddUser', '/usersVue/DeleteUser', '/fieldsVue/DeleteField', '/fieldsVue/AddField',
     '/dataModelsVue/addDataModel', '/dataModelsVue/deleteDataModel', '/datasetsVue/addDataset',
     '/datasetsVue/executeDataset/123456789012345678901234', '/datasetVue/deleteDataset', '/refresh_data', '/refresh_data_ga',
-    '/create_sc_listing', '/delete_sc_listing',
+    '/create_sc_listing', '/create_ga_listing', '/delete_sc_listing', '/create_veto_listing', '/delete_veto_listing',
+    '/import_veto_from_html',
 ])
 def test_post_routes(client, route):
     response = client.post(route)
@@ -60,7 +61,7 @@ def test_post_routes(client, route):
 
 @pytest.mark.parametrize("route", [
     '/usersVue/UpdateUser/123456789012345678901234', '/fieldsVue/UpdateField/123456789012345678901234',
-    '/dataModelsVue/updateDataModel/123456789012345678901234', '/update_sc_listing',
+    '/dataModelsVue/updateDataModel/123456789012345678901234', '/update_sc_listing', '/update_veto_listing',
 ])
 def test_put_routes(client, route):
     response = client.put(route)

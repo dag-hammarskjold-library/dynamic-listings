@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark" id="login-html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Help — Dynamic Listings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/modern.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/help.css') }}?v=2" rel="stylesheet">
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            {% if embedded %}
+            document.documentElement.classList.add('help-embedded');
+            {% endif %}
+        })();
+    </script>
+</head>
+<body class="modern-body">
+    <div class="help-login-wrap">
+        <div class="help-login-panel help-page">
+            <div class="help-login-top help-no-print">
+                <a href="{{ url_for('main.login') }}" class="btn btn-secondary-modern btn-modern">
+                    <i class="fas fa-arrow-left me-1"></i> Back to sign in
+                </a>
+                <div class="help-actions">
+                    <button type="button" id="print-help" class="btn btn-secondary-modern btn-modern">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+                    <button type="button" id="download-pdf" class="btn btn-primary-modern btn-modern">
+                        <i class="fas fa-file-pdf me-1"></i> Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="modern-card liquid-card liquid-effect mb-4">
+                <div class="card-body">
+                    <h1 class="card-title mb-1">
+                        <i class="fas fa-circle-question me-2"></i>
+                        Help &amp; documentation
+                    </h1>
+                    <p class="card-subtitle mb-0">Dynamic Listings user guide (also available after sign-in from the sidebar and top bar).</p>
+                </div>
+            </div>
+
+            {% include "_help_document.html" %}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/help.js') }}?v=2"></script>
+</body>
+</html>

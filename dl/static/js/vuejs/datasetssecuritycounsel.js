@@ -68,15 +68,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
                 </div>
               </div>
             </div>
-            <div v-if="displayFTP">
-              <div class="row mt-3">
-                <div class="col">
-                  <button type="button" class="btn btn-primary" @click="document.location.reload(true);">
-                    Go Back
-                  </button>
-                </div>
-              </div>
-            </div>
         </div>
         <div v-if="displayRecordFromQuery" class="mt-4">
           <table v-if="languageSelected==='EN'" id="myTable" class="table table-striped liquid-table" summary="The table has five columns and should be read per row. The first column indicate the document 
@@ -281,22 +272,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
 
 
-        </div>
-
-        <div v-if="displayFTP" class="form-section ">
-          <h3> FTP parameters </h3>
-          <hr>
-              <p> <strong> Host ->      </strong> </p> 
-              <p> <strong> Username ->  </strong> </p> 
-              <p> <strong> Password ->  </strong> </p> 
-              <p> <strong> Timeout ->  </strong> </p> 
-              <p> <strong> Encoding ->  </strong> </p> 
-          <hr>
-          <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupFile01">Upload</label>
-            <input type="file" class="form-control" id="inputGroupFile01">
-          </div>
-          <input type="submit" name="sendftp" class="btn btn-primary">
         </div>
 
         <div v-if="updateRecordFromQuery" style="overflow: visible;">
@@ -885,7 +860,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       return {
         outcomes:[],
         initPage:true,
-        displayFTP:false,
         meetingsIds:[],
         meetingSelected:"",
         languageSelected:"",
@@ -938,12 +912,19 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
     },
     
     created:async function(){
-      // loading all the meetings ID
-      const my_response = await fetch("./getsclistingsId");
-      const my_data = await my_response.json();
-      my_data.forEach(element => {
-        this.meetingsIds.push(element)
-      });
+      try {
+        const my_response = await fetch("./getsclistingsId");
+        if (!my_response.ok) {
+          showError(`Could not load meeting list (HTTP ${my_response.status}). Check server/database connection.`);
+          return;
+        }
+        const my_data = await my_response.json();
+        my_data.forEach(element => {
+          this.meetingsIds.push(element)
+        });
+      } catch (error) {
+        showError('Could not load meeting list: ' + error.message);
+      }
     },
 
     methods:{
@@ -960,12 +941,6 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
         // Removes a row at the specified index
         this.outcomes.splice(index, 1);
         showSuccess("Outcome removed successfully!");
-      },
-      openFTP(){
-        showWarning("define the ftp")
-        this.initPage=false
-        this.displayRecordFromQuery=false
-        this.displayFTP=true
       },
       AddOutcomeEmpty(){
         const myRecord=
@@ -1170,7 +1145,11 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
   async displayData(listofmeetings,listoflanguages){
       // retrieve the parameters
       const myMeeting = document.getElementById(listofmeetings);
-      const myMeetingValue = myMeeting.value;       
+      const myMeetingValue = myMeeting.value;
+      if (!myMeetingValue) {
+        showError('Please select a meeting from the list.');
+        return;
+      }
       const myLanguage = document.getElementById(listoflanguages);
       const myLanguageValue = myLanguage.value;  
 
@@ -1180,7 +1159,12 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
 
       // loading all the data
       this.listOfRecords = []
-      const my_response = await fetch("./getsclistings/" + myMeetingValue);
+      try {
+      const my_response = await fetch("./getsclistings/" + encodeURIComponent(myMeetingValue));
+      if (!my_response.ok) {
+        showError(`Could not load records (HTTP ${my_response.status}).`);
+        return;
+      }
       const my_data = await my_response.json();
       
       my_data.forEach(element => {
@@ -1192,6 +1176,9 @@ Vue.component('displaylistdatasetssecuritycounselcomponent',{
       this.initPage=false
       this.displayRecordFromQuery=true
       console.log(this.listOfRecords)
+      } catch (error) {
+        showError('Error loading data: ' + error.message);
+      }
       
       },
 

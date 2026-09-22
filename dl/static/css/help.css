@@ -1,0 +1,283 @@
+/* Help page — uses Dynamic Listings theme tokens from modern.css */
+
+.help-page {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.help-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.help-page-header .card-title {
+  margin-bottom: 0;
+}
+
+.help-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.help-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.help-toc {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-4));
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--font-size-sm);
+}
+
+.help-toc-title {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-3);
+  font-weight: 600;
+}
+
+.help-toc ol {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.help-toc li + li {
+  margin-top: var(--space-2);
+}
+
+.help-toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.help-toc a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.help-document {
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.help-document > header h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+}
+
+.help-lead {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  max-width: 52rem;
+  margin: 0;
+}
+
+.help-meta {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.help-section h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin: var(--space-8) 0 var(--space-4);
+  color: var(--primary-color);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.help-section:first-of-type h2 {
+  margin-top: var(--space-4);
+}
+
+.help-section h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin: var(--space-5) 0 var(--space-2);
+  color: var(--text-primary);
+}
+
+.help-section p,
+.help-section li {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.help-section ul,
+.help-section ol {
+  margin: var(--space-2) 0 var(--space-4);
+  padding-left: 1.35rem;
+}
+
+.help-section li + li {
+  margin-top: var(--space-2);
+}
+
+.help-callout {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  border-left: 3px solid var(--primary-color);
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+[data-bs-theme="light"] .help-callout {
+  background: var(--primary-light);
+}
+
+.help-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-3) 0 var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.help-table th,
+.help-table td {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: top;
+}
+
+.help-table th {
+  background: var(--bg-tertiary);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.help-table td {
+  color: var(--text-secondary);
+}
+
+.help-table code,
+.help-section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.84em;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 0.12rem 0.35rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Sign-in help (no sidebar) */
+.help-login-wrap {
+  min-height: 100vh;
+  padding: var(--space-8) var(--space-4) var(--space-10);
+}
+
+.help-login-panel {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.help-login-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+html.help-embedded .help-login-top,
+html.help-embedded .help-page-header {
+  display: none;
+}
+
+html.help-embedded .help-layout {
+  grid-template-columns: 1fr;
+}
+
+html.help-embedded .help-toc {
+  position: static;
+}
+
+body.help-pdf-export #help-content {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+body.help-pdf-export #help-content .help-section p,
+body.help-pdf-export #help-content .help-section li,
+body.help-pdf-export #help-content .help-lead,
+body.help-pdf-export #help-content .help-meta,
+body.help-pdf-export #help-content .help-table td {
+  color: #334155 !important;
+}
+
+body.help-pdf-export #help-content .help-section h2 {
+  color: #4f46e5 !important;
+}
+
+body.help-pdf-export #help-content .help-table th {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+@media print {
+  .help-no-print,
+  .modern-sidebar,
+  .top-navbar {
+    display: none !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .help-layout {
+    display: block;
+  }
+
+  .help-toc {
+    display: none;
+  }
+
+  .help-document {
+    border: none;
+    box-shadow: none;
+  }
+
+  .help-section h2 {
+    page-break-after: avoid;
+  }
+}
+
+@media (max-width: 900px) {
+  .help-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .help-toc {
+    position: static;
+  }
+
+  .help-document {
+    padding: var(--space-5);
+  }
+}
